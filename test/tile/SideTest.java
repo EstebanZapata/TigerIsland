@@ -33,6 +33,12 @@ public class SideTest {
     }
 
     @Test
+    public void testSideWithoutAdjacentSideHasNullAdjacentSide() {
+        Assert.assertEquals(null, sideWithoutAdjacentSide.getAdjacentSide());
+    }
+
+
+    @Test
     public void testGetAdjacentSideOwner() {
         Side adjacentSide = sideWithAdjacentSide.getAdjacentSide();
         Assert.assertEquals(hexContainingLake, adjacentSide.getOwner());
