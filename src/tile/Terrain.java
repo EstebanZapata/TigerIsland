@@ -1,3 +1,4 @@
+package tile;
 
 public enum Terrain {
     JUNGLE(true),
@@ -7,7 +8,7 @@ public enum Terrain {
 
     VOLCANO(false);
 
-    private final boolean isHabitable;
+    private boolean isHabitable;
 
     Terrain(boolean isHabitable) {
         this.isHabitable = isHabitable;
