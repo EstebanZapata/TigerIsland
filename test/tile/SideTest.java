@@ -3,9 +3,6 @@ package tile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import tile.Hex;
-import tile.Side;
-import tile.Terrain;
 
 
 public class SideTest {
@@ -42,7 +39,7 @@ public class SideTest {
     public void testGetAdjacentSideOwnerDirectly(){
         try {
             Assert.assertEquals(hexContainingLake, sideWithAdjacentSide.getAdjacentSideOwner());
-        } catch (AdjacentSideIsNullException e) {
+        } catch (NoAdjacentSideException e) {
             e.printStackTrace();
         }
     }
@@ -52,8 +49,8 @@ public class SideTest {
         Assert.assertEquals(Side.NO_ADJACENT_SIDE, sideWithoutAdjacentSide.getAdjacentSide());
     }
 
-    @Test(expected = AdjacentSideIsNullException.class)
-    public void testAttemptToAccessOwnerOfNoAdjacentSideThrowsException() throws AdjacentSideIsNullException {
+    @Test(expected = NoAdjacentSideException.class)
+    public void testAttemptToAccessOwnerOfNoAdjacentSideThrowsException() throws NoAdjacentSideException {
         sideWithoutAdjacentSide.getAdjacentSideOwner();
     }
 

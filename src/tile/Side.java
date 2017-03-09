@@ -3,6 +3,7 @@ package tile;
 public class Side {
     private Side adjacentSide;
     private Hex owner;
+    
     static Side NO_ADJACENT_SIDE = new Side(null);
 
     Side(Hex owner) {
@@ -35,12 +36,12 @@ public class Side {
         this.adjacentSide = adjacentSide;
     }
 
-    public Hex getAdjacentSideOwner() throws AdjacentSideIsNullException {
+    public Hex getAdjacentSideOwner() throws NoAdjacentSideException {
         if(this.adjacentSide != NO_ADJACENT_SIDE) {
             return this.adjacentSide.getOwner();
         }
         else {
-            throw new AdjacentSideIsNullException("Attempted to get owner of adjacent side when there is no adjacent side.");
+            throw new NoAdjacentSideException("Attempted to get owner of adjacent side when there is no adjacent side.");
         }
     }
 
