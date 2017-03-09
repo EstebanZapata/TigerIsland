@@ -3,15 +3,19 @@ package tile;
 public class Side {
     private Side adjacentSide;
     private Hex owner;
+    static Side NO_ADJACENT_SIDE = new Side(null);
 
     Side(Hex owner) {
         this.owner = owner;
+        this.adjacentSide = NO_ADJACENT_SIDE;
     }
 
     Side(Hex owner, Side adjacentSide) {
         this.owner = owner;
         setSidesAdjacentToEachOther(adjacentSide);
     }
+
+
 
     public Hex getOwner() {
         return this.owner;
@@ -27,7 +31,17 @@ public class Side {
         adjacentSide.setAdjacentSide(this);
     }
 
-    public void setAdjacentSide(Side adjacentSide) {
+    private void setAdjacentSide(Side adjacentSide) {
         this.adjacentSide = adjacentSide;
     }
+
+    public Hex getAdjacentSideOwner() throws AdjacentSideIsNullException {
+        if(this.adjacentSide != NO_ADJACENT_SIDE) {
+            return this.adjacentSide.getOwner();
+        }
+        else {
+            throw new AdjacentSideIsNullException("Attempted to get owner of adjacent side when there is no adjacent side.");
+        }
+    }
+
 }

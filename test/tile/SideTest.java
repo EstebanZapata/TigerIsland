@@ -33,15 +33,28 @@ public class SideTest {
     }
 
     @Test
-    public void testSideWithoutAdjacentSideHasNullAdjacentSide() {
-        Assert.assertEquals(null, sideWithoutAdjacentSide.getAdjacentSide());
-    }
-
-
-    @Test
     public void testGetAdjacentSideOwner() {
         Side adjacentSide = sideWithAdjacentSide.getAdjacentSide();
         Assert.assertEquals(hexContainingLake, adjacentSide.getOwner());
+    }
+
+    @Test
+    public void testGetAdjacentSideOwnerDirectly(){
+        try {
+            Assert.assertEquals(hexContainingLake, sideWithAdjacentSide.getAdjacentSideOwner());
+        } catch (AdjacentSideIsNullException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testSideWithoutAdjacentSideHasNoAdjacentSide() {
+        Assert.assertEquals(Side.NO_ADJACENT_SIDE, sideWithoutAdjacentSide.getAdjacentSide());
+    }
+
+    @Test(expected = AdjacentSideIsNullException.class)
+    public void testAttemptToAccessOwnerOfNoAdjacentSideThrowsException() throws AdjacentSideIsNullException {
+        sideWithoutAdjacentSide.getAdjacentSideOwner();
     }
 
     @Test
@@ -51,5 +64,6 @@ public class SideTest {
         Assert.assertEquals(adjacentSide, sideWithAdjacentSide.getAdjacentSide());
         Assert.assertEquals(sideWithAdjacentSide, adjacentSide.getAdjacentSide());
     }
+
 
 }

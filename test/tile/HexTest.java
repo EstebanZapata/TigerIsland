@@ -21,5 +21,18 @@ public class HexTest {
         Assert.assertEquals(Terrain.JUNGLE, hex.getTerrain());
     }
 
+    @Test
+    public void testHexContainsSixSides() {
+        Assert.assertEquals(6, hex.getSides().length);
+    }
+
+    @Test
+    public void testSidesHaveHexPassedToConstructorAsOwner() {
+        Side[] sides = hex.getSides();
+
+        for(int i = 0; i < sides.length; i++) {
+            Assert.assertEquals(hex, sides[i].getOwner());
+        }
+    }
 
 }
