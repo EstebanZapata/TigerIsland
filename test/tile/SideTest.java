@@ -27,7 +27,7 @@ public class SideTest {
     }
 
     @Test
-    public void testGetOwnerOfSide() {
+    public void testGetSideOwner() {
         Assert.assertEquals(hexContainingGrasslands, sideWithoutAdjacentSide.getOwner());
         Assert.assertEquals(hexContainingGrasslands, sideWithAdjacentSide.getOwner());
     }
