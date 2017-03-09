@@ -11,10 +11,10 @@ public class Tile {
         hexes[1] = new Hex(terrainOne);
         hexes[2] = new Hex(terrainTwo);
 
-        setupAdjacencies();
+        setUpInnerSideAdjacencies();
     }
 
-    private void setupAdjacencies() {
+    private void setUpInnerSideAdjacencies() {
         Side[] sidesOfHexZero = hexes[0].getSides();
         Side[] sidesOfHexOne = hexes[1].getSides();
         Side[] sidesOfHexTwo = hexes[2].getSides();

@@ -27,7 +27,7 @@ public class HexTest {
     }
 
     @Test
-    public void testSidesHaveHexPassedToConstructorAsOwner() {
+    public void testSidesHaveHexPassedToSideConstructorAsOwner() {
         Side[] sides = hex.getSides();
 
         for(int i = 0; i < sides.length; i++) {

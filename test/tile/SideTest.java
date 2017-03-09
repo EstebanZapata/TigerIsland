@@ -6,11 +6,11 @@ import org.junit.Test;
 
 
 public class SideTest {
-    Hex hexContainingGrasslands;
-    Hex hexContainingLake;
+    private Hex hexContainingGrasslands;
+    private Hex hexContainingLake;
 
-    Side sideWithoutAdjacentSide;
-    Side sideWithAdjacentSide;
+    private Side sideWithoutAdjacentSide;
+    private Side sideWithAdjacentSide;
 
     @Before
     public void setupSides() {

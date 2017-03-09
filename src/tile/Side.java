@@ -3,7 +3,7 @@ package tile;
 public class Side {
     private Side adjacentSide;
     private Hex owner;
-    
+
     static Side NO_ADJACENT_SIDE = new Side(null);
 
     Side(Hex owner) {
@@ -16,16 +16,6 @@ public class Side {
         setSidesAdjacentToEachOther(adjacentSide);
     }
 
-
-
-    public Hex getOwner() {
-        return this.owner;
-    }
-
-    public Side getAdjacentSide() {
-        return this.adjacentSide;
-    }
-
     public void setSidesAdjacentToEachOther(Side adjacentSide) {
         this.adjacentSide = adjacentSide;
 
@@ -34,6 +24,14 @@ public class Side {
 
     private void setAdjacentSide(Side adjacentSide) {
         this.adjacentSide = adjacentSide;
+    }
+
+    public Hex getOwner() {
+        return this.owner;
+    }
+
+    public Side getAdjacentSide() {
+        return this.adjacentSide;
     }
 
     public Hex getAdjacentSideOwner() throws NoAdjacentSideException {

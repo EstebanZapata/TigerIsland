@@ -18,4 +18,6 @@ public class TerrainTest {
     public void testVolcanoTerrainIsNotHabitable() {
         Assert.assertEquals(false, Terrain.VOLCANO.isHabitable());
     }
+
+
 }
