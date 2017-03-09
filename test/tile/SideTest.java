@@ -14,8 +14,8 @@ public class SideTest {
 
     @Before
     public void setupSides() {
-        hexContainingGrasslands = new Hex(Terrain.GRASSLANDS);
-        hexContainingLake = new Hex(Terrain.LAKE);
+        hexContainingGrasslands = new Hex(null, Terrain.GRASSLANDS);
+        hexContainingLake = new Hex(null, Terrain.LAKE);
 
         Side adjacentSide = new Side(hexContainingLake);
 

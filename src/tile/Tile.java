@@ -7,9 +7,9 @@ public class Tile {
 
     Tile(Terrain terrainOne, Terrain terrainTwo) {
         hexes = new Hex[MAX_HEXES_PER_TILE];
-        hexes[0] = new Hex(Terrain.VOLCANO);
-        hexes[1] = new Hex(terrainOne);
-        hexes[2] = new Hex(terrainTwo);
+        hexes[0] = new Hex(this, Terrain.VOLCANO);
+        hexes[1] = new Hex(this, terrainOne);
+        hexes[2] = new Hex(this, terrainTwo);
 
         setUpInnerSideAdjacencies();
     }

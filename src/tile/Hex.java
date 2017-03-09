@@ -2,10 +2,12 @@ package tile;
 
 public class Hex {
     private Terrain terrain;
+    private Tile owner;
     private Side[] sides;
     private int SIDES_ON_HEXAGON = 6;
 
-    Hex(Terrain terrain) {
+    Hex(Tile owner, Terrain terrain) {
+        this.owner = owner;
         this.terrain = terrain;
         this.sides = new Side[SIDES_ON_HEXAGON];
 
@@ -24,5 +26,9 @@ public class Hex {
 
     public Side[] getSides() {
         return this.sides;
+    }
+
+    public Tile getOwner() {
+        return this.owner;
     }
 }
