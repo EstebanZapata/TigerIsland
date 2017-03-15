@@ -41,19 +41,4 @@ public class TileTest {
         Assert.assertEquals(Terrain.JUNGLE, tileHexes[2].getTerrain());
     }
 
-    @Test
-    public void testInnerHexesAreAdjacentToEachOther() throws NoAdjacentSideException {
-        Hex hexZero = tileHexes[0];
-        Hex hexOne = tileHexes[1];
-        Hex hexTwo = tileHexes[2];
-
-        Assert.assertEquals(hexOne, hexZero.getSides()[4].getAdjacentSideOwner());
-        Assert.assertEquals(hexTwo, hexZero.getSides()[5].getAdjacentSideOwner());
-
-        Assert.assertEquals(hexZero, hexOne.getSides()[5].getAdjacentSideOwner());
-        Assert.assertEquals(hexTwo, hexOne.getSides()[4].getAdjacentSideOwner());
-
-        Assert.assertEquals(hexZero, hexTwo.getSides()[4].getAdjacentSideOwner());
-        Assert.assertEquals(hexOne, hexTwo.getSides()[5].getAdjacentSideOwner());
-    }
 }
