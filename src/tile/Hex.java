@@ -19,7 +19,7 @@ public class Hex {
             sides[i] = new Side(this);
         }
     }
-
+//potato
     public Terrain getTerrain() {
         return this.terrain;
     }
