@@ -29,10 +29,20 @@ public class LocationTest {
         Assert.assertEquals(testLocation.getRow(),17);
     }
 
-    //@Test
+    @Test
+    public void testGetRow() {
+        Assert.assertEquals(testLocation.getRow(), 3);
+    }
 
+    @Test
+    public void testSetHeight() {
+        testLocation.setHeight(65);
+        Assert.assertEquals(testLocation.getHeight(), 65);
+    }
 
-
-
+    @Test
+    public void testGetHeight() {
+        Assert.assertEquals(testLocation.getHeight(),5);
+    }
 
 }

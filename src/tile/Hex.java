@@ -17,4 +17,12 @@ public class Hex {
     public Tile getOwner() {
         return this.owner;
     }
+
+    public Location getLocationOfHex() {
+        return locationOfHex;
+    }
+
+    public void setLocationOfHex(Location locationOfHex) {
+        this.locationOfHex = locationOfHex;
+    }
 }
