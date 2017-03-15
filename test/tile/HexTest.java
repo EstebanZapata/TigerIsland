@@ -23,20 +23,6 @@ public class HexTest {
     }
 
     @Test
-    public void testHexContainsSixSides() {
-        Assert.assertEquals(6, hexWithoutOwner.getSides().length);
-    }
-
-    @Test
-    public void testSidesHaveHexPassedToSideConstructorAsOwner() {
-        Side[] sides = hexWithoutOwner.getSides();
-
-        for(int i = 0; i < sides.length; i++) {
-            Assert.assertEquals(hexWithoutOwner, sides[i].getOwner());
-        }
-    }
-
-    @Test
     public void testGetOwnerOfHex() {
         Assert.assertEquals(tile, hexWithOwner.getOwner());
     }
