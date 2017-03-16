@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+
 public class SideTest {
     private Hex hexContainingGrasslands;
     private Hex hexContainingLake;
