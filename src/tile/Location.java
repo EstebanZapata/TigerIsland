@@ -1,38 +1,25 @@
 package tile;
 
 public class Location {
-    private int row;
-    private int col;
-    private int height;
+    private int xCoordinate;
+    private int yCoordinate;
+    private int zCoordinate;
 
-    public Location(int row, int col, int height) {
-        this.row = row;
-        this.col = col;
-        this.height = height;
+    public Location(int xCoordinate, int col, int height) {
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = col;
+        this.zCoordinate = height;
     }
 
-    public int getHeight() {
-        return height;
+    public int getxCoordinate() {
+        return xCoordinate;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public int getyCoordinate() {
+        return yCoordinate;
     }
 
-    public int getRow() {
-        return row;
+    public int getzCoordinate() {
+        return zCoordinate;
     }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
-    }
-
 }

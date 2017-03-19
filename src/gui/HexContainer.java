@@ -7,8 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import tile.Hex;
 
-import static gui.TigerIslandGui.HEX_HEIGHT;
-import static gui.TigerIslandGui.HEX_WIDTH;
+import static gui.Gui.HEX_HEIGHT;
+import static gui.Gui.HEX_WIDTH;
 
 
 public class HexContainer extends Group {

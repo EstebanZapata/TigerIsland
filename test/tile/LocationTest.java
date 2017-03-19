@@ -13,36 +13,18 @@ public class LocationTest {
     }
 
     @Test
-    public void testSetCol() {
-        testLocation.setCol(6);
-        Assert.assertEquals(testLocation.getCol(), 6);
+    public void testGetRow() {
+        Assert.assertEquals(testLocation.getxCoordinate(), 3);
     }
 
     @Test
     public void testGetCol() {
-        Assert.assertEquals(testLocation.getCol(),4);
-    }
-
-    @Test
-    public void testSetRow() {
-        testLocation.setRow(17);
-        Assert.assertEquals(testLocation.getRow(),17);
-    }
-
-    @Test
-    public void testGetRow() {
-        Assert.assertEquals(testLocation.getRow(), 3);
-    }
-
-    @Test
-    public void testSetHeight() {
-        testLocation.setHeight(65);
-        Assert.assertEquals(testLocation.getHeight(), 65);
+        Assert.assertEquals(testLocation.getyCoordinate(),4);
     }
 
     @Test
     public void testGetHeight() {
-        Assert.assertEquals(testLocation.getHeight(),5);
+        Assert.assertEquals(testLocation.getzCoordinate(),5);
     }
 
 }
