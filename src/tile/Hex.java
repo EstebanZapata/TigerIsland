@@ -5,7 +5,7 @@ public class Hex {
     private Tile owner;
     private Location locationOfHex;
 
-    Hex(Tile owner, Terrain terrain) {
+    public Hex(Tile owner, Terrain terrain) {
         this.owner = owner;
         this.terrain = terrain;
     }
