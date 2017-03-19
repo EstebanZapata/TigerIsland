@@ -5,7 +5,7 @@ public class Tile {
     private int MAX_HEXES_PER_TILE = 3;
 
 
-    Tile(Terrain terrainOne, Terrain terrainTwo) {
+    public Tile(Terrain terrainOne, Terrain terrainTwo) {
         hexes = new Hex[MAX_HEXES_PER_TILE];
         hexes[0] = new Hex(this, Terrain.VOLCANO);
         hexes[1] = new Hex(this, terrainOne);
