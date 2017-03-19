@@ -6,7 +6,7 @@ public class Hex {
     private Side[] sides;
     private int SIDES_ON_HEXAGON = 6;
 
-    Hex(Tile owner, Terrain terrain) {
+    public Hex(Tile owner, Terrain terrain) {
         this.owner = owner;
         this.terrain = terrain;
         this.sides = new Side[SIDES_ON_HEXAGON];
