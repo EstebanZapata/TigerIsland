@@ -17,8 +17,9 @@ import tile.Tile;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
-public class TigerIslandGui extends Application {
+public class Gui extends Application {
     private StackPane board;
     private StackPane axesPane;
     private StackPane hexesPane;
@@ -30,7 +31,28 @@ public class TigerIslandGui extends Application {
 
     private static final String WINDOW_NAME = "Tiger Island";
 
-    private HashMap<Integer, HashMap<Integer, HexContainer>> hexCoordinateSystem;
+    private HashMap<Integer, HashMap<Integer, HashMap<Integer, HexContainer>>> hexCoordinateSystem;
+
+    public static final CountDownLatch latch = new CountDownLatch(1);
+    public static Gui gui = null;
+
+    public static Gui waitForGuiTest() {
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return gui;
+    }
+
+    public static void setGui(Gui gui0) {
+        gui = gui0;
+        latch.countDown();
+    }
+
+    public Gui() {
+        setGui(this);
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -50,20 +72,6 @@ public class TigerIslandGui extends Application {
         setUpSceneAndStage(primaryStage);
         assignHexWidthAndHeightFromReductionPercent();
         drawCoordinateAxes(primaryStage);
-
-        Tile dummyTile = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
-        Hex dummyHex = new Hex(dummyTile, Terrain.GRASSLANDS);
-
-        
-
-        createHexAtCoordinate(dummyHex, 0,0);
-        createHexAtCoordinate(dummyHex, -1,0);
-        createHexAtCoordinate(dummyHex, -2,0);
-        createHexAtCoordinate(dummyHex, -1,1);
-        createHexAtCoordinate(dummyHex, 0,-1);
-        createHexAtCoordinate(dummyHex, -2,-1);
-        createHexAtCoordinate(dummyHex, -1,-1);
-
 
 
 
@@ -103,14 +111,14 @@ public class TigerIslandGui extends Application {
 
     }
 
-    private void createHexAtCoordinate(Hex hex, int xCoordinate, int yCoordinate) {
+    public void createHexAtLocation(Hex hex, int xCoordinate, int yCoordinate, int zCoordinate) {
         HexContainer hexContainer = new HexContainer(hex);
 
-        drawHexContainer(xCoordinate, yCoordinate, hexContainer);
-        putHexContainerIntoCoordinateSystem(xCoordinate, yCoordinate, hexContainer);
+        drawHexContainer(xCoordinate, yCoordinate, zCoordinate, hexContainer);
+        putHexContainerIntoCoordinateSystem(xCoordinate, yCoordinate, zCoordinate, hexContainer);
     }
 
-    private void drawHexContainer(int xCoordinate, int yCoordinate, HexContainer hexContainer) {
+    private void drawHexContainer(int xCoordinate, int yCoordinate, int zCoordinate, HexContainer hexContainer) {
         hexContainer.setBackgroundColor(Color.BLUE);
 
         Image hexImage = new Image(HEX_IMAGE_LOCATION);
@@ -143,8 +151,12 @@ public class TigerIslandGui extends Application {
         return yTranslation;
     }
 
-    private void putHexContainerIntoCoordinateSystem(int xCoordinate, int yCoordinate, HexContainer hexContainer) {
-        hexCoordinateSystem.putIfAbsent(xCoordinate, new HashMap<Integer, HexContainer>());
-        hexCoordinateSystem.get(xCoordinate).put(yCoordinate, hexContainer);
+    private void putHexContainerIntoCoordinateSystem(int xCoordinate, int yCoordinate, int zCoordinate, HexContainer hexContainer) {
+        hexCoordinateSystem.putIfAbsent(xCoordinate, new HashMap<Integer, HashMap<Integer, HexContainer>>());
+
+        HashMap<Integer, HashMap<Integer, HexContainer>> yCoordinateMap = hexCoordinateSystem.get(xCoordinate);
+        yCoordinateMap.put(yCoordinate, new HashMap<Integer, HexContainer>());
+
+        hexCoordinateSystem.get(xCoordinate).get(yCoordinate).put(zCoordinate, hexContainer);
     }
 }
