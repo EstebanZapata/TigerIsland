@@ -1,54 +1,59 @@
 package game;
 
 import tile.*;
-import tile.orientation.HexOrientation;
-import tile.orientation.TileOrientation;
+import tile.orientation.HexOrientationRelativeToVolcano;
+import tile.orientation.TileOrientationRelativeToVolcano;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 class World {
     private HashMap<Integer, HashMap<Integer, HashMap<Integer, Hex>>> hexCoordinateSystem;
+    private ArrayList<Hex> allHexesInWorld;
 
     World() {
         hexCoordinateSystem = new HashMap<>();
+        allHexesInWorld = new ArrayList<>();
     }
 
-    public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientation orientation) throws HexAlreadyAtLocationException{
+    public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientationRelativeToVolcano orientation)
+            throws HexAlreadyAtLocationException
+    {
         Location locationOfLeftHex;
         Location locationOfRightHex;
 
-        HexOrientation orientationOfLeftHex = null;
-        HexOrientation orientationOfRightHex = null;
+        HexOrientationRelativeToVolcano orientationOfLeftHex = null;
+        HexOrientationRelativeToVolcano orientationOfRightHex = null;
 
         switch(orientation) {
             case SOUTHWEST_SOUTHEAST:
-                orientationOfLeftHex = HexOrientation.SOUTHWEST;
-                orientationOfRightHex = HexOrientation.SOUTHEAST;
+                orientationOfLeftHex = HexOrientationRelativeToVolcano.SOUTHWEST;
+                orientationOfRightHex = HexOrientationRelativeToVolcano.SOUTHEAST;
                 break;
 
             case WEST_SOUTHWEST:
-                orientationOfLeftHex = HexOrientation.WEST;
-                orientationOfRightHex = HexOrientation.SOUTHWEST;
+                orientationOfLeftHex = HexOrientationRelativeToVolcano.WEST;
+                orientationOfRightHex = HexOrientationRelativeToVolcano.SOUTHWEST;
                 break;
 
             case NORTHWEST_WEST:
-                orientationOfLeftHex = HexOrientation.NORTHWEST;
-                orientationOfRightHex = HexOrientation.WEST;
+                orientationOfLeftHex = HexOrientationRelativeToVolcano.NORTHWEST;
+                orientationOfRightHex = HexOrientationRelativeToVolcano.WEST;
                 break;
 
             case NORTHEAST_NORTHWEST:
-                orientationOfLeftHex = HexOrientation.NORTHEAST;
-                orientationOfRightHex = HexOrientation.NORTHWEST;
+                orientationOfLeftHex = HexOrientationRelativeToVolcano.NORTHEAST;
+                orientationOfRightHex = HexOrientationRelativeToVolcano.NORTHWEST;
                 break;
 
             case EAST_NORTHEAST:
-                orientationOfLeftHex = HexOrientation.EAST;
-                orientationOfRightHex = HexOrientation.NORTHEAST;
+                orientationOfLeftHex = HexOrientationRelativeToVolcano.EAST;
+                orientationOfRightHex = HexOrientationRelativeToVolcano.NORTHEAST;
                 break;
 
             case SOUTHEAST_EAST:
-                orientationOfLeftHex = HexOrientation.SOUTHEAST;
-                orientationOfRightHex = HexOrientation.EAST;
+                orientationOfLeftHex = HexOrientationRelativeToVolcano.SOUTHEAST;
+                orientationOfRightHex = HexOrientationRelativeToVolcano.EAST;
                 break;
         }
 
@@ -56,14 +61,26 @@ class World {
         locationOfRightHex = getLocationRelativeToOrientationAndCenter(locationOfVolcano, orientationOfRightHex);
 
         if(ableToInsertTileIntoWorldOnLayerZero(locationOfVolcano, locationOfLeftHex, locationOfRightHex)) {
-            insertHexIntoWorld(tile.getVolcanoHex(), locationOfVolcano);
-            insertHexIntoWorld(tile.getLeftHexRelativeToVolcano(), locationOfLeftHex);
-            insertHexIntoWorld(tile.getRightHexRelativeToVolcano(), locationOfRightHex);
+            Hex volcanoHex = tile.getVolcanoHex();
+            Hex leftHex = tile.getLeftHexRelativeToVolcano();
+            Hex rightHex = tile.getRightHexRelativeToVolcano();
+
+            insertHexIntoWorld(volcanoHex, locationOfVolcano);
+            insertHexIntoWorld(leftHex, locationOfLeftHex);
+            insertHexIntoWorld(rightHex, locationOfRightHex);
+
+            allHexesInWorld.add(volcanoHex);
+            allHexesInWorld.add(leftHex);
+            allHexesInWorld.add(rightHex);
+
+            volcanoHex.setLocation(locationOfVolcano);
+            leftHex.setLocation(locationOfLeftHex);
+            rightHex.setLocation(locationOfRightHex);
         }
 
     }
 
-    private Location getLocationRelativeToOrientationAndCenter(Location center, HexOrientation orientation) {
+    private Location getLocationRelativeToOrientationAndCenter(Location center, HexOrientationRelativeToVolcano orientation) {
         int xCoordinateOfCenter = center.getxCoordinate();
         int yCoordinateOfCenter = center.getyCoordinate();
 
@@ -169,5 +186,20 @@ class World {
 
         hexCoordinateSystem.get(xCoordinate).get(yCoordinate).put(zCoordinate, hex);
 
+    }
+
+    public void printAllHexLocationsInWorld() {
+        for (Hex hex:allHexesInWorld) {
+            Location hexLocation = hex.getLocation();
+            int xCoordinate = hexLocation.getxCoordinate();
+            int yCoordinate = hexLocation.getyCoordinate();
+            int zCoordinate = hexLocation.getzCoordinate();
+
+            System.out.println(String.format("Hex at (%d,%d,%d)" , xCoordinate, yCoordinate, zCoordinate));
+        }
+    }
+
+    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException {
+        insertTileIntoWorld(tile, new Location(0,0,0), orientation);
     }
 }
