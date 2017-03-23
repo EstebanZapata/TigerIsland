@@ -2,7 +2,7 @@ package tile;
 
 public class Tile {
     private Hex[] hexes;
-    private int MAX_HEXES_PER_TILE = 3;
+    public static int MAX_HEXES_PER_TILE = 3;
 
     private static final int VOLCANO_HEX = 0;
     private static final int LEFT_HEX = 1;
