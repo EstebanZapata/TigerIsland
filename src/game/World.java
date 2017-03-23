@@ -7,7 +7,7 @@ import tile.orientation.TileOrientationRelativeToVolcano;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class World {
+public class World {
     private HashMap<Integer, HashMap<Integer, HashMap<Integer, Hex>>> hexCoordinateSystem;
     private ArrayList<Hex> allHexesInWorld;
 
@@ -16,7 +16,7 @@ class World {
 
     private static boolean firstTileHasBeenPlaced = false;
 
-    World() {
+    public World() {
         hexCoordinateSystem = new HashMap<>();
         allHexesInWorld = new ArrayList<>();
     }
@@ -295,5 +295,9 @@ class World {
 
         insertTileIntoWorld(tile, new Location(0,0,0), orientation);
         firstTileHasBeenPlaced = true;
+    }
+
+    public ArrayList<Hex> getAllHexesInWorld() {
+        return this.allHexesInWorld;
     }
 }
