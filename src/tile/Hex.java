@@ -3,6 +3,7 @@ package tile;
 public class Hex {
     private Terrain terrain;
     private Tile owner;
+    private Location location;
 
     public Hex(Tile owner, Terrain terrain) {
         this.owner = owner;
@@ -18,5 +19,11 @@ public class Hex {
         return this.owner;
     }
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
+    public Location getLocation() {
+        return this.location;
+    }
 }

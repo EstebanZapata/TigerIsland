@@ -7,7 +7,7 @@ import tile.Hex;
 import tile.Location;
 import tile.Terrain;
 import tile.Tile;
-import tile.orientation.TileOrientation;
+import tile.orientation.TileOrientationRelativeToVolcano;
 
 public class WorldTest {
     private World world;
@@ -27,9 +27,9 @@ public class WorldTest {
 
     // TODO: Test each orientation
     @Test
-    public void testAfterTileInsertGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException {
+    public void testAfterTileWithOrientationSouthwestSoutheastInsertGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException {
         Location locationOfVolcano = new Location(1,2,0);
-        world.insertTileIntoWorld(tile, locationOfVolcano, TileOrientation.SOUTHWEST_SOUTHEAST);
+        world.insertTileIntoWorld(tile, locationOfVolcano, TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -40,10 +40,26 @@ public class WorldTest {
         Assert.assertEquals(rightHexightHex, world.getHexByCoordinate(1,1,0));
     }
 
+    @Test
+    public void testAfterTileWithOrientationEastNortheastInsertGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException {
+        Location locationOfVolcano = new Location(3,4,0);
+        world.insertTileIntoWorld(tile, locationOfVolcano, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+
+        Hex volcanoHex = tile.getVolcanoHex();
+        Hex leftHex = tile.getLeftHexRelativeToVolcano();
+        Hex rightHex = tile.getRightHexRelativeToVolcano();
+
+        Assert.assertEquals(volcanoHex, world.getHexByCoordinate(3,4,0));
+        Assert.assertEquals(leftHex, world.getHexByCoordinate(4,4,0));
+        Assert.assertEquals(rightHex, world.getHexByCoordinate(4,5,0));
+    }
+
     @Test(expected = HexAlreadyAtLocationException.class)
     public void testPlacingTileOverlappingAnotherTileThrowsException() throws HexAlreadyAtLocationException {
-        world.insertTileIntoWorld(tile, new Location(1,2,0), TileOrientation.EAST_NORTHEAST);
-        world.insertTileIntoWorld(new Tile(Terrain.JUNGLE, Terrain.ROCKY), new Location(2,4,0), TileOrientation.SOUTHWEST_SOUTHEAST);
-
+        world.insertTileIntoWorld(tile, new Location(1,2,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+        world.insertTileIntoWorld(new Tile(Terrain.JUNGLE, Terrain.ROCKY), new Location(2,4,0), TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
     }
+
+
+
 }

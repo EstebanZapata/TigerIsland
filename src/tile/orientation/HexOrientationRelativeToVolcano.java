@@ -1,5 +1,5 @@
 package tile.orientation;
 
-public enum HexOrientation {
+public enum HexOrientationRelativeToVolcano {
     SOUTHWEST, WEST, NORTHWEST, NORTHEAST, EAST, SOUTHEAST;
 }
