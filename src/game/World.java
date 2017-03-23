@@ -22,8 +22,7 @@ class World {
     }
 
     public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientationRelativeToVolcano tileOrientation)
-            throws HexAlreadyAtLocationException, AirBelowTileException
-    {
+            throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException {
         Location locationOfLeftHex;
         Location locationOfRightHex;
 
@@ -43,7 +42,7 @@ class World {
         locationOfTileHexes[2] = locationOfRightHex;
 
         if (locationOfVolcano.getzCoordinate() != 0) {
-            ableToPlaceTile = noAirBelowTile(locationOfTileHexes) && tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  noHexesExistAtLocations(locationOfTileHexes);
+            ableToPlaceTile = noAirBelowTile(locationOfTileHexes) && topVolcanoCoversOneBelow(locationOfVolcano) && tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  noHexesExistAtLocations(locationOfTileHexes);
         }
         else {
             ableToPlaceTile = (tileIsAdjacentToAnExistingTile(locationOfTileHexes) || !firstTileHasBeenPlaced) && noHexesExistAtLocations(locationOfTileHexes);
@@ -69,6 +68,16 @@ class World {
 
     }
 
+    private boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException {
+        int xCoordinate = locationOfVolcano.getxCoordinate();
+        int yCoordinate = locationOfVolcano.getyCoordinate();
+        int zCoordinateToCheck = locationOfVolcano.getzCoordinate() - 1;
+        if (getHexByCoordinate(xCoordinate,yCoordinate,zCoordinateToCheck).getTerrain() != Terrain.VOLCANO) {
+            throw new TopVolcanoDoesNotCoverBottomVolcanoException(String.format("Hex at (%d,%d,%d) is not volcano", xCoordinate,yCoordinate,zCoordinateToCheck));
+        }
+        return true;
+    }
+
     private boolean tileIsAdjacentToAnExistingTile(Location[] locationOfHexes) {
         //TODO: implement
         return true;
@@ -90,27 +99,34 @@ class World {
         return true;
     }
 
-    private boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) {
+    private boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws NoHexAtLocationException {
 
         Tile tileOne;
         Tile tileTwo;
         Tile tileThree;
 
-        try {
-            tileOne = getHexByLocation(locationOfTileHexes[0]).getOwner();
-            tileTwo = getHexByLocation(locationOfTileHexes[1]).getOwner();
-            tileThree = getHexByLocation(locationOfTileHexes[2]).getOwner();
+        int zCoordinateToCheck = locationOfTileHexes[0].getzCoordinate() - 1;
 
-        }
-        catch (NoHexAtLocationException e) {
-            return true;
-        }
+        Location locationOne = locationOfTileHexes[0];
+        Location locationTwo = locationOfTileHexes[1];
+        Location locationThree = locationOfTileHexes[2];
+
+        Location locationOneToCheck = new Location(locationOne.getxCoordinate(), locationOne.getyCoordinate(), zCoordinateToCheck);
+        Location locationTwoToCheck = new Location(locationTwo.getxCoordinate(), locationTwo.getyCoordinate(), zCoordinateToCheck);
+        Location locationThreeToCheck = new Location(locationThree.getxCoordinate(), locationThree.getyCoordinate(), zCoordinateToCheck);
+
+
+        tileOne = getHexByLocation(locationOneToCheck).getOwner();
+        tileTwo = getHexByLocation(locationTwoToCheck).getOwner();
+        tileThree = getHexByLocation(locationThreeToCheck).getOwner();
+
+
 
         if (tileOne == tileTwo && tileOne == tileThree) {
-            return true;
+            return false;
         }
         else {
-            return false;
+            return true;
         }
     }
 
@@ -275,7 +291,7 @@ class World {
         }
     }
 
-    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException, AirBelowTileException {
+    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException {
 
         insertTileIntoWorld(tile, new Location(0,0,0), orientation);
         firstTileHasBeenPlaced = true;

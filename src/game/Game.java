@@ -31,6 +31,10 @@ public class Game {
         }
         catch (AirBelowTileException e) {
             System.out.println(e.getMessage());
+        } catch (NoHexAtLocationException e) {
+            System.out.println(e.getMessage());
+        } catch (TopVolcanoDoesNotCoverBottomVolcanoException e) {
+            System.out.println(e.getMessage());
         }
 
         world.printAllHexesAndTheirInformation();
