@@ -26,9 +26,21 @@ public class Game {
         }
     }
 
-    public void play() {
+    public void play()  {
         Tile tile = drawTile();
-        insertTileIntoWorld(tile, new Location(0,0,0), TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
+        try {
+            world.placeFirstTile(tile, TileOrientationRelativeToVolcano.NORTHWEST_WEST);
+            world.placeFirstTile(tile, TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
+
+
+        }
+        catch (HexAlreadyAtLocationException e) {
+            System.out.println(e.getMessage());
+        }
+
+        world.printAllHexesAndTheirInformation();
+
+
     }
 
 }

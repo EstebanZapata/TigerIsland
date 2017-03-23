@@ -27,7 +27,7 @@ public class WorldTest {
 
     // TODO: Test each orientation
     @Test
-    public void testAfterTileWithOrientationSouthwestSoutheastInsertGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException {
+    public void testAfterPlacingTileWithOrientationSouthwestSoutheastGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException {
         Location locationOfVolcano = new Location(1,2,0);
         world.insertTileIntoWorld(tile, locationOfVolcano, TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
 
@@ -41,7 +41,7 @@ public class WorldTest {
     }
 
     @Test
-    public void testAfterTileWithOrientationEastNortheastInsertGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException {
+    public void testAfterPlacingTileWithOrientationEastNortheastGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException {
         Location locationOfVolcano = new Location(3,4,0);
         world.insertTileIntoWorld(tile, locationOfVolcano, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
 
@@ -55,10 +55,11 @@ public class WorldTest {
     }
 
     @Test(expected = HexAlreadyAtLocationException.class)
-    public void testPlacingTileOverlappingAnotherTileThrowsException() throws HexAlreadyAtLocationException {
+    public void testCannotPlaceTileOverlappingAnotherTile() throws HexAlreadyAtLocationException {
         world.insertTileIntoWorld(tile, new Location(1,2,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
         world.insertTileIntoWorld(new Tile(Terrain.JUNGLE, Terrain.ROCKY), new Location(2,4,0), TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
     }
+
 
 
 
