@@ -17,14 +17,6 @@ public class Game {
         return new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
     }
 
-    public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientationRelativeToVolcano orientation) {
-        try {
-            world.insertTileIntoWorld(tile, locationOfVolcano, orientation);
-        }
-        catch (HexAlreadyAtLocationException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     public void play()  {
         Tile tile = drawTile();
@@ -35,6 +27,9 @@ public class Game {
 
         }
         catch (HexAlreadyAtLocationException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (AirBelowTileException e) {
             System.out.println(e.getMessage());
         }
 
