@@ -22,7 +22,7 @@ class World {
     }
 
     public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientationRelativeToVolcano tileOrientation)
-            throws HexAlreadyAtLocationException
+            throws HexAlreadyAtLocationException, AirBelowTileException
     {
         Location locationOfLeftHex;
         Location locationOfRightHex;
@@ -74,7 +74,7 @@ class World {
         return true;
     }
 
-    private boolean noAirBelowTile(Location[] locationOfTileHexes) {
+    private boolean noAirBelowTile(Location[] locationOfTileHexes) throws AirBelowTileException {
         int zCoordinate = locationOfTileHexes[0].getzCoordinate();
         int zLayerToCheck = zCoordinate - 1;
 
@@ -84,7 +84,7 @@ class World {
             getHexByCoordinate(locationOfTileHexes[2].getxCoordinate(), locationOfTileHexes[2].getyCoordinate(), zLayerToCheck);
         }
         catch (NoHexAtLocationException e) {
-            return false;
+            throw new AirBelowTileException("Air below tile");
         }
 
         return true;
@@ -275,7 +275,7 @@ class World {
         }
     }
 
-    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException {
+    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException, AirBelowTileException {
 
         insertTileIntoWorld(tile, new Location(0,0,0), orientation);
         firstTileHasBeenPlaced = true;
