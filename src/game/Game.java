@@ -7,7 +7,7 @@ import tile.Tile;
 import tile.orientation.TileOrientationRelativeToVolcano;
 
 public class Game {
-    private World world;
+    public World world;
 
     public Game() {
         this.world = new World();
@@ -41,5 +41,6 @@ public class Game {
 
 
     }
+
 
 }
