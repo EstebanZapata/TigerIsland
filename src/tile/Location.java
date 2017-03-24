@@ -22,4 +22,16 @@ public class Location {
     public int getzCoordinate() {
         return zCoordinate;
     }
+
+    public void setxCoordinate(int xCoordinate) {
+        this.xCoordinate = xCoordinate;
+    }
+
+    public void setyCoordinate(int col) {
+        this.yCoordinate = col;
+    }
+
+    public void setzCoordinate(int height) {
+        this.zCoordinate = height;
+    }
 }
