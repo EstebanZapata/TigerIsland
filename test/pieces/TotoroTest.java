@@ -25,21 +25,21 @@ public class TotoroTest {
     }
 
     @Test
-    public void testSettingTigerColor() throws Throwable {
+    public void testSettingTotoroColor() throws Throwable {
         String totoroColor = "blue";
         testTotoro.setTotoroColor(totoroColor);
         Assert.assertEquals(totoroColor, testTotoro.getTotoroColor());
     }
 
     @Test
-    public void testSettingTigerLocation() throws Throwable {
+    public void testSettingTotoroLocation() throws Throwable {
         Location totoroLocation = new Location(3,4,5);
         testTotoro.setTotoroLocation(totoroLocation);
         Assert.assertEquals(totoroLocation, testTotoro.getTotoroLocation());
     }
 
     @Test
-    public void testSetTigerStatus() throws Throwable {
+    public void testSetTotoroStatus() throws Throwable {
         String status = "not_yet_played";
         testTotoro.setTotoroStatus(status);
         Assert.assertEquals(status, testTotoro.getTotoroStatus());
