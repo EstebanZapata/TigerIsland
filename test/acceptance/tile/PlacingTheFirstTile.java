@@ -16,13 +16,13 @@ public class PlacingTheFirstTile {
     private World world;
 
     @Given("^I have a tile$")
-    public void i_have_a_tile() throws Throwable {
+    public void i_have_a_tile() {
         world = new World();
         tile = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
     }
 
     @Given("^No other tiles have been placed$")
-    public void no_other_tiles_have_been_placed() throws Throwable {
+    public void no_other_tiles_have_been_placed() {
         Assert.assertEquals(0, world.getAllHexesInWorld().size());
     }
 

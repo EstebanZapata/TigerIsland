@@ -17,7 +17,6 @@ public class Game {
         return new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
     }
 
-
     public void play()  {
         Tile tile = drawTile();
         try {
@@ -35,6 +34,8 @@ public class Game {
             System.out.println(e.getMessage());
         } catch (TopVolcanoDoesNotCoverBottomVolcanoException e) {
             System.out.println(e.getMessage());
+        } catch (TileNotAdjacentToAnotherException e) {
+            e.printStackTrace();
         }
 
         world.printAllHexesAndTheirInformation();
