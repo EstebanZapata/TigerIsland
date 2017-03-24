@@ -2,29 +2,28 @@ package tile;
 
 public class Tile {
     private Hex[] hexes;
-    private int MAX_HEXES_PER_TILE = 3;
+    public static int MAX_HEXES_PER_TILE = 3;
 
+    private static final int VOLCANO_HEX = 0;
+    private static final int LEFT_HEX = 1;
+    private static final int RIGHT_HEX = 2;
 
     public Tile(Terrain terrainOne, Terrain terrainTwo) {
         hexes = new Hex[MAX_HEXES_PER_TILE];
-        hexes[0] = new Hex(this, Terrain.VOLCANO);
-        hexes[1] = new Hex(this, terrainOne);
-        hexes[2] = new Hex(this, terrainTwo);
-
-        setUpInnerSideAdjacencies();
+        hexes[VOLCANO_HEX] = new Hex(this, Terrain.VOLCANO);
+        hexes[LEFT_HEX] = new Hex(this, terrainOne);
+        hexes[RIGHT_HEX] = new Hex(this, terrainTwo);
     }
 
-    private void setUpInnerSideAdjacencies() {
-        Side[] sidesOfHexZero = hexes[0].getSides();
-        Side[] sidesOfHexOne = hexes[1].getSides();
-        Side[] sidesOfHexTwo = hexes[2].getSides();
-
-        sidesOfHexZero[4].setSidesAdjacentToEachOther(sidesOfHexOne[5]);
-        sidesOfHexZero[5].setSidesAdjacentToEachOther(sidesOfHexTwo[4]);
-        sidesOfHexOne[4].setSidesAdjacentToEachOther(sidesOfHexTwo[5]);
+    public Hex getVolcanoHex() {
+        return hexes[VOLCANO_HEX];
     }
 
-    public Hex[] getHexes() {
-        return this.hexes;
+    public Hex getLeftHexRelativeToVolcano() {
+        return hexes[LEFT_HEX];
+    }
+
+    public Hex getRightHexRelativeToVolcano() {
+        return hexes[RIGHT_HEX];
     }
 }
