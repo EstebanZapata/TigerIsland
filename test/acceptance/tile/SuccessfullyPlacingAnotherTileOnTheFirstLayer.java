@@ -17,14 +17,14 @@ public class SuccessfullyPlacingAnotherTileOnTheFirstLayer {
     private Location[] locationOfTile;
 
     @Given("^a non-empty board$")
-    public void a_non_empty_board() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException {
+    public void a_non_empty_board() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
         world = new World();
         tileOne = new Tile(Terrain.GRASSLANDS,Terrain.JUNGLE);
         world.placeFirstTile(tileOne, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
     }
 
     @When("^I place the tile on  the first layer$")
-    public void i_place_the_tile_on_the_first_layer() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException {
+    public void i_place_the_tile_on_the_first_layer() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
         tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
         world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
     }

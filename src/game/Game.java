@@ -36,6 +36,8 @@ public class Game {
             System.out.println(e.getMessage());
         } catch (TileNotAdjacentToAnotherException e) {
             e.printStackTrace();
+        } catch (TileCompletelyOverlapsAnotherException e) {
+            e.printStackTrace();
         }
 
         world.printAllHexesAndTheirInformation();

@@ -28,7 +28,7 @@ public class World {
     }
 
     public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientationRelativeToVolcano tileOrientation)
-            throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException {
+            throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
         Location locationOfLeftHex;
         Location locationOfRightHex;
 
@@ -227,7 +227,7 @@ public class World {
         return true;
     }
 
-    public boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws NoHexAtLocationException {
+    public boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws NoHexAtLocationException, TileCompletelyOverlapsAnotherException {
 
         Tile tileOne;
         Tile tileTwo;
@@ -251,7 +251,7 @@ public class World {
 
 
         if (tileOne == tileTwo && tileOne == tileThree) {
-            return false;
+            throw new TileCompletelyOverlapsAnotherException("Tile completely overlaps another");
         }
         else {
             return true;
@@ -383,7 +383,12 @@ public class World {
 
     public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {
         try {
-            return hexCoordinateSystem.get(x).get(y).get(z);
+            Hex hex = hexCoordinateSystem.get(x).get(y).get(z);
+            if (hex == null) {
+                throw new NullPointerException();
+            }
+            return hex;
+
         }
         catch (NullPointerException e) {
             String errorMessage = String.format("No hex at location (%d,%d,%d)", x,y,z);
@@ -419,7 +424,7 @@ public class World {
         }
     }
 
-    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException {
+    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
 
         insertTileIntoWorld(tile, new Location(0,0,0), orientation);
         firstTileHasBeenPlaced = true;
