@@ -15,7 +15,7 @@ public class villager {
         this.status = status;
     }
 
-    public int getVillagerIDID() {
+    public int getVillagerID() {
         return villagerID;
     }
 
