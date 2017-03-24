@@ -429,7 +429,9 @@ public class World {
         insertTileIntoWorld(tile, new Location(0,0,0), orientation);
         firstTileHasBeenPlaced = true;
     }
-
+    public boolean getFirstTileHasBeenPlaced(){
+        return firstTileHasBeenPlaced;
+    }
     public ArrayList<Hex> getAllHexesInWorld() {
         return this.allHexesInWorld;
     }
