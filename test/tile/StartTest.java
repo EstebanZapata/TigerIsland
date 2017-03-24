@@ -1,3 +1,6 @@
+package tile;
+
+import game.Start;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

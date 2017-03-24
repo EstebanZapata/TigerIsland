@@ -1,6 +1,8 @@
+package game;
+
 import game.Game;
 
-class Start {
+public class Start {
     public Game myGame;
     public void main(String[] args) {
         this.myGame = new Game();
