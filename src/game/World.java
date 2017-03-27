@@ -5,24 +5,30 @@ import tile.orientation.HexOrientationRelativeToVolcano;
 import tile.orientation.TileOrientationRelativeToVolcano;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
-class World {
+import static java.util.Arrays.asList;
+
+//TODO: Enforce first tile placement and cannot use that method afterwards
+
+public class World {
     private HashMap<Integer, HashMap<Integer, HashMap<Integer, Hex>>> hexCoordinateSystem;
     private ArrayList<Hex> allHexesInWorld;
 
     private static final int ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION = 0;
     private static final int ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION = 1;
 
-    private static boolean firstTileHasBeenPlaced = false;
+    private boolean firstTileHasBeenPlaced = false;
 
-    World() {
+    public World() {
         hexCoordinateSystem = new HashMap<>();
         allHexesInWorld = new ArrayList<>();
     }
 
     public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientationRelativeToVolcano tileOrientation)
-            throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException {
+            throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
         Location locationOfLeftHex;
         Location locationOfRightHex;
 
@@ -45,7 +51,7 @@ class World {
             ableToPlaceTile = noAirBelowTile(locationOfTileHexes) && topVolcanoCoversOneBelow(locationOfVolcano) && tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  noHexesExistAtLocations(locationOfTileHexes);
         }
         else {
-            ableToPlaceTile = (tileIsAdjacentToAnExistingTile(locationOfTileHexes) || !firstTileHasBeenPlaced) && noHexesExistAtLocations(locationOfTileHexes);
+            ableToPlaceTile = (!firstTileHasBeenPlaced || tileIsAdjacentToAnExistingTile(locationOfTileHexes, tileOrientation)) && noHexesExistAtLocations(locationOfTileHexes);
         }
 
         if(ableToPlaceTile) {
@@ -68,7 +74,7 @@ class World {
 
     }
 
-    private boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException {
+    public boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException {
         int xCoordinate = locationOfVolcano.getxCoordinate();
         int yCoordinate = locationOfVolcano.getyCoordinate();
         int zCoordinateToCheck = locationOfVolcano.getzCoordinate() - 1;
@@ -78,12 +84,134 @@ class World {
         return true;
     }
 
-    private boolean tileIsAdjacentToAnExistingTile(Location[] locationOfHexes) {
-        //TODO: implement
-        return true;
+    public boolean tileIsAdjacentToAnExistingTile(Location[] locationOfHexes, TileOrientationRelativeToVolcano tileOrientation) throws TileNotAdjacentToAnotherException {
+        int upArrowOrientation = 0;
+        int downArrowOrientation = 1;
+
+        int tileArrowOrientation;
+
+        if(tileOrientation == TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST
+                || tileOrientation == TileOrientationRelativeToVolcano.EAST_NORTHEAST
+                || tileOrientation == TileOrientationRelativeToVolcano.NORTHWEST_WEST) {
+            tileArrowOrientation = upArrowOrientation;
+        }
+        else {
+            tileArrowOrientation = downArrowOrientation;
+        }
+
+        Location[] adjecentHexLocations = new Location[9];
+
+        ArrayList<Location> locationOfHexesList = new ArrayList<>(Arrays.asList(locationOfHexes));
+
+        if (tileArrowOrientation == upArrowOrientation) {
+
+            sortByLargestXAndLargestYAtEndOfList(locationOfHexesList);
+            adjecentHexLocations = getAdjacentHexesUpArrowOrientation(locationOfHexesList.get(2));
+
+        }
+
+        else {
+            sortBySmallestXAndLargestYAtEndOfList(locationOfHexesList);
+            adjecentHexLocations = getAdjacentHexesDownArrowOrientation(locationOfHexesList.get(2));
+        }
+
+        for (int i = 0; i < 9; i++) {
+            try {
+                Hex hex = getHexByLocation(adjecentHexLocations[i]);
+                if (hex != null) {
+                    return true;
+                }
+            } catch (NoHexAtLocationException e) {
+                continue;
+            }
+        }
+        throw new TileNotAdjacentToAnotherException("Tile being placed is not adjacent to an existing tile");
+
+
     }
 
-    private boolean noAirBelowTile(Location[] locationOfTileHexes) throws AirBelowTileException {
+    private Location[] getAdjacentHexesDownArrowOrientation(Location topLeftLocation) {
+        int topX = topLeftLocation.getxCoordinate();
+        int topY = topLeftLocation.getyCoordinate();
+        int topZ = topLeftLocation.getzCoordinate();
+
+        Location[] locationsToCheck = new Location[9];
+
+        locationsToCheck[0] = new Location(topX-1,topY,topZ);
+        locationsToCheck[1] = new Location(topX-1, topY-1,topZ);
+        locationsToCheck[2] = new Location(topX-1,topY-2,topZ);
+        locationsToCheck[3] = new Location(topX, topY-2, topZ);
+        locationsToCheck[4] = new Location(topX+1, topY-1, topZ);
+        locationsToCheck[5] = new Location(topX+2, topY,topZ);
+        locationsToCheck[6] = new Location(topX+2,topY+1,topZ);
+        locationsToCheck[7] = new Location(topX+1, topY+1, topZ);
+        locationsToCheck[8] = new Location(topX, topY+1, topZ);
+
+        return locationsToCheck;
+    }
+
+    private Location[] getAdjacentHexesUpArrowOrientation(Location topHexLocation) {
+        int topX = topHexLocation.getxCoordinate();
+        int topY = topHexLocation.getyCoordinate();
+        int topZ = topHexLocation.getzCoordinate();
+
+        Location[] locationsToCheck = new Location[9];
+
+        locationsToCheck[0] = new Location(topX, topY + 1, topZ);
+        locationsToCheck[1] = new Location(topX - 1, topY, topZ);
+        locationsToCheck[2] = new Location(topX-2, topY - 1, topZ);
+        locationsToCheck[3] = new Location(topX-2, topY-2, topZ);
+        locationsToCheck[4] = new Location(topX-1, topY-2, topZ);
+        locationsToCheck[5] = new Location(topX, topY-2, topZ);
+        locationsToCheck[6] = new Location(topX+1, topY-1, topZ);
+        locationsToCheck[7] = new Location(topX + 1, topY, topZ);
+        locationsToCheck[8] = new Location(topX + 1, topY + 1, topZ);
+
+        return locationsToCheck;
+    }
+
+    private void sortBySmallestXAndLargestYAtEndOfList(ArrayList<Location> locationOfHexesList) {
+        locationOfHexesList.sort(new Comparator<Location>() {
+            @Override
+            public int compare(Location o1, Location o2) {
+                int o1XCoordinate = o1.getxCoordinate();
+                int o2XCoordinate = o2.getxCoordinate();
+
+                int o1YCoordinate = o1.getyCoordinate();
+                int o2YCoordinate = o2.getyCoordinate();
+
+                if (o1XCoordinate < o2XCoordinate && o1YCoordinate > o2YCoordinate) {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
+            }
+        });
+    }
+
+    private void sortByLargestXAndLargestYAtEndOfList(ArrayList<Location> locationOfHexesList) {
+        locationOfHexesList.sort(new Comparator<Location>() {
+            @Override
+            public int compare(Location o1, Location o2) {
+                int o1XCoordinate = o1.getxCoordinate();
+                int o2XCoordinate = o2.getxCoordinate();
+
+                int o1YCoordinate = o1.getyCoordinate();
+                int o2YCoordinate = o2.getyCoordinate();
+
+                if (o1XCoordinate > o2XCoordinate && o1YCoordinate > o2YCoordinate) {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
+            }
+        });
+    }
+
+
+    public boolean noAirBelowTile(Location[] locationOfTileHexes) throws AirBelowTileException {
         int zCoordinate = locationOfTileHexes[0].getzCoordinate();
         int zLayerToCheck = zCoordinate - 1;
 
@@ -99,7 +227,7 @@ class World {
         return true;
     }
 
-    private boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws NoHexAtLocationException {
+    public boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws NoHexAtLocationException, TileCompletelyOverlapsAnotherException {
 
         Tile tileOne;
         Tile tileTwo;
@@ -123,7 +251,7 @@ class World {
 
 
         if (tileOne == tileTwo && tileOne == tileThree) {
-            return false;
+            throw new TileCompletelyOverlapsAnotherException("Tile completely overlaps another");
         }
         else {
             return true;
@@ -207,7 +335,7 @@ class World {
 
     }
 
-    private boolean noHexesExistAtLocations(Location[] locationOfHexes) throws HexAlreadyAtLocationException {
+    public boolean noHexesExistAtLocations(Location[] locationOfHexes) throws HexAlreadyAtLocationException {
         boolean ableToInsertTileIntoWorld = true;
         Location notEmptyLocation = null;
 
@@ -255,7 +383,12 @@ class World {
 
     public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {
         try {
-            return hexCoordinateSystem.get(x).get(y).get(z);
+            Hex hex = hexCoordinateSystem.get(x).get(y).get(z);
+            if (hex == null) {
+                throw new NullPointerException();
+            }
+            return hex;
+
         }
         catch (NullPointerException e) {
             String errorMessage = String.format("No hex at location (%d,%d,%d)", x,y,z);
@@ -291,9 +424,15 @@ class World {
         }
     }
 
-    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException {
+    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
 
         insertTileIntoWorld(tile, new Location(0,0,0), orientation);
         firstTileHasBeenPlaced = true;
+    }
+    public boolean getFirstTileHasBeenPlaced(){
+        return firstTileHasBeenPlaced;
+    }
+    public ArrayList<Hex> getAllHexesInWorld() {
+        return this.allHexesInWorld;
     }
 }

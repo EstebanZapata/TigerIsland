@@ -7,7 +7,7 @@ import tile.Tile;
 import tile.orientation.TileOrientationRelativeToVolcano;
 
 public class Game {
-    private World world;
+    public World world;
 
     public Game() {
         this.world = new World();
@@ -16,7 +16,6 @@ public class Game {
     public Tile drawTile() {
         return new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
     }
-
 
     public void play()  {
         Tile tile = drawTile();
@@ -35,11 +34,16 @@ public class Game {
             System.out.println(e.getMessage());
         } catch (TopVolcanoDoesNotCoverBottomVolcanoException e) {
             System.out.println(e.getMessage());
+        } catch (TileNotAdjacentToAnotherException e) {
+            e.printStackTrace();
+        } catch (TileCompletelyOverlapsAnotherException e) {
+            e.printStackTrace();
         }
 
         world.printAllHexesAndTheirInformation();
 
 
     }
+
 
 }
