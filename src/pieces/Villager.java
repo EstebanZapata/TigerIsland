@@ -1,5 +1,6 @@
 package pieces;
 
+import game.Player;
 import tile.Location;
 
 public class Villager extends Piece {
