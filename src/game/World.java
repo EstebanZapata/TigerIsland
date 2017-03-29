@@ -7,15 +7,15 @@ import tile.orientation.TileOrientationRelativeToVolcano;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-
-import static java.util.Arrays.asList;
 
 //TODO: Enforce first tile placement and cannot use that method afterwards
 
 public class World {
-    private HashMap<Integer, HashMap<Integer, HashMap<Integer, Hex>>> hexCoordinateSystem;
+    private Hex[][] hexCoordinateSystem;
     private ArrayList<Hex> allHexesInWorld;
+
+    private static final int SIZE_OF_BOARD = 200;
+    private static final int ORIGIN_OFFSET = SIZE_OF_BOARD/2;
 
     private static final int ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION = 0;
     private static final int ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION = 1;
@@ -23,8 +23,13 @@ public class World {
     private boolean firstTileHasBeenPlaced = false;
 
     public World() {
-        hexCoordinateSystem = new HashMap<>();
+        initializeCoordinateSystem();
         allHexesInWorld = new ArrayList<>();
+    }
+
+    private void initializeCoordinateSystem() {
+        hexCoordinateSystem = new Hex[SIZE_OF_BOARD][SIZE_OF_BOARD];
+
     }
 
     public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientationRelativeToVolcano tileOrientation)
@@ -59,9 +64,9 @@ public class World {
             Hex leftHex = tile.getLeftHexRelativeToVolcano();
             Hex rightHex = tile.getRightHexRelativeToVolcano();
 
-            insertHexIntoWorld(volcanoHex, locationOfVolcano);
-            insertHexIntoWorld(leftHex, locationOfLeftHex);
-            insertHexIntoWorld(rightHex, locationOfRightHex);
+            insertHexIntoCoordinateSystem(volcanoHex, locationOfVolcano);
+            insertHexIntoCoordinateSystem(leftHex, locationOfLeftHex);
+            insertHexIntoCoordinateSystem(rightHex, locationOfRightHex);
 
             allHexesInWorld.add(volcanoHex);
             allHexesInWorld.add(leftHex);
@@ -383,8 +388,13 @@ public class World {
 
     public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {
         try {
-            Hex hex = hexCoordinateSystem.get(x).get(y).get(z);
+            int arrayXCoordinate = getArrayCoordinateFromTrueCoordinate(x);
+            int arrayYCoordinate = getArrayCoordinateFromTrueCoordinate(y);
+            Hex hex = hexCoordinateSystem[arrayXCoordinate][arrayYCoordinate];
             if (hex == null) {
+                throw new NullPointerException();
+            }
+            if (hex.getLocation().getzCoordinate() != z) {
                 throw new NullPointerException();
             }
             return hex;
@@ -396,16 +406,11 @@ public class World {
         }
     }
 
-    private void insertHexIntoWorld(Hex hex, Location location) throws HexAlreadyAtLocationException {
-        int xCoordinate = location.getxCoordinate();
-        int yCoordinate = location.getyCoordinate();
-        int zCoordinate = location.getzCoordinate();
+    private void insertHexIntoCoordinateSystem(Hex hex, Location location) throws HexAlreadyAtLocationException {
+        int arrayCoordinateX = getArrayCoordinateFromTrueCoordinate(location.getxCoordinate());
+        int arrayCoordinateY = getArrayCoordinateFromTrueCoordinate(location.getyCoordinate());
 
-        hexCoordinateSystem.putIfAbsent(xCoordinate, new HashMap<Integer, HashMap<Integer, Hex>>());
-        hexCoordinateSystem.get(xCoordinate).putIfAbsent(yCoordinate, new HashMap<Integer, Hex>());
-
-
-        hexCoordinateSystem.get(xCoordinate).get(yCoordinate).put(zCoordinate, hex);
+        hexCoordinateSystem[arrayCoordinateX][arrayCoordinateY] = hex;
 
     }
 
@@ -435,4 +440,10 @@ public class World {
     public ArrayList<Hex> getAllHexesInWorld() {
         return this.allHexesInWorld;
     }
+
+    private int getArrayCoordinateFromTrueCoordinate(int trueCoordinate) {
+        return trueCoordinate + ORIGIN_OFFSET;
+    }
+
+
 }
