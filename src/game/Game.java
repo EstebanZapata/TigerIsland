@@ -1,7 +1,8 @@
 package game;
 
 
-import tile.Location;
+import game.world.*;
+import game.world.exceptions.*;
 import tile.Terrain;
 import tile.Tile;
 import tile.orientation.TileOrientationRelativeToVolcano;
@@ -25,22 +26,11 @@ public class Game {
 
 
         }
-        catch (HexAlreadyAtLocationException e) {
+        catch (TilePlacementException e) {
             System.out.println(e.getMessage());
-        }
-        catch (AirBelowTileException e) {
-            System.out.println(e.getMessage());
-        } catch (NoHexAtLocationException e) {
-            System.out.println(e.getMessage());
-        } catch (TopVolcanoDoesNotCoverBottomVolcanoException e) {
-            System.out.println(e.getMessage());
-        } catch (TileNotAdjacentToAnotherException e) {
-            e.printStackTrace();
-        } catch (TileCompletelyOverlapsAnotherException e) {
-            e.printStackTrace();
         }
 
-        world.printAllHexesAndTheirInformation();
+
 
 
     }

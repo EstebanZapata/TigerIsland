@@ -8,7 +8,7 @@ import tile.Hex;
 import tile.Terrain;
 import tile.Tile;
 
-import game.World;
+import game.world.World;
 import tile.orientation.TileOrientationRelativeToVolcano;
 
 public class PlacingTheFirstTile {

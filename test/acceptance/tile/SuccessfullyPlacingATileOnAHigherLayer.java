@@ -3,7 +3,7 @@ package acceptance.tile;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import game.World;
+import game.world.World;
 import org.junit.Assert;
 import tile.Hex;
 import tile.Location;
