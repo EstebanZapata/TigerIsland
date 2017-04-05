@@ -1,5 +1,6 @@
 package pieces;
 
+import game.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,26 +11,13 @@ import tile.Location;
  */
 
 public class TigerTest {
-    private tiger testTiger;
-
+    private Tiger testTiger;
+    private Player player1 = new Player();
     @Before
     public void setupTiger() {
-        testTiger = new tiger(1, "blue", new Location(3,4,5), "in_play");
+        testTiger = new Tiger(player1, new Location(3,4,5), true);
     }
 
-    @Test
-    public void testSettingTigerId() throws Throwable {
-        int tigerId = 1;
-        testTiger.setTigerID(tigerId);
-        Assert.assertEquals(tigerId, testTiger.getTigerID());
-    }
-
-    @Test
-    public void testSettingTigerColor() throws Throwable {
-        String tigerColor = "blue";
-        testTiger.setTigerColor(tigerColor);
-        Assert.assertEquals(tigerColor, testTiger.getTigerColor());
-    }
 
     @Test
     public void testSettingTigerLocation() throws Throwable {
@@ -40,8 +28,8 @@ public class TigerTest {
 
     @Test
     public void testSetTigerStatus() throws Throwable {
-        String status = "not_yet_played";
-        testTiger.setTigerStatus(status);
+        boolean status = false;
+        testTiger.setTigerStatus(false);
         Assert.assertEquals(status, testTiger.getTigerStatus());
     }
 }
