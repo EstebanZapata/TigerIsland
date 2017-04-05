@@ -25,6 +25,7 @@ public class World {
     public World() {
         initializeCoordinateSystem();
         allHexesInWorld = new ArrayList<>();
+
     }
 
     private void initializeCoordinateSystem() {
@@ -34,16 +35,9 @@ public class World {
 
     public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientationRelativeToVolcano tileOrientation)
             throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        Location locationOfLeftHex;
-        Location locationOfRightHex;
+        Location locationOfLeftHex = getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
+        Location locationOfRightHex = getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
 
-        HexOrientationRelativeToVolcano[] hexOrientations = getHexOrientationFromTileOrientation(tileOrientation);
-
-        HexOrientationRelativeToVolcano orientationOfLeftHex = hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION];
-        HexOrientationRelativeToVolcano orientationOfRightHex = hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION];
-
-        locationOfLeftHex = getLocationRelativeToOrientationAndCenter(locationOfVolcano, orientationOfLeftHex);
-        locationOfRightHex = getLocationRelativeToOrientationAndCenter(locationOfVolcano, orientationOfRightHex);
 
         boolean ableToPlaceTile = false;
 
@@ -446,4 +440,19 @@ public class World {
     }
 
 
+    public Location getTentativeLeftHexLocation(Location locationOfVolcano, TileOrientationRelativeToVolcano tileOrientation) {
+        HexOrientationRelativeToVolcano[] hexOrientations = getHexOrientationFromTileOrientation(tileOrientation);
+
+        Location locationOfLeftHex = getLocationRelativeToOrientationAndCenter(locationOfVolcano, hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION]);
+
+        return locationOfLeftHex;
+    }
+
+    public Location getTentativeRightHexLocation(Location locationOfVolcano, TileOrientationRelativeToVolcano tileOrientation) {
+        HexOrientationRelativeToVolcano[] hexOrientations = getHexOrientationFromTileOrientation(tileOrientation);
+
+        Location locationOfRightHex = getLocationRelativeToOrientationAndCenter(locationOfVolcano, hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION]);
+
+        return locationOfRightHex;
+    }
 }

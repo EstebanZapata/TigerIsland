@@ -26,25 +26,26 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
         world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
     }
 
-    @When("^I place the tile on the layer higher than those$")
+    @When("^I attempt to place the tile on the layer higher than those two tiles$")
     public void i_place_the_tile_on_the_layer_higher_than_those() throws Throwable {
         upperTile = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
-        world.insertTileIntoWorld(upperTile, new Location(0,0,1), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+
+        Location locationOfVolcano = new Location(0,0,1);
 
         locationOfHexes = new Location[3];
-        locationOfHexes[0] = upperTile.getVolcanoHex().getLocation();
-        locationOfHexes[1] = upperTile.getLeftHexRelativeToVolcano().getLocation();
-        locationOfHexes[2] = upperTile.getRightHexRelativeToVolcano().getLocation();
+        locationOfHexes[0] = locationOfVolcano;
+        locationOfHexes[1] = world.getTentativeLeftHexLocation(locationOfVolcano, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+        locationOfHexes[2] = world.getTentativeRightHexLocation(locationOfVolcano, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
     }
 
     @When("^it does not completely overlap a tile$")
     public void it_does_not_completely_overlap_a_tile() throws Throwable {
-        Assert.assertEquals(true, world.tileDoesNotLieCompletelyOnAnother(locationOfHexes));
+         Assert.assertEquals(true, world.tileDoesNotLieCompletelyOnAnother(locationOfHexes));
     }
 
     @When("^the upper tile volcano covers a lower volcano$")
     public void the_upper_tile_volcano_covers_a_lower_volcano() throws Throwable {
-        Assert.assertEquals(true, world.topVolcanoCoversOneBelow(upperTile.getVolcanoHex().getLocation()));
+        Assert.assertEquals(true, world.topVolcanoCoversOneBelow(locationOfHexes[0]));
     }
 
     @When("^there is no air gap below the tile$")
@@ -54,6 +55,8 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
 
     @Then("^The tile should be placed on the board on the higher layer$")
     public void the_should_be_placed_on_the_board() throws Throwable {
+        world.insertTileIntoWorld(upperTile, new Location(0,0,1), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+
         Hex volcanoHex = upperTile.getVolcanoHex();
         Hex leftHex = upperTile.getLeftHexRelativeToVolcano();
         Hex rightHex = upperTile.getRightHexRelativeToVolcano();
