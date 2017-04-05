@@ -3,6 +3,7 @@ package acceptance;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.junit.Assert;
 import tile.Hex;
 import tile.Tile;
 
@@ -24,13 +25,14 @@ public class HexAcceptanceTest {
     @When("^I check the Terrain type$")
     public void i_check_the_Terrain_type() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        hexes = testHexOwner.getHexes();
+        hexes[0] = testHexOwner.getVolcanoHex();
     }
 
     @Then("^I see type is volcano$")
     public void i_see_type_is_volcano() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         final boolean b = hexes[0].getTerrain() == VOLCANO;
+        Assert.assertEquals(true, b);
     }
 
 }

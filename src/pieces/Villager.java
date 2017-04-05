@@ -5,12 +5,8 @@ import tile.Location;
 
 public class Villager extends Piece {
 
-    public Villager(Player owner, Location location, boolean played) {
-        super(owner, location, played);
-    }
-
-    public Player getVillagerOwner() {
-        return getOwner();
+    public Villager(Location location, boolean played) {
+        super(location, played);
     }
 
     public Location getVillagerLocation() {

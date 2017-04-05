@@ -12,7 +12,7 @@ import tile.Tile;
 public class Habitability {
     private Tile myTile;
     private boolean isHabitable;
-    @Given("^I have a tile$")
+    @Given("^I have a new tile$")
     public void i_have_a_tile() throws Throwable {
         this.myTile = new Tile(Terrain.JUNGLE, Terrain.LAKE );
     }

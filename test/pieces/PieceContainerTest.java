@@ -9,7 +9,7 @@ public class PieceContainerTest {
     private PieceContainer testBag;
     Player player1 = new Player();
     @Before
-    public void setUpPieceContainer(){this.testBag = new PieceContainer(player1);}
+    public void setUpPieceContainer(){this.testBag = new PieceContainer();}
 
     @Test
     public void tigersStartingCount(){

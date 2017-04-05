@@ -1,6 +1,5 @@
 package pieces;
 
-import game.Player;
 import tile.Location;
 
 import java.util.Vector;
@@ -14,17 +13,17 @@ public class PieceContainer {
     private Vector<Villager> villagers = new Vector<Villager>(STARTING_VILLAGER_COUNT);
 
 
-    public PieceContainer(Player owner){
+    public PieceContainer(){
         int i;
 
         for (i = 0; i<STARTING_TOTORO_COUNT; i++){
-            totoros.add(i,new Totoro(owner, new Location(0,0,0),false));
+            totoros.add(i,new Totoro(new Location(0,0, 0),false));
         }
         for (i = 0; i<STARTING_TIGER_COUNT; i++){
-            tigers.add(i,new Tiger(owner, new Location(0,0,0),false));
+            tigers.add(i,new Tiger(new Location(0,0, 0),false));
         }
         for (i = 0; i<STARTING_VILLAGER_COUNT; i++){
-            villagers.add(i,new Villager(owner, new Location(0,0,0),false));
+            villagers.add(i,new Villager(new Location(0,0, 0),false));
 
         }
     };
