@@ -34,7 +34,6 @@ public class WorldTest {
         world.getHexByCoordinate(0, 1, 2);
     }
 
-    // TODO: Test each orientation
     @Test
     public void testAfterPlacingTileWithOrientationSouthwestSoutheastGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException, AirBelowTileException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
         world.placeFirstTile(tile,  TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
@@ -140,6 +139,8 @@ public class WorldTest {
         world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
 
         world.insertTileIntoWorld(tileThree, new Location(1,0,1),TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST );
+
+        Assert.assertEquals(tileThree, world.getHexByCoordinate(1,0,1).getOwner());
     }
 
     @Test(expected = TopVolcanoDoesNotCoverBottomVolcanoException.class)
@@ -165,6 +166,7 @@ public class WorldTest {
 
         world.insertTileIntoWorld(tileThree, new Location(1,0,1),TileOrientationRelativeToVolcano.EAST_NORTHEAST );
 
+
     }
 
     @Test
@@ -177,6 +179,8 @@ public class WorldTest {
         world.insertTileIntoWorld(tileFive, new Location(2,0,1), TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
 
         world.insertTileIntoWorld(tileSix, new Location(2,0,2), TileOrientationRelativeToVolcano.NORTHWEST_WEST);
+
+        Assert.assertEquals(tileSix, world.getHexByCoordinate(2,0,2).getOwner());
 
 
     }
