@@ -1,5 +1,6 @@
-package game;
+package game.player;
 
+import game.player.exceptions.NotEnoughPiecesException;
 import pieces.*;
 import settlements.SettlementCannotBeBuiltOnVolcanoException;
 import settlements.SettlementHeightRequirementException;

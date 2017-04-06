@@ -1,4 +1,4 @@
-package pieces;
+package game.player.exceptions;
 
 /**
  * Created by thomasbaldwin on 4/5/17.
