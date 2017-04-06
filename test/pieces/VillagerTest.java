@@ -10,11 +10,11 @@ import tile.Location;
  */
 
 public class VillagerTest {
-    private villager testVillager;
+    private Villager testVillager;
 
     @Before
     public void setupVillager() {
-        testVillager = new villager(1, "blue", new Location(3,4,5), "in_play");
+        testVillager = new Villager(1, "blue", new Location(3,4,5), "in_play");
     }
 
     @Test
