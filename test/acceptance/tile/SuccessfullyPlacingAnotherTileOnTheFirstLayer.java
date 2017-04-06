@@ -9,7 +9,7 @@ import org.junit.Assert;
 import tile.Location;
 import tile.Terrain;
 import tile.Tile;
-import tile.orientation.TileOrientationRelativeToVolcano;
+import tile.orientation.TileOrientation;
 
 public class SuccessfullyPlacingAnotherTileOnTheFirstLayer {
     private World world;
@@ -21,13 +21,13 @@ public class SuccessfullyPlacingAnotherTileOnTheFirstLayer {
     public void a_non_empty_board() throws TilePlacementException {
         world = new World();
         tileOne = new Tile(Terrain.GRASSLANDS,Terrain.JUNGLE);
-        world.placeFirstTile(tileOne, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+        world.placeFirstTile(tileOne, TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^I place the tile on  the first layer$")
     public void i_place_the_tile_on_the_first_layer() throws TilePlacementException {
         tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
-        world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+        world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^it is adjacent to an existing tile$")
@@ -37,7 +37,7 @@ public class SuccessfullyPlacingAnotherTileOnTheFirstLayer {
         locationOfTile[1] = tileTwo.getLeftHexRelativeToVolcano().getLocation();
         locationOfTile[2] = tileTwo.getRightHexRelativeToVolcano().getLocation();
 
-        Assert.assertEquals(true, world.tileIsAdjacentToAnExistingTile(locationOfTile, TileOrientationRelativeToVolcano.EAST_NORTHEAST));
+        Assert.assertEquals(true, world.tileIsAdjacentToAnExistingTile(locationOfTile, TileOrientation.EAST_NORTHEAST));
     }
 
     @When("^it is not overlapping another tile$")

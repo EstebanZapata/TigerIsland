@@ -9,7 +9,7 @@ import tile.Hex;
 import tile.Location;
 import tile.Terrain;
 import tile.Tile;
-import tile.orientation.TileOrientationRelativeToVolcano;
+import tile.orientation.TileOrientation;
 
 public class SuccessfullyPlacingATileOnAHigherLayer {
     private World world;
@@ -22,8 +22,8 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
         world = new World();
         Tile tileOne = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
-        world.placeFirstTile(tileOne, TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+        world.placeFirstTile(tileOne, TileOrientation.NORTHEAST_NORTHWEST);
+        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^I attempt to place the tile on the layer higher than those two tiles$")
@@ -34,8 +34,8 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
 
         locationOfHexes = new Location[3];
         locationOfHexes[0] = locationOfVolcano;
-        locationOfHexes[1] = world.getTentativeLeftHexLocation(locationOfVolcano, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
-        locationOfHexes[2] = world.getTentativeRightHexLocation(locationOfVolcano, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+        locationOfHexes[1] = world.getTentativeLeftHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
+        locationOfHexes[2] = world.getTentativeRightHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^it does not completely overlap a tile$")
@@ -55,7 +55,7 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
 
     @Then("^The tile should be placed on the board on the higher layer$")
     public void the_should_be_placed_on_the_board() throws Throwable {
-        world.insertTileIntoWorld(upperTile, new Location(0,0,1), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+        world.insertTileIntoWorld(upperTile, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
 
         Hex volcanoHex = upperTile.getVolcanoHex();
         Hex leftHex = upperTile.getLeftHexRelativeToVolcano();
