@@ -12,22 +12,19 @@ import java.util.Arrays;
 public class World {
     private TileManager tileManager;
 
-
     private boolean firstTileHasBeenPlaced = false;
 
     public World() {
         initializeTileManager();
-
     }
 
     private void initializeTileManager() {
         tileManager = new TileManager();
-
     }
 
     public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws TilePlacementException {
-        Location locationOfLeftHex = getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
-        Location locationOfRightHex = getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
+        Location locationOfLeftHex = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
+        Location locationOfRightHex = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
 
 
         boolean ableToPlaceTile = false;
@@ -64,21 +61,7 @@ public class World {
 
     }
 
-    public Location getTentativeLeftHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
-        HexOrientation leftHexOrientation = CoordinateSystemHelper.getLeftHexOrientationFromTileOrientation(tileOrientation);
 
-        Location locationOfLeftHex = CoordinateSystemHelper.getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, leftHexOrientation);
-
-        return locationOfLeftHex;
-    }
-
-    public Location getTentativeRightHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
-        HexOrientation rightHexOrientation = CoordinateSystemHelper.getRightHexOrientationFromTileOrientation(tileOrientation);
-
-        Location locationOfRightHex = CoordinateSystemHelper.getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, rightHexOrientation);
-
-        return locationOfRightHex;
-    }
 
     public boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws TilePlacementException {
         int xCoordinate = locationOfVolcano.getxCoordinate();

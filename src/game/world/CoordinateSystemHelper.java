@@ -145,4 +145,16 @@ public class CoordinateSystemHelper {
 
         return hexOrientation;
     }
+
+    public static Location getTentativeLeftHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
+        HexOrientation leftHexOrientation = getLeftHexOrientationFromTileOrientation(tileOrientation);
+
+        return getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, leftHexOrientation);
+    }
+
+    public static Location getTentativeRightHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
+        HexOrientation rightHexOrientation = CoordinateSystemHelper.getRightHexOrientationFromTileOrientation(tileOrientation);
+
+        return getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, rightHexOrientation);
+    }
 }

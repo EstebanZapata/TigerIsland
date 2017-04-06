@@ -3,6 +3,7 @@ package acceptance.tile;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import game.world.CoordinateSystemHelper;
 import game.world.World;
 import org.junit.Assert;
 import tile.Hex;
@@ -34,8 +35,8 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
 
         locationOfHexes = new Location[3];
         locationOfHexes[0] = locationOfVolcano;
-        locationOfHexes[1] = world.getTentativeLeftHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
-        locationOfHexes[2] = world.getTentativeRightHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
+        locationOfHexes[1] = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
+        locationOfHexes[2] = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^it does not completely overlap a tile$")

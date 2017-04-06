@@ -3,6 +3,8 @@ package game.world;
 import game.world.exceptions.NoHexAtLocationException;
 import tile.Hex;
 import tile.Location;
+import tile.orientation.HexOrientation;
+import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
@@ -68,6 +70,8 @@ public class TileManager {
     private boolean hexDoesNotMatchGivenHeight(Hex hex, int z) {
         return hex.getLocation().getzCoordinate() != z;
     }
+
+
 
 
 
