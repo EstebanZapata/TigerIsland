@@ -41,7 +41,7 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
 
     @When("^it does not completely overlap a tile$")
     public void it_does_not_completely_overlap_a_tile() throws Throwable {
-         Assert.assertEquals(true, world.tileDoesNotLieCompletelyOnAnother(locationOfHexes));
+         Assert.assertEquals(true, world.tileRulesManager.tileDoesNotLieCompletelyOnAnother(locationOfHexes));
     }
 
     @When("^the upper tile volcano covers a lower volcano$")

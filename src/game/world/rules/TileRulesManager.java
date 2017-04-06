@@ -3,10 +3,11 @@ package game.world.rules;
 import game.world.TileManager;
 import game.world.rules.exceptions.HexAlreadyAtLocationException;
 import game.world.rules.exceptions.NoHexAtLocationException;
+import game.world.rules.exceptions.TileCompletelyOverlapsAnotherException;
+import game.world.rules.exceptions.TilePlacementException;
 import tile.Hex;
 import tile.Location;
 import tile.Tile;
-import tile.orientation.TileOrientation;
 
 public class TileRulesManager {
     private TileManager tileManager;
@@ -18,6 +19,39 @@ public class TileRulesManager {
     //public boolean ableToPlaceTileAtLocation(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) {
 
     //}
+
+
+
+    public boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws TilePlacementException {
+
+        Tile tileOne;
+        Tile tileTwo;
+        Tile tileThree;
+
+        int zCoordinateToCheck = locationOfTileHexes[0].getzCoordinate() - 1;
+
+        Location locationOne = locationOfTileHexes[0];
+        Location locationTwo = locationOfTileHexes[1];
+        Location locationThree = locationOfTileHexes[2];
+
+        Location locationOneToCheck = new Location(locationOne.getxCoordinate(), locationOne.getyCoordinate(), zCoordinateToCheck);
+        Location locationTwoToCheck = new Location(locationTwo.getxCoordinate(), locationTwo.getyCoordinate(), zCoordinateToCheck);
+        Location locationThreeToCheck = new Location(locationThree.getxCoordinate(), locationThree.getyCoordinate(), zCoordinateToCheck);
+
+
+        tileOne = tileManager.getHexByLocation(locationOneToCheck).getOwner();
+        tileTwo = tileManager.getHexByLocation(locationTwoToCheck).getOwner();
+        tileThree = tileManager.getHexByLocation(locationThreeToCheck).getOwner();
+
+
+
+        if (tileOne == tileTwo && tileOne == tileThree) {
+            throw new TileCompletelyOverlapsAnotherException("Tile completely overlaps another");
+        }
+        else {
+            return true;
+        }
+    }
 
     public boolean noHexesExistAtLocations(Location[] locationOfHexes) throws HexAlreadyAtLocationException {
         boolean ableToInsertTileIntoWorld = true;

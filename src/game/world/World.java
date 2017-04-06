@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class World {
     private TileManager tileManager;
-    private TileRulesManager tileRulesManager;
+    public TileRulesManager tileRulesManager;
 
     private boolean firstTileHasBeenPlaced = false;
 
@@ -34,7 +34,7 @@ public class World {
         locationOfTileHexes[2] = locationOfRightHex;
 
         if (locationOfVolcano.getzCoordinate() != 0) {
-            ableToPlaceTile = noAirBelowTile(locationOfTileHexes) && topVolcanoCoversOneBelow(locationOfVolcano) && tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  tileRulesManager.noHexesExistAtLocations(locationOfTileHexes);
+            ableToPlaceTile = noAirBelowTile(locationOfTileHexes) && topVolcanoCoversOneBelow(locationOfVolcano) && tileRulesManager.tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  tileRulesManager.noHexesExistAtLocations(locationOfTileHexes);
         }
         else {
             ableToPlaceTile = (!firstTileHasBeenPlaced || tileIsAdjacentToAnExistingTile(locationOfTileHexes, tileOrientation)) && tileRulesManager.noHexesExistAtLocations(locationOfTileHexes);
@@ -136,41 +136,6 @@ public class World {
 
         return true;
     }
-
-    public boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws TilePlacementException {
-
-        Tile tileOne;
-        Tile tileTwo;
-        Tile tileThree;
-
-        int zCoordinateToCheck = locationOfTileHexes[0].getzCoordinate() - 1;
-
-        Location locationOne = locationOfTileHexes[0];
-        Location locationTwo = locationOfTileHexes[1];
-        Location locationThree = locationOfTileHexes[2];
-
-        Location locationOneToCheck = new Location(locationOne.getxCoordinate(), locationOne.getyCoordinate(), zCoordinateToCheck);
-        Location locationTwoToCheck = new Location(locationTwo.getxCoordinate(), locationTwo.getyCoordinate(), zCoordinateToCheck);
-        Location locationThreeToCheck = new Location(locationThree.getxCoordinate(), locationThree.getyCoordinate(), zCoordinateToCheck);
-
-
-        tileOne = tileManager.getHexByLocation(locationOneToCheck).getOwner();
-        tileTwo = tileManager.getHexByLocation(locationTwoToCheck).getOwner();
-        tileThree = tileManager.getHexByLocation(locationThreeToCheck).getOwner();
-
-
-
-        if (tileOne == tileTwo && tileOne == tileThree) {
-            throw new TileCompletelyOverlapsAnotherException("Tile completely overlaps another");
-        }
-        else {
-            return true;
-        }
-    }
-
-
-
-
 
 
 
