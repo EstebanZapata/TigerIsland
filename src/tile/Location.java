@@ -34,4 +34,9 @@ public class Location {
     public void setzCoordinate(int height) {
         this.zCoordinate = height;
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%d,%d,%d)", xCoordinate,yCoordinate,zCoordinate);
+    }
 }
