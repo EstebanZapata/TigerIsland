@@ -1,5 +1,7 @@
 package pieces;
 
+import pieces.*;
+import game.HexAlreadyAtLocationException;
 import game.Player;
 import tile.Location;
 
@@ -12,7 +14,6 @@ public class PieceContainer {
     private Vector<Totoro> totoros = new Vector<Totoro>(STARTING_TOTORO_COUNT);
     private Vector<Tiger> tigers = new Vector<Tiger>(STARTING_TIGER_COUNT);
     private Vector<Villager> villagers = new Vector<Villager>(STARTING_VILLAGER_COUNT);
-
 
     public PieceContainer(Player owner){
         int i;
@@ -28,36 +29,42 @@ public class PieceContainer {
 
         }
     };
-    public void playATotoro(){
-        if(!totoros.isEmpty()){
-            totoros.remove(0);
+
+    public void playAVillager() throws NotEnoughPiecesException {
+        if (getRemainingVillagerCount() == 0) {
+            String errorMessage = String.format("You do not have enough Villagers");
+            throw new NotEnoughPiecesException(errorMessage);
         }
-        else{
-            //Throw Exception
-        }
+
+        villagers.remove(0);
     }
-    public void playATiger(){
-        if(!tigers.isEmpty()){
-            tigers.remove(0);
+
+    public void playATotoro() throws NotEnoughPiecesException {
+        if (getRemainingTotoroCount() == 0) {
+            String errorMessage = String.format("You do not have enough Totoros");
+            throw new NotEnoughPiecesException(errorMessage);
         }
-        else{
-            //Throw Exception
-        }
+
+        totoros.remove(0);
     }
-    public void playAVillager(){
-        if(!villagers.isEmpty()){
-            villagers.remove(0);
+
+    public void playATiger() throws NotEnoughPiecesException {
+        if (getRemainingTigerCount() == 0) {
+            String errorMessage = String.format("You do not have enough Tigers");
+            throw new NotEnoughPiecesException(errorMessage);
         }
-        else{
-            //Throw Exception
-        }
+
+        tigers.remove(0);
     }
+
     public int getRemainingTotoroCount(){
         return totoros.size();
     }
+
     public int getRemainingTigerCount(){
         return tigers.size();
     }
+
     public int getRemainingVillagerCount(){
         return villagers.size();
     }
