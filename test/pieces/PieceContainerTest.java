@@ -24,6 +24,7 @@ public class PieceContainerTest {
         Assert.assertEquals(20,testBag.getRemainingVillagerCount());
     }
 
+    /*
     @Test
     public void playingATiger(){
         this.testBag.playATiger();
@@ -39,5 +40,6 @@ public class PieceContainerTest {
         this.testBag.playAVillager();
         Assert.assertEquals(19,this.testBag.getRemainingVillagerCount());
     }
+    */
 
 }
