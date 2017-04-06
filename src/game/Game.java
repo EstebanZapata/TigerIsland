@@ -14,7 +14,9 @@ public class Game {
         this.world = new World();
     }
 
+public void play() {
 
+}
 
 }
 

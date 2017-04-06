@@ -1,5 +1,7 @@
 package tile;
 
+import java.util.Objects;
+
 public class Location {
     private int xCoordinate;
     private int yCoordinate;
@@ -39,4 +41,39 @@ public class Location {
     public String toString() {
         return String.format("(%d,%d,%d)", xCoordinate,yCoordinate,zCoordinate);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof  Location)) {
+            return false;
+        }
+
+        Location otherLocation = (Location) other;
+
+        if (other == null) {
+            return false;
+        }
+
+        if (other == this) {
+            return true;
+        }
+
+        int otherX = otherLocation.getxCoordinate();
+        int otherY = otherLocation.getyCoordinate();
+        int otherZ = otherLocation.getzCoordinate();
+
+        if (this.xCoordinate == otherX && this.yCoordinate == otherY && this.zCoordinate == otherZ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(xCoordinate,yCoordinate,zCoordinate);
+    }
+
 }

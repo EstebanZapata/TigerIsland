@@ -5,26 +5,39 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LocationTest {
-    private Location testLocation;
+    private Location firstLocation;
+    private Location secondLocation;
+    private Location thirdLocation;
 
     @Before
-    public void setupLocation() {
-        testLocation = new Location(3,4,5);
+    public void setupLocations() {
+        firstLocation = new Location(3,4,5);
+        secondLocation = new Location(3,4,5);
+        thirdLocation = new Location(3,4,6);
+
     }
 
     @Test
-    public void testGetRow() {
-        Assert.assertEquals(testLocation.getxCoordinate(), 3);
+    public void testLocationsWithSameCoordinatesAreEqual() {
+        boolean firstLocationEqualsSecond = firstLocation.equals(secondLocation);
+
+        Assert.assertTrue(firstLocationEqualsSecond);
     }
 
     @Test
-    public void testGetCol() {
-        Assert.assertEquals(testLocation.getyCoordinate(),4);
+    public void testLocationsWithSameCoordinatesAreEqualSymmetrically() {
+        boolean secondLocationEqualsFirst = secondLocation.equals(firstLocation);
+
+        Assert.assertTrue(secondLocationEqualsFirst);
     }
 
     @Test
-    public void testGetHeight() {
-        Assert.assertEquals(testLocation.getzCoordinate(),5);
+    public void testLocationsWithDifferentCoordinatesAreDifferent() {
+        boolean firstLocationDoesNotEqualThird = !firstLocation.equals(thirdLocation);
+
+        Assert.assertTrue(firstLocationDoesNotEqualThird);
     }
+
+
 
 }
