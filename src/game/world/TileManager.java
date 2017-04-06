@@ -1,10 +1,8 @@
 package game.world;
 
-import game.world.exceptions.NoHexAtLocationException;
+import game.world.rules.exceptions.NoHexAtLocationException;
 import tile.Hex;
 import tile.Location;
-import tile.orientation.HexOrientation;
-import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 

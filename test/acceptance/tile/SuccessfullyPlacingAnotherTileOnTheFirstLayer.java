@@ -4,7 +4,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import game.world.*;
-import game.world.exceptions.*;
+import game.world.rules.exceptions.*;
 import org.junit.Assert;
 import tile.Location;
 import tile.Terrain;

@@ -1,8 +1,8 @@
 package game.world;
 
-import game.world.exceptions.*;
+import game.world.rules.TileRulesManager;
+import game.world.rules.exceptions.*;
 import tile.*;
-import tile.orientation.HexOrientation;
 import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
@@ -11,16 +11,15 @@ import java.util.Arrays;
 
 public class World {
     private TileManager tileManager;
+    private TileRulesManager tileRulesManager;
 
     private boolean firstTileHasBeenPlaced = false;
 
     public World() {
-        initializeTileManager();
+        tileManager = new TileManager();
+        tileRulesManager = new TileRulesManager(tileManager);
     }
 
-    private void initializeTileManager() {
-        tileManager = new TileManager();
-    }
 
     public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws TilePlacementException {
         Location locationOfLeftHex = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
@@ -35,10 +34,10 @@ public class World {
         locationOfTileHexes[2] = locationOfRightHex;
 
         if (locationOfVolcano.getzCoordinate() != 0) {
-            ableToPlaceTile = noAirBelowTile(locationOfTileHexes) && topVolcanoCoversOneBelow(locationOfVolcano) && tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  noHexesExistAtLocations(locationOfTileHexes);
+            ableToPlaceTile = noAirBelowTile(locationOfTileHexes) && topVolcanoCoversOneBelow(locationOfVolcano) && tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  tileRulesManager.noHexesExistAtLocations(locationOfTileHexes);
         }
         else {
-            ableToPlaceTile = (!firstTileHasBeenPlaced || tileIsAdjacentToAnExistingTile(locationOfTileHexes, tileOrientation)) && noHexesExistAtLocations(locationOfTileHexes);
+            ableToPlaceTile = (!firstTileHasBeenPlaced || tileIsAdjacentToAnExistingTile(locationOfTileHexes, tileOrientation)) && tileRulesManager.noHexesExistAtLocations(locationOfTileHexes);
         }
 
         if(ableToPlaceTile) {
@@ -172,48 +171,6 @@ public class World {
 
 
 
-
-    public boolean noHexesExistAtLocations(Location[] locationOfHexes) throws HexAlreadyAtLocationException {
-        boolean ableToInsertTileIntoWorld = true;
-        Location notEmptyLocation = null;
-
-        if (!hexLocationIsEmpty(locationOfHexes[0])) {
-            ableToInsertTileIntoWorld = false;
-            notEmptyLocation = locationOfHexes[0];
-        }
-
-        if(!hexLocationIsEmpty(locationOfHexes[1])) {
-            ableToInsertTileIntoWorld = false;
-            notEmptyLocation = locationOfHexes[1];
-        }
-
-        if (!hexLocationIsEmpty(locationOfHexes[2])) {
-            ableToInsertTileIntoWorld = false;
-            notEmptyLocation = locationOfHexes[2];
-        }
-
-        if (ableToInsertTileIntoWorld) {
-            return true;
-        }
-        else {
-            String errorMessage = String.format("Hex already exists at location (%d,%d,%d)", notEmptyLocation.getxCoordinate(), notEmptyLocation.getyCoordinate(), notEmptyLocation.getzCoordinate());
-            throw new HexAlreadyAtLocationException(errorMessage);
-        }
-
-    }
-
-    private boolean hexLocationIsEmpty(Location location) {
-        try {
-            Hex hex = tileManager.getHexByLocation(location);
-            if (hex != null) {
-                return false;
-            }
-        }
-        catch (NoHexAtLocationException e) {
-            return true;
-        }
-        return true;
-    }
 
 
 

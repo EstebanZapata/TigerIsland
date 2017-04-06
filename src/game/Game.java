@@ -2,7 +2,7 @@ package game;
 
 
 import game.world.*;
-import game.world.exceptions.*;
+import game.world.rules.exceptions.*;
 import tile.Terrain;
 import tile.Tile;
 import tile.orientation.TileOrientation;

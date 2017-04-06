@@ -1,4 +1,4 @@
-package game.world.exceptions;
+package game.world.rules.exceptions;
 
 public class AirBelowTileException extends TilePlacementException {
     public AirBelowTileException(String errorMessage) {

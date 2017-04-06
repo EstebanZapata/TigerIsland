@@ -1,4 +1,4 @@
-package game.world.exceptions;
+package game.world.rules.exceptions;
 
 
 public class TopVolcanoDoesNotCoverBottomVolcanoException  extends TilePlacementException{
