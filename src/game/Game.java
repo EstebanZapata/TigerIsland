@@ -26,7 +26,7 @@ public class Game {
 
 
         }
-        catch (TilePlacementException e) {
+        catch (IllegalTilePlacementException e) {
             System.out.println(e.getMessage());
         }
 

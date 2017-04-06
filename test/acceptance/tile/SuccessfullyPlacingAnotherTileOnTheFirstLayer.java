@@ -18,26 +18,26 @@ public class SuccessfullyPlacingAnotherTileOnTheFirstLayer {
     private Location[] locationOfTile;
 
     @Given("^a non-empty board$")
-    public void a_non_empty_board() throws TilePlacementException {
+    public void a_non_empty_board() throws IllegalTilePlacementException {
         world = new World();
         tileOne = new Tile(Terrain.GRASSLANDS,Terrain.JUNGLE);
         world.placeFirstTile(tileOne, TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^I place the tile on  the first layer$")
-    public void i_place_the_tile_on_the_first_layer() throws TilePlacementException {
+    public void i_place_the_tile_on_the_first_layer() throws IllegalTilePlacementException {
         tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
         world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^it is adjacent to an existing tile$")
-    public void it_is_adjacent_to_an_existing_tile() throws TilePlacementException {
+    public void it_is_adjacent_to_an_existing_tile() throws IllegalTilePlacementException {
         locationOfTile = new Location[3];
         locationOfTile[0] = tileTwo.getVolcanoHex().getLocation();
         locationOfTile[1] = tileTwo.getLeftHexRelativeToVolcano().getLocation();
         locationOfTile[2] = tileTwo.getRightHexRelativeToVolcano().getLocation();
 
-        Assert.assertEquals(true, world.tileRulesManager.tileIsAdjacentToAnExistingTile(locationOfTile, TileOrientation.EAST_NORTHEAST));
+        Assert.assertEquals(true, world.tileRulesManager.tileIsAdjacentToAnExistingTile(locationOfTile));
     }
 
     @When("^it is not overlapping another tile$")

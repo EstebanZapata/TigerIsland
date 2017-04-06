@@ -6,14 +6,13 @@ import tile.*;
 import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class World {
     private TileManager tileManager;
     public TileRulesManager tileRulesManager;
 
-    private boolean firstTileHasBeenPlaced = false;
+    public boolean firstTileHasBeenPlaced = false;
 
     public World() {
         tileManager = new TileManager();
@@ -21,24 +20,16 @@ public class World {
     }
 
 
-    public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws TilePlacementException {
+    public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws IllegalTilePlacementException {
         Location locationOfLeftHex = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
         Location locationOfRightHex = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
-
-
-        boolean ableToPlaceTile = false;
 
         Location[] locationOfTileHexes = new Location[Tile.MAX_HEXES_PER_TILE];
         locationOfTileHexes[0] = locationOfVolcano;
         locationOfTileHexes[1] = locationOfLeftHex;
         locationOfTileHexes[2] = locationOfRightHex;
 
-        if (locationOfVolcano.getzCoordinate() != 0) {
-            ableToPlaceTile = tileRulesManager.noAirBelowTile(locationOfTileHexes) && tileRulesManager.topVolcanoCoversOneBelow(locationOfVolcano) && tileRulesManager.tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  tileRulesManager.noHexesExistAtLocations(locationOfTileHexes);
-        }
-        else {
-            ableToPlaceTile = (!firstTileHasBeenPlaced || tileRulesManager.tileIsAdjacentToAnExistingTile(locationOfTileHexes, tileOrientation)) && tileRulesManager.noHexesExistAtLocations(locationOfTileHexes);
-        }
+        boolean ableToPlaceTile = tileRulesManager.ableToPlaceTileAtLocation(tile, locationOfTileHexes, firstTileHasBeenPlaced);
 
         if(ableToPlaceTile) {
             Hex volcanoHex = tile.getVolcanoHex();
@@ -64,7 +55,7 @@ public class World {
         tileManager.insertHexIntoCoordinateSystemAtLocation(hex, location);
     }
 
-    public void placeFirstTile(Tile tile, TileOrientation orientation) throws TilePlacementException {
+    public void placeFirstTile(Tile tile, TileOrientation orientation) throws IllegalTilePlacementException {
 
         insertTileIntoWorld(tile, new Location(0,0,0), orientation);
         firstTileHasBeenPlaced = true;

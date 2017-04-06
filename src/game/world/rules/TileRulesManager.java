@@ -16,11 +16,29 @@ public class TileRulesManager {
         this.tileManager = tileManager;
     }
 
-    //public boolean ableToPlaceTileAtLocation(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) {
+    public boolean ableToPlaceTileAtLocation(Tile tile, Location[] locationsOfTileHexes, boolean firstTileHasBeePlaced) throws IllegalTilePlacementException {
+        boolean ableToPlaceTile = false;
 
-    //}
+        noHexesExistAtLocations(locationsOfTileHexes);
 
-    public boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws TilePlacementException {
+        int zCoordinate = locationsOfTileHexes[0].getzCoordinate();
+        if (zCoordinate > 0) {
+            return ableToPlaceTileOnUpperLayer(tile, locationsOfTileHexes);
+        }
+        else {
+            return ableToPlaceTileOnBaseLayer(tile, locationsOfTileHexes, firstTileHasBeePlaced);
+        }
+    }
+
+    private boolean ableToPlaceTileOnBaseLayer(Tile tile, Location[] locationsOfTileHexes, boolean firstTileHasBeenPlaced) throws IllegalTilePlacementException {
+        return !firstTileHasBeenPlaced || tileIsAdjacentToAnExistingTile(locationsOfTileHexes);
+    }
+
+    public boolean ableToPlaceTileOnUpperLayer(Tile tile, Location[] locationsOfTileHexes) throws IllegalTilePlacementException {
+        return noAirBelowTile(locationsOfTileHexes) && topVolcanoCoversOneBelow(locationsOfTileHexes[0]) && tileDoesNotLieCompletelyOnAnother(locationsOfTileHexes);
+    }
+
+    public boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws IllegalTilePlacementException {
         int xCoordinate = locationOfVolcano.getxCoordinate();
         int yCoordinate = locationOfVolcano.getyCoordinate();
         int zCoordinateToCheck = locationOfVolcano.getzCoordinate() - 1;
@@ -30,7 +48,7 @@ public class TileRulesManager {
         return true;
     }
 
-    public boolean tileIsAdjacentToAnExistingTile(Location[] locationOfHexes, TileOrientation tileOrientation) throws TileNotAdjacentToAnotherException {
+    public boolean tileIsAdjacentToAnExistingTile(Location[] locationOfHexes) throws TileNotAdjacentToAnotherException {
         Location[] adjecentHexLocations = CoordinateSystemHelper.getAdjacentHexLocationsToTile(locationOfHexes);
 
         for (int i = 0; i < 9; i++) {
@@ -61,7 +79,7 @@ public class TileRulesManager {
         return true;
     }
 
-    public boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws TilePlacementException {
+    public boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws IllegalTilePlacementException {
 
         Tile tileOne;
         Tile tileTwo;
