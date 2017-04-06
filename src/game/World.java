@@ -20,12 +20,13 @@ public class World {
     private static final int ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION = 0;
     private static final int ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION = 1;
 
-    private boolean firstTileHasBeenPlaced = false;
-
     public World() {
         initializeCoordinateSystem();
         allHexesInWorld = new ArrayList<>();
-
+        try {
+            placeFirstTile();
+        }
+        catch (HexAlreadyAtLocationException e) {}
     }
 
     private void initializeCoordinateSystem() {
@@ -50,7 +51,7 @@ public class World {
             ableToPlaceTile = noAirBelowTile(locationOfTileHexes) && topVolcanoCoversOneBelow(locationOfVolcano) && tileDoesNotLieCompletelyOnAnother(locationOfTileHexes) &&  noHexesExistAtLocations(locationOfTileHexes);
         }
         else {
-            ableToPlaceTile = (!firstTileHasBeenPlaced || tileIsAdjacentToAnExistingTile(locationOfTileHexes, tileOrientation)) && noHexesExistAtLocations(locationOfTileHexes);
+            ableToPlaceTile = (tileIsAdjacentToAnExistingTile(locationOfTileHexes, tileOrientation)) && noHexesExistAtLocations(locationOfTileHexes);
         }
 
         if(ableToPlaceTile) {
@@ -423,14 +424,40 @@ public class World {
         }
     }
 
-    public void placeFirstTile(Tile tile, TileOrientationRelativeToVolcano orientation) throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
+    public void placeFirstTile() throws HexAlreadyAtLocationException {
+        Location startingLocationOfVolcanoHex = new Location(0,0);
+        Location startingLocationOfJungleHex = new Location(0,-1);
+        Location startingLocationOfLakeHex = new Location(1,-1);
+        Location startingLocationOfGrasslandsHex = new Location(0,1);
+        Location startingLocationOfRockyHex = new Location(-1,1);
 
-        insertTileIntoWorld(tile, new Location(0,0,0), orientation);
-        firstTileHasBeenPlaced = true;
+        FirstTile firstTile = new FirstTile();
+
+        Hex volcano = firstTile.getVolcanoHex();
+        Hex jungle = firstTile.getJungleHex();
+        Hex lake = firstTile.getLakeHex();
+        Hex grasslands = firstTile.getGrasslandsHex();
+        Hex rocky = firstTile.getRockyHex();
+
+        volcano.setLocation(startingLocationOfVolcanoHex);
+        jungle.setLocation(startingLocationOfJungleHex);
+        lake.setLocation(startingLocationOfLakeHex);
+        grasslands.setLocation(startingLocationOfGrasslandsHex);
+        rocky.setLocation(startingLocationOfRockyHex);
+
+        insertHexIntoCoordinateSystem(volcano, startingLocationOfVolcanoHex);
+        insertHexIntoCoordinateSystem(jungle, startingLocationOfJungleHex);
+        insertHexIntoCoordinateSystem(lake, startingLocationOfLakeHex);
+        insertHexIntoCoordinateSystem(grasslands, startingLocationOfGrasslandsHex);
+        insertHexIntoCoordinateSystem(rocky, startingLocationOfRockyHex);
+
+        allHexesInWorld.add(volcano);
+        allHexesInWorld.add(jungle);
+        allHexesInWorld.add(lake);
+        allHexesInWorld.add(grasslands);
+        allHexesInWorld.add(rocky);
     }
-    public boolean getFirstTileHasBeenPlaced(){
-        return firstTileHasBeenPlaced;
-    }
+
     public ArrayList<Hex> getAllHexesInWorld() {
         return this.allHexesInWorld;
     }

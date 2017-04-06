@@ -19,27 +19,6 @@ public class Game {
 
     public void play()  {
         Tile tile = drawTile();
-        try {
-            world.placeFirstTile(tile, TileOrientationRelativeToVolcano.NORTHWEST_WEST);
-            world.placeFirstTile(tile, TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
-
-
-        }
-        catch (HexAlreadyAtLocationException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (AirBelowTileException e) {
-            System.out.println(e.getMessage());
-        } catch (NoHexAtLocationException e) {
-            System.out.println(e.getMessage());
-        } catch (TopVolcanoDoesNotCoverBottomVolcanoException e) {
-            System.out.println(e.getMessage());
-        } catch (TileNotAdjacentToAnotherException e) {
-            e.printStackTrace();
-        } catch (TileCompletelyOverlapsAnotherException e) {
-            e.printStackTrace();
-        }
-
         world.printAllHexesAndTheirInformation();
 
 
