@@ -10,7 +10,6 @@ public class TileManager {
     public Hex[][] hexCoordinateSystem;
     public ArrayList<Hex> allHexesInWorld;
 
-
     private static final int SIZE_OF_BOARD = 200;
     private static final int ORIGIN_OFFSET = SIZE_OF_BOARD/2;
 
@@ -21,7 +20,10 @@ public class TileManager {
     }
 
     public void insertHexIntoCoordinateSystemAtLocation(Hex hex, Location location) {
-        insertHexIntoCoordinateSystemAtCoordinates(hex, location.getxCoordinate(), location.getyCoordinate());
+        int x = location.getxCoordinate();
+        int y = location.getyCoordinate();
+
+        insertHexIntoCoordinateSystemAtCoordinates(hex, x, y);
     }
 
     private void insertHexIntoCoordinateSystemAtCoordinates(Hex hex, int x, int y) {
@@ -31,32 +33,42 @@ public class TileManager {
         hexCoordinateSystem[arrayCoordinateX][arrayCoordinateY] = hex;
     }
 
-    public int getArrayCoordinateFromTrueCoordinate(int trueCoordinate) {
+    private int getArrayCoordinateFromTrueCoordinate(int trueCoordinate) {
         return trueCoordinate + ORIGIN_OFFSET;
     }
 
     public Hex getHexByLocation(Location location) throws NoHexAtLocationException {
-        return getHexByCoordinate(location.getxCoordinate(), location.getyCoordinate(), location.getzCoordinate());
+        int x = location.getxCoordinate();
+        int y = location.getyCoordinate();
+        int z = location.getzCoordinate();
+
+        return getHexByCoordinate(x, y, z);
     }
 
     public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {
-        try {
-            int arrayXCoordinate = getArrayCoordinateFromTrueCoordinate(x);
-            int arrayYCoordinate = getArrayCoordinateFromTrueCoordinate(y);
-            Hex hex = hexCoordinateSystem[arrayXCoordinate][arrayYCoordinate];
-            if (hex == null) {
-                throw new NullPointerException();
-            }
-            if (hex.getLocation().getzCoordinate() != z) {
-                throw new NullPointerException();
-            }
-            return hex;
 
-        }
-        catch (NullPointerException e) {
+        int arrayXCoordinate = getArrayCoordinateFromTrueCoordinate(x);
+        int arrayYCoordinate = getArrayCoordinateFromTrueCoordinate(y);
+
+        Hex hex = hexCoordinateSystem[arrayXCoordinate][arrayYCoordinate];
+
+        if (hexDoesNotExist(hex) || hexDoesNotMatchGivenHeight(hex, z)) {
             String errorMessage = String.format("No hex at location (%d,%d,%d)", x,y,z);
             throw new NoHexAtLocationException(errorMessage);
         }
+
+        return hex;
+
     }
+
+    private boolean hexDoesNotExist(Hex hex) {
+        return hex == null;
+    }
+
+    private boolean hexDoesNotMatchGivenHeight(Hex hex, int z) {
+        return hex.getLocation().getzCoordinate() != z;
+    }
+
+
 
 }
