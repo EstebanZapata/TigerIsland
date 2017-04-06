@@ -11,14 +11,12 @@ import java.util.Arrays;
 
 public class World {
     private TileManager tileManager;
-    private ArrayList<Hex> allHexesInWorld;
 
 
     private boolean firstTileHasBeenPlaced = false;
 
     public World() {
         initializeTileManager();
-        allHexesInWorld = new ArrayList<>();
 
     }
 
@@ -55,9 +53,9 @@ public class World {
             insertHexIntoCoordinateSystem(leftHex, locationOfLeftHex);
             insertHexIntoCoordinateSystem(rightHex, locationOfRightHex);
 
-            allHexesInWorld.add(volcanoHex);
-            allHexesInWorld.add(leftHex);
-            allHexesInWorld.add(rightHex);
+            tileManager.allHexesInWorld.add(volcanoHex);
+            tileManager.allHexesInWorld.add(leftHex);
+            tileManager.allHexesInWorld.add(rightHex);
 
             volcanoHex.setLocation(locationOfVolcano);
             leftHex.setLocation(locationOfLeftHex);
@@ -86,7 +84,7 @@ public class World {
         int xCoordinate = locationOfVolcano.getxCoordinate();
         int yCoordinate = locationOfVolcano.getyCoordinate();
         int zCoordinateToCheck = locationOfVolcano.getzCoordinate() - 1;
-        if (getHexByCoordinate(xCoordinate,yCoordinate,zCoordinateToCheck).getTerrain() != Terrain.VOLCANO) {
+        if (tileManager.getHexByCoordinate(xCoordinate,yCoordinate,zCoordinateToCheck).getTerrain() != Terrain.VOLCANO) {
             throw new TopVolcanoDoesNotCoverBottomVolcanoException(String.format("Hex at (%d,%d,%d) is not volcano", xCoordinate,yCoordinate,zCoordinateToCheck));
         }
         return true;
@@ -123,7 +121,7 @@ public class World {
 
         for (int i = 0; i < 9; i++) {
             try {
-                Hex hex = getHexByLocation(adjecentHexLocations[i]);
+                Hex hex = tileManager.getHexByLocation(adjecentHexLocations[i]);
                 if (hex != null) {
                     return true;
                 }
@@ -146,9 +144,9 @@ public class World {
         int zLayerToCheck = zCoordinate - 1;
 
         try {
-            getHexByCoordinate(locationOfTileHexes[0].getxCoordinate(), locationOfTileHexes[0].getyCoordinate(), zLayerToCheck);
-            getHexByCoordinate(locationOfTileHexes[1].getxCoordinate(), locationOfTileHexes[1].getyCoordinate(), zLayerToCheck);
-            getHexByCoordinate(locationOfTileHexes[2].getxCoordinate(), locationOfTileHexes[2].getyCoordinate(), zLayerToCheck);
+            tileManager.getHexByCoordinate(locationOfTileHexes[0].getxCoordinate(), locationOfTileHexes[0].getyCoordinate(), zLayerToCheck);
+            tileManager.getHexByCoordinate(locationOfTileHexes[1].getxCoordinate(), locationOfTileHexes[1].getyCoordinate(), zLayerToCheck);
+            tileManager.getHexByCoordinate(locationOfTileHexes[2].getxCoordinate(), locationOfTileHexes[2].getyCoordinate(), zLayerToCheck);
         }
         catch (NoHexAtLocationException e) {
             throw new AirBelowTileException("Air below tile");
@@ -174,9 +172,9 @@ public class World {
         Location locationThreeToCheck = new Location(locationThree.getxCoordinate(), locationThree.getyCoordinate(), zCoordinateToCheck);
 
 
-        tileOne = getHexByLocation(locationOneToCheck).getOwner();
-        tileTwo = getHexByLocation(locationTwoToCheck).getOwner();
-        tileThree = getHexByLocation(locationThreeToCheck).getOwner();
+        tileOne = tileManager.getHexByLocation(locationOneToCheck).getOwner();
+        tileTwo = tileManager.getHexByLocation(locationTwoToCheck).getOwner();
+        tileThree = tileManager.getHexByLocation(locationThreeToCheck).getOwner();
 
 
 
@@ -223,7 +221,7 @@ public class World {
 
     private boolean hexLocationIsEmpty(Location location) {
         try {
-            Hex hex = getHexByLocation(location);
+            Hex hex = tileManager.getHexByLocation(location);
             if (hex != null) {
                 return false;
             }
@@ -234,48 +232,10 @@ public class World {
         return true;
     }
 
-    private Hex getHexByLocation(Location location) throws NoHexAtLocationException {
-        return getHexByCoordinate(location.getxCoordinate(), location.getyCoordinate(), location.getzCoordinate());
-    }
 
-    public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {
-        try {
-            int arrayXCoordinate = tileManager.getArrayCoordinateFromTrueCoordinate(x);
-            int arrayYCoordinate = tileManager.getArrayCoordinateFromTrueCoordinate(y);
-            Hex hex = tileManager.hexCoordinateSystem[arrayXCoordinate][arrayYCoordinate];
-            if (hex == null) {
-                throw new NullPointerException();
-            }
-            if (hex.getLocation().getzCoordinate() != z) {
-                throw new NullPointerException();
-            }
-            return hex;
-
-        }
-        catch (NullPointerException e) {
-            String errorMessage = String.format("No hex at location (%d,%d,%d)", x,y,z);
-            throw new NoHexAtLocationException(errorMessage);
-        }
-    }
 
     private void insertHexIntoCoordinateSystem(Hex hex, Location location) throws HexAlreadyAtLocationException {
         tileManager.insertHexIntoCoordinateSystemAtLocation(hex, location);
-
-    }
-
-    public void printAllHexesAndTheirInformation() {
-        for (Hex hex:allHexesInWorld) {
-            Location hexLocation = hex.getLocation();
-            int xCoordinate = hexLocation.getxCoordinate();
-            int yCoordinate = hexLocation.getyCoordinate();
-            int zCoordinate = hexLocation.getzCoordinate();
-
-            Terrain hexTerrain = hex.getTerrain();
-            Tile hexOwner = hex.getOwner();
-
-            System.out.println(String.format("Hex at (%d,%d,%d) with terrain %s and in tile %s" ,
-                    xCoordinate, yCoordinate, zCoordinate, hexTerrain.toString(), hexOwner.toString()));
-        }
     }
 
     public void placeFirstTile(Tile tile, TileOrientation orientation) throws TilePlacementException {
@@ -287,10 +247,12 @@ public class World {
         return firstTileHasBeenPlaced;
     }
     public ArrayList<Hex> getAllHexesInWorld() {
-        return this.allHexesInWorld;
+        return tileManager.allHexesInWorld;
     }
 
-
+    public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {
+        return tileManager.getHexByCoordinate(x,y,z);
+    }
 
 
 
