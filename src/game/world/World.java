@@ -19,7 +19,7 @@ public class World {
         tileRulesManager = new TileRulesManager(tileManager);
     }
 
-    public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws IllegalTilePlacementException {
+    public void attemptToInsertTileIntoTileManager(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws IllegalTilePlacementException {
         Location locationOfLeftHex = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
         Location locationOfRightHex = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
 
@@ -31,32 +31,14 @@ public class World {
         boolean ableToPlaceTile = tileRulesManager.ableToPlaceTileAtLocation(tile, locationOfTileHexes, firstTileHasBeenPlaced);
 
         if(ableToPlaceTile) {
-            Hex volcanoHex = tile.getVolcanoHex();
-            Hex leftHex = tile.getLeftHexRelativeToVolcano();
-            Hex rightHex = tile.getRightHexRelativeToVolcano();
-
-            insertHexIntoCoordinateSystem(volcanoHex, locationOfVolcano);
-            insertHexIntoCoordinateSystem(leftHex, locationOfLeftHex);
-            insertHexIntoCoordinateSystem(rightHex, locationOfRightHex);
-
-            tileManager.allHexesInWorld.add(volcanoHex);
-            tileManager.allHexesInWorld.add(leftHex);
-            tileManager.allHexesInWorld.add(rightHex);
-
-            volcanoHex.setLocation(locationOfVolcano);
-            leftHex.setLocation(locationOfLeftHex);
-            rightHex.setLocation(locationOfRightHex);
+            tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tile, locationOfTileHexes);
         }
 
     }
 
-    private void insertHexIntoCoordinateSystem(Hex hex, Location location) throws HexAlreadyAtLocationException {
-        tileManager.insertHexIntoCoordinateSystemAtLocation(hex, location);
-    }
-
     public void placeFirstTile(Tile tile, TileOrientation orientation) throws IllegalTilePlacementException {
 
-        insertTileIntoWorld(tile, new Location(0,0,0), orientation);
+        attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), orientation);
         firstTileHasBeenPlaced = true;
     }
     public boolean getFirstTileHasBeenPlaced(){

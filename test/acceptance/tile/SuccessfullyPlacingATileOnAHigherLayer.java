@@ -24,7 +24,7 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
         Tile tileOne = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
         world.placeFirstTile(tileOne, TileOrientation.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^I attempt to place the tile on the layer higher than those two tiles$")
@@ -56,7 +56,7 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
 
     @Then("^The tile should be placed on the board on the higher layer$")
     public void the_should_be_placed_on_the_board() throws Throwable {
-        world.insertTileIntoWorld(upperTile, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(upperTile, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
 
         Hex volcanoHex = upperTile.getVolcanoHex();
         Hex leftHex = upperTile.getLeftHexRelativeToVolcano();

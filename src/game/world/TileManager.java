@@ -22,13 +22,26 @@ public class TileManager {
         allHexesInWorld = new ArrayList<>();
     }
 
-    public void attemptToInsertTileIntoCoordinateSystemAndAddHexesToList(Tile tile, Location locationOfVolcano, TileOrientation orientation)
-            throws IllegalTilePlacementException {
+    public void insertTileIntoCoordinateSystemAndAddHexesToList(Tile tile, Location[] locationsOfTileHexes) {
 
+        Hex volcanoHex = tile.getVolcanoHex();
+        Hex leftHex = tile.getLeftHexRelativeToVolcano();
+        Hex rightHex = tile.getRightHexRelativeToVolcano();
 
+        insertHexIntoCoordinateSystemAtLocation(volcanoHex, locationsOfTileHexes[0]);
+        insertHexIntoCoordinateSystemAtLocation(leftHex, locationsOfTileHexes[1]);
+        insertHexIntoCoordinateSystemAtLocation(rightHex, locationsOfTileHexes[2]);
+
+        allHexesInWorld.add(volcanoHex);
+        allHexesInWorld.add(leftHex);
+        allHexesInWorld.add(rightHex);
+
+        volcanoHex.setLocation(locationsOfTileHexes[0]);
+        leftHex.setLocation(locationsOfTileHexes[1]);
+        rightHex.setLocation(locationsOfTileHexes[2]);
     }
 
-    public void insertHexIntoCoordinateSystemAtLocation(Hex hex, Location location) {
+    private void insertHexIntoCoordinateSystemAtLocation(Hex hex, Location location) {
         int x = location.getxCoordinate();
         int y = location.getyCoordinate();
 

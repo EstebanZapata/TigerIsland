@@ -91,7 +91,7 @@ public class WorldTest {
     @Test
     public void testAfterPlacingTileWithOrientationEastNortheastGetHexesByCoordinate() throws IllegalTilePlacementException {
         Location locationOfVolcano = new Location(3,4,0);
-        world.insertTileIntoWorld(tile, locationOfVolcano, TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tile, locationOfVolcano, TileOrientation.EAST_NORTHEAST);
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -117,14 +117,14 @@ public class WorldTest {
 
     @Test(expected = HexAlreadyAtLocationException.class)
     public void testCannotPlaceTileOverlappingAnotherTile() throws IllegalTilePlacementException {
-        world.insertTileIntoWorld(tile, new Location(1,2,0), TileOrientation.EAST_NORTHEAST);
-        world.insertTileIntoWorld(new Tile(Terrain.JUNGLE, Terrain.ROCKY), new Location(2,4,0), TileOrientation.SOUTHWEST_SOUTHEAST);
+        world.attemptToInsertTileIntoTileManager(tile, new Location(1,2,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(new Tile(Terrain.JUNGLE, Terrain.ROCKY), new Location(2,4,0), TileOrientation.SOUTHWEST_SOUTHEAST);
     }
 
     @Test
     public void testSuccessfullyPlaceTileOnFirstLayerAdjacentToAnotherTile() throws IllegalTilePlacementException {
         world.placeFirstTile(tile, TileOrientation.EAST_NORTHEAST);
-        world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
 
         Assert.assertEquals(tileTwo.getVolcanoHex(), world.getHexByCoordinate(2, 0, 0));
     }
@@ -132,55 +132,55 @@ public class WorldTest {
     @Test(expected = TileNotAdjacentToAnotherException.class)
     public void testCannotPlaceTileOnFirstLayerWhichIsNotAdjacentToAnotherTile() throws IllegalTilePlacementException {
         world.placeFirstTile(tile, TileOrientation.NORTHWEST_WEST);
-        world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
     }
 
     @Test
     public void testSuccessfullyPlaceTileOnAnotherLayer() throws IllegalTilePlacementException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
-        world.insertTileIntoWorld(tileThree, new Location(1,0,1), TileOrientation.NORTHEAST_NORTHWEST );
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.NORTHEAST_NORTHWEST );
 
         Assert.assertEquals(tileThree, world.getHexByCoordinate(1,0,1).getOwner());
     }
 
     @Test(expected = TopVolcanoDoesNotCoverBottomVolcanoException.class)
     public void testCannotPlaceTileDueToTopVolcanoNotCoveringBottomVolcano() throws IllegalTilePlacementException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
-        world.insertTileIntoWorld(tileThree, new Location(1,1,1), TileOrientation.SOUTHEAST_EAST );
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,1,1), TileOrientation.SOUTHEAST_EAST );
     }
 
     @Test(expected = AirBelowTileException.class)
     public void testCannotPlaceTileDueToAirBelowTile() throws IllegalTilePlacementException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
-        world.insertTileIntoWorld(tileThree, new Location(1,1,1), TileOrientation.EAST_NORTHEAST );
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,1,1), TileOrientation.EAST_NORTHEAST );
     }
 
     @Test(expected = TileCompletelyOverlapsAnotherException.class)
     public void testCannotPlaceTileDueToTopTileCompletelyOverlappingBottomTile() throws IllegalTilePlacementException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
-        world.insertTileIntoWorld(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST );
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST );
 
 
     }
 
     @Test
     public void testPlacingTileTwoLayersUp () throws IllegalTilePlacementException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientation.NORTHWEST_WEST);
-        world.insertTileIntoWorld(tileThree, new Location(3,0,0), TileOrientation.NORTHEAST_NORTHWEST );
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.NORTHWEST_WEST);
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(3,0,0), TileOrientation.NORTHEAST_NORTHWEST );
 
-        world.insertTileIntoWorld(tileFour, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
-        world.insertTileIntoWorld(tileFive, new Location(2,0,1), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileFour, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tileFive, new Location(2,0,1), TileOrientation.NORTHEAST_NORTHWEST);
 
-        world.insertTileIntoWorld(tileSix, new Location(2,0,2), TileOrientation.NORTHWEST_WEST);
+        world.attemptToInsertTileIntoTileManager(tileSix, new Location(2,0,2), TileOrientation.NORTHWEST_WEST);
 
         Assert.assertEquals(tileSix, world.getHexByCoordinate(2,0,2).getOwner());
 

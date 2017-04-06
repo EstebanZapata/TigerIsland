@@ -29,7 +29,7 @@ public class IllegallyPlacingAnotherTileOnTheFirstLayerViaOverlappingAnExistingT
     public void i_attempt_to_place_my_tile_on_the_first_layer() throws Throwable {
         tileTwo = new Tile(Terrain.ROCKY, Terrain.GRASSLANDS);
         try {
-            world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.SOUTHWEST_SOUTHEAST);
+            world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHWEST_SOUTHEAST);
         }
         catch (HexAlreadyAtLocationException e) {
 
@@ -42,7 +42,7 @@ public class IllegallyPlacingAnotherTileOnTheFirstLayerViaOverlappingAnExistingT
         boolean overlapsAnExistingTile = false;
 
         try {
-            world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.SOUTHWEST_SOUTHEAST);
+            world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHWEST_SOUTHEAST);
         }
         catch (HexAlreadyAtLocationException e) {
             overlapsAnExistingTile = true;
