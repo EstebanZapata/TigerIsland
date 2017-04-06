@@ -10,22 +10,21 @@ import java.util.Arrays;
 
 
 public class World {
-    private Hex[][] hexCoordinateSystem;
+    private TileManager tileManager;
     private ArrayList<Hex> allHexesInWorld;
 
-    private static final int SIZE_OF_BOARD = 200;
-    private static final int ORIGIN_OFFSET = SIZE_OF_BOARD/2;
+    private static final int ORIGIN_OFFSET = TileManager.SIZE_OF_BOARD/2;
 
     private boolean firstTileHasBeenPlaced = false;
 
     public World() {
-        initializeHexCoordinateSystem();
+        initializeTileManager();
         allHexesInWorld = new ArrayList<>();
 
     }
 
-    private void initializeHexCoordinateSystem() {
-        hexCoordinateSystem = new Hex[SIZE_OF_BOARD][SIZE_OF_BOARD];
+    private void initializeTileManager() {
+        tileManager = new TileManager();
 
     }
 
@@ -244,7 +243,7 @@ public class World {
         try {
             int arrayXCoordinate = getArrayCoordinateFromTrueCoordinate(x);
             int arrayYCoordinate = getArrayCoordinateFromTrueCoordinate(y);
-            Hex hex = hexCoordinateSystem[arrayXCoordinate][arrayYCoordinate];
+            Hex hex = tileManager.hexCoordinateSystem[arrayXCoordinate][arrayYCoordinate];
             if (hex == null) {
                 throw new NullPointerException();
             }
@@ -264,7 +263,7 @@ public class World {
         int arrayCoordinateX = getArrayCoordinateFromTrueCoordinate(location.getxCoordinate());
         int arrayCoordinateY = getArrayCoordinateFromTrueCoordinate(location.getyCoordinate());
 
-        hexCoordinateSystem[arrayCoordinateX][arrayCoordinateY] = hex;
+        tileManager.hexCoordinateSystem[arrayCoordinateX][arrayCoordinateY] = hex;
 
     }
 
