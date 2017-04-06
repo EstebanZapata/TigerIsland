@@ -1,8 +1,11 @@
 package game.world;
 
+import game.world.rules.exceptions.IllegalTilePlacementException;
 import game.world.rules.exceptions.NoHexAtLocationException;
 import tile.Hex;
 import tile.Location;
+import tile.Tile;
+import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
@@ -17,6 +20,12 @@ public class TileManager {
     public TileManager() {
         hexCoordinateSystem = new Hex[SIZE_OF_BOARD][SIZE_OF_BOARD];
         allHexesInWorld = new ArrayList<>();
+    }
+
+    public void attemptToInsertTileIntoCoordinateSystemAndAddHexesToList(Tile tile, Location locationOfVolcano, TileOrientation orientation)
+            throws IllegalTilePlacementException {
+
+
     }
 
     public void insertHexIntoCoordinateSystemAtLocation(Hex hex, Location location) {
