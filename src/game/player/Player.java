@@ -1,64 +1,57 @@
 package game.player;
 
 import game.player.exceptions.NotEnoughPiecesException;
-import pieces.*;
-import settlements.SettlementCannotBeBuiltOnVolcanoException;
-import settlements.SettlementHeightRequirementException;
-import settlements.SettlementIsOccupiedException;
+import game.settlements.exceptions.*;
 import tile.*;
-import settlements.*;
+import game.settlements.*;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class Player {
     private static final int STARTING_SCORE_COUNT = 0;
     private static final int FOUND_SETTLEMENT_POINTS = 1;
+    private static final int BUILD_SANCTUARY_POINTS = 200;
+    private static final int BUILD_PLAYGROUND_POINTS = 75;
     private static final int STARTING_TOTORO_COUNT = 3;
     private static final int STARTING_TIGER_COUNT = 2;
     private static final int STARTING_VILLAGER_COUNT = 20;
 
     private int score;
-    private Vector<Totoro> totoros = new Vector<Totoro>(STARTING_TOTORO_COUNT);
-    private Vector<Tiger> tigers = new Vector<Tiger>(STARTING_TIGER_COUNT);
-    private Vector<Villager> villagers = new Vector<Villager>(STARTING_VILLAGER_COUNT);
-    private SettlementManager settlementManager;
+    private int totoroCount = STARTING_TOTORO_COUNT;
+    private int tigerCount = STARTING_TIGER_COUNT;
+    private int villagerCount = STARTING_VILLAGER_COUNT;
+    private SettlementManager settlementManager = null;
 
     public Player(){
         this.score = STARTING_SCORE_COUNT;
-
-        for (int i = 0; i<STARTING_TOTORO_COUNT; i++){
-            totoros.add(i,new Totoro(new Location(0,0,0),false));
-        }
-        for (int i = 0; i<STARTING_TIGER_COUNT; i++){
-            tigers.add(i,new Tiger(new Location(0,0,0),false));
-        }
-        for (int i = 0; i<STARTING_VILLAGER_COUNT; i++){
-            villagers.add(i,new Villager(new Location(0,0,0),false));
-        }
     };
 
     public int getScore() {
         return this.score;
     }
 
-    public void playAVillager() throws NotEnoughPiecesException {
-        if (getRemainingVillagerCount() == 0) {
+    private void incrementScore(int changes) {
+        this.score += changes;
+    }
+
+    public void playVillager(int count) throws NotEnoughPiecesException {
+        if (getRemainingVillagerCount() < count) {
             String errorMessage = String.format("You do not have enough Villagers");
             // throw error
             return;
         }
 
-        villagers.remove(0);
+        villagerCount -= count;
     }
 
     public void playATotoro() throws NotEnoughPiecesException {
         if (getRemainingTotoroCount() == 0) {
-            String errorMessage = String.format("You do not have enough Totoros");
+            String errorMessage = String.format("You do not have enough Totoro");
             // throw error
             return;
         }
 
-        totoros.remove(0);
+        totoroCount--;
     }
 
     public void playATiger() throws NotEnoughPiecesException {
@@ -68,32 +61,32 @@ public class Player {
             return;
         }
 
-        tigers.remove(0);
+        tigerCount--;
     }
 
     public int getRemainingTotoroCount(){
-        return totoros.size();
+        return totoroCount;
     }
 
     public int getRemainingTigerCount(){
-        return tigers.size();
+        return tigerCount;
     }
 
     public int getRemainingVillagerCount(){
-        return villagers.size();
+        return villagerCount;
     }
 
     public void foundSettlement(Hex hexToBuildOn) {
         try {
-            this.playAVillager();
+            this.playVillager(1);
             this.settlementManager.foundSettlement(hexToBuildOn);
-            this.incrementScore(FOUND_SETTLEMENT_POINTS);
+            hexToBuildOn.setIsOccupied(true);
         }
         catch (NotEnoughPiecesException e) {
             System.out.println("Not enough pieces: " + e);
         }
-        catch (SettlementIsOccupiedException e) {
-            System.out.println("Settlement is occupied: " + e);
+        catch (HexIsOccupiedException e) {
+            System.out.println("Hex is occupied: " + e);
         }
         catch (SettlementCannotBeBuiltOnVolcanoException e) {
             System.out.println("Settlement cannot be built on a volcano: " + e);
@@ -101,21 +94,100 @@ public class Player {
         catch (SettlementHeightRequirementException e) {
             System.out.println("Settlement does not meet height requirements: " + e);
         }
+
+        this.incrementScore(FOUND_SETTLEMENT_POINTS);
+    }
+
+    public void expandSettlement(VillagerSettlement existingSettlement, Terrain terrainType) {
+        int numVillagers = 0;
+
+        try {
+            ArrayList<Hex> potentialSettlementHexes = this.settlementManager.getPotentialExpansion(existingSettlement, terrainType);
+
+            for (int i=0; i<potentialSettlementHexes.size(); i++){
+                int hexHeight = potentialSettlementHexes.get(i).getHeight();
+                numVillagers += hexHeight;
+            }
+
+            this.playVillager(numVillagers);
+            this.settlementManager.expandSettlement(existingSettlement, potentialSettlementHexes);
+
+            for (int i=0; i<potentialSettlementHexes.size(); i++){
+                Hex potentialSettlementHex = potentialSettlementHexes.get(i);
+                potentialSettlementHex.setIsOccupied(true);
+            }
+        }
+
+        catch (SettlementCannotBeBuiltOnVolcanoException e) {
+            System.out.println("Settlement cannot be built on a volcano: " + e);
+        }
+
+        catch (SettlementCannotBeExpandedException e) {
+            System.out.println("Settlement cannot be expanded: " + e);
+        }
+
+        catch (NotEnoughPiecesException e) {
+            System.out.println("Not enough pieces: " + e);
+        }
+
+        this.incrementScore(numVillagers);
     }
 
     public void buildTotoroSanctuary(Hex hexToBuildOn) {
+        try{
+            this.playATotoro();
+            this.settlementManager.buildTotoroSanctuary(hexToBuildOn);
+            hexToBuildOn.setIsOccupied(true);
+        }
 
+        catch (NotEnoughPiecesException e) {
+            System.out.println("Not enough pieces: " + e);
+        }
+
+        catch (HexIsOccupiedException e) {
+            System.out.println("Hex is occupied: " + e);
+        }
+        catch (SettlementCannotBeBuiltOnVolcanoException e) {
+            System.out.println("Sanctuary cannot be built on a volcano: " + e);
+        }
+
+        catch (BuildConditionsNotMetException e) {
+            System.out.println("Sanctuary conditions are not met: " + e);
+        }
+
+        this.incrementScore(BUILD_SANCTUARY_POINTS);
     }
 
     public void buildTigerPlayground(Hex hexToBuildOn) {
+        try{
+            this.playATiger();
+            this.settlementManager.buildTigerPlayground(hexToBuildOn);
+            hexToBuildOn.setIsOccupied(true);
+        }
 
+        catch (NotEnoughPiecesException e) {
+            System.out.println("Not enough pieces: " + e);
+        }
+
+        catch (HexIsOccupiedException e) {
+            System.out.println("Hex is occupied: " + e);
+        }
+        catch (SettlementCannotBeBuiltOnVolcanoException e) {
+            System.out.println("Playground cannot be built on a volcano: " + e);
+        }
+
+        catch (BuildConditionsNotMetException e) {
+            System.out.println("Playground conditions are not met: " + e);
+        }
+
+        catch (SettlementHeightRequirementException e) {
+            System.out.println("Hex does not meet height requirements: " + e);
+        }
+
+        this.incrementScore(BUILD_PLAYGROUND_POINTS);
     }
 
-    public void expandSettlement(Hex hexToBuildOn) {
-
-    }
-
-    private void incrementScore(int changes) {
-        this.score += changes;
+    public void mergeSettlements() {
+        this.settlementManager.mergeSettlements();
     }
 }

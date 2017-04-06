@@ -1,7 +1,5 @@
 package tile;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 public class Hex {
     private Terrain terrain;
     private Tile owner;

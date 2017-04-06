@@ -5,7 +5,7 @@ package game.player.exceptions;
  */
 
 public class NotEnoughPiecesException extends Exception {
-    NotEnoughPiecesException(String errorMessage) {
+    public NotEnoughPiecesException(String errorMessage) {
         super(errorMessage);
     }
 }
