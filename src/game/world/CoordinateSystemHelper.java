@@ -6,7 +6,7 @@ import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
-public class CoordinateSystem {
+public class CoordinateSystemHelper {
 
     public static Location getHexLocationRelativeToOrientationAndCenter(Location center, HexOrientation hexOrientation) {
         Location[] adjacentHexLocations = getHexLocationsAdjacentToCenter(center);

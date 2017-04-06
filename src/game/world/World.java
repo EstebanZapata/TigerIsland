@@ -13,7 +13,6 @@ public class World {
     private TileManager tileManager;
     private ArrayList<Hex> allHexesInWorld;
 
-    private static final int ORIGIN_OFFSET = TileManager.SIZE_OF_BOARD/2;
 
     private boolean firstTileHasBeenPlaced = false;
 
@@ -68,17 +67,17 @@ public class World {
     }
 
     public Location getTentativeLeftHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
-        HexOrientation leftHexOrientation = CoordinateSystem.getLeftHexOrientationFromTileOrientation(tileOrientation);
+        HexOrientation leftHexOrientation = CoordinateSystemHelper.getLeftHexOrientationFromTileOrientation(tileOrientation);
 
-        Location locationOfLeftHex = CoordinateSystem.getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, leftHexOrientation);
+        Location locationOfLeftHex = CoordinateSystemHelper.getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, leftHexOrientation);
 
         return locationOfLeftHex;
     }
 
     public Location getTentativeRightHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
-        HexOrientation rightHexOrientation = CoordinateSystem.getRightHexOrientationFromTileOrientation(tileOrientation);
+        HexOrientation rightHexOrientation = CoordinateSystemHelper.getRightHexOrientationFromTileOrientation(tileOrientation);
 
-        Location locationOfRightHex = CoordinateSystem.getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, rightHexOrientation);
+        Location locationOfRightHex = CoordinateSystemHelper.getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, rightHexOrientation);
 
         return locationOfRightHex;
     }
@@ -114,12 +113,12 @@ public class World {
 
         if (tileArrowOrientation == upArrowOrientation) {
 
-            adjecentHexLocations = CoordinateSystem.getAdjacentHexLocationsToTile(locationOfHexes);
+            adjecentHexLocations = CoordinateSystemHelper.getAdjacentHexLocationsToTile(locationOfHexes);
 
         }
 
         else {
-            adjecentHexLocations = CoordinateSystem.getAdjacentHexLocationsToTile(locationOfHexes);
+            adjecentHexLocations = CoordinateSystemHelper.getAdjacentHexLocationsToTile(locationOfHexes);
         }
 
         for (int i = 0; i < 9; i++) {
@@ -241,8 +240,8 @@ public class World {
 
     public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {
         try {
-            int arrayXCoordinate = getArrayCoordinateFromTrueCoordinate(x);
-            int arrayYCoordinate = getArrayCoordinateFromTrueCoordinate(y);
+            int arrayXCoordinate = tileManager.getArrayCoordinateFromTrueCoordinate(x);
+            int arrayYCoordinate = tileManager.getArrayCoordinateFromTrueCoordinate(y);
             Hex hex = tileManager.hexCoordinateSystem[arrayXCoordinate][arrayYCoordinate];
             if (hex == null) {
                 throw new NullPointerException();
@@ -260,10 +259,7 @@ public class World {
     }
 
     private void insertHexIntoCoordinateSystem(Hex hex, Location location) throws HexAlreadyAtLocationException {
-        int arrayCoordinateX = getArrayCoordinateFromTrueCoordinate(location.getxCoordinate());
-        int arrayCoordinateY = getArrayCoordinateFromTrueCoordinate(location.getyCoordinate());
-
-        tileManager.hexCoordinateSystem[arrayCoordinateX][arrayCoordinateY] = hex;
+        tileManager.insertHexIntoCoordinateSystemAtLocation(hex, location);
 
     }
 
@@ -294,9 +290,6 @@ public class World {
         return this.allHexesInWorld;
     }
 
-    private int getArrayCoordinateFromTrueCoordinate(int trueCoordinate) {
-        return trueCoordinate + ORIGIN_OFFSET;
-    }
 
 
 
