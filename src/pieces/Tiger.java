@@ -5,12 +5,8 @@ import tile.Location;
 
 public class Tiger extends Piece {
 
-    public Tiger(Player owner, Location location, boolean played)  {
-        super(owner, location, played);
-    }
-
-    public Player getTigerOwner() {
-        return getOwner();
+    public Tiger(Location location, boolean played)  {
+        super(location, played);
     }
 
     public Location getTigerLocation() {

@@ -5,12 +5,8 @@ import tile.Location;
 
 public class Totoro extends Piece {
 
-    public Totoro(Player owner, Location location, boolean played)  {
-        super(owner, location, played);
-    }
-
-    public Player getTotoroOwner() {
-        return getOwner();
+    public Totoro(Location location, boolean played)  {
+        super(location, played);
     }
 
     public Location getTotoroLocation() {

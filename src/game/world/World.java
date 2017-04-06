@@ -1,6 +1,7 @@
 package game.world;
 
 import game.world.exceptions.*;
+import settlements.SettlementManager;
 import tile.*;
 import tile.orientation.HexOrientation;
 import tile.orientation.TileOrientation;
@@ -14,6 +15,7 @@ import java.util.Comparator;
 public class World {
     private Hex[][] hexCoordinateSystem;
     private ArrayList<Hex> allHexesInWorld;
+    private SettlementManager settlementManager;
 
     private static final int SIZE_OF_BOARD = 200;
     private static final int ORIGIN_OFFSET = SIZE_OF_BOARD/2;
@@ -31,6 +33,10 @@ public class World {
 
     private void initializeCoordinateSystem() {
         hexCoordinateSystem = new Hex[SIZE_OF_BOARD][SIZE_OF_BOARD];
+
+    }
+
+    public void foundSettlement() {
 
     }
 

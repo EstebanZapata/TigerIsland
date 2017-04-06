@@ -1,12 +1,13 @@
 package settlements;
 
-import pieces.NotEnoughPiecesException;
+import game.world.CoordinateSystem;
 import tile.*;
 import java.util.ArrayList;
 
 /**
  * Created by thomasbaldwin on 4/5/17.
  */
+
 public class SettlementManager {
     ArrayList<VillagerSettlement> villagerSettlements;
     ArrayList<TigerPlayground> tigerPlaygrounds;
@@ -23,7 +24,7 @@ public class SettlementManager {
         }
 
         if (hexToBuildOn.getTerrain() == Terrain.VOLCANO) {
-            String errorMessage = String.format("You do not have enough Villagers.");
+            String errorMessage = String.format("You cannot build a settlement on a Volcano");
             throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
         }
 
@@ -36,7 +37,21 @@ public class SettlementManager {
         villagerSettlements.add(newSettlement);
     }
 
-    public void expandSettlement(Hex hexToBuildOn) {
+    public void expandSettlement(Hex hexToBuildOn, Terrain terrainType) throws
+            SettlementCannotBeBuiltOnVolcanoException
+    {
+        if (terrainType == Terrain.VOLCANO) {
+            String errorMessage = String.format("You cannot build a settlement on a Volcano");
+            throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
+        }
+
+        Location hexLocation = hexToBuildOn.getLocation();
+        Location[] hexLocationsAdjacentToCenter = CoordinateSystem.getHexLocationsAdjacentToCenter(hexLocation);
+
+        for (int i=0; i<hexLocationsAdjacentToCenter.length; i++) {
+            Location adjacentHexLocation = hexLocationsAdjacentToCenter[i];
+
+        }
 
     }
 }
