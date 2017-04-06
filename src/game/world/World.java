@@ -7,9 +7,7 @@ import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 
-//TODO: Enforce first tile placement and cannot use that method afterwards
 
 public class World {
     private Hex[][] hexCoordinateSystem;
@@ -18,24 +16,20 @@ public class World {
     private static final int SIZE_OF_BOARD = 200;
     private static final int ORIGIN_OFFSET = SIZE_OF_BOARD/2;
 
-    private static final int ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION = 0;
-    private static final int ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION = 1;
-
     private boolean firstTileHasBeenPlaced = false;
 
     public World() {
-        initializeCoordinateSystem();
+        initializeHexCoordinateSystem();
         allHexesInWorld = new ArrayList<>();
 
     }
 
-    private void initializeCoordinateSystem() {
+    private void initializeHexCoordinateSystem() {
         hexCoordinateSystem = new Hex[SIZE_OF_BOARD][SIZE_OF_BOARD];
 
     }
 
-    public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation)
-            throws TilePlacementException {
+    public void insertTileIntoWorld(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws TilePlacementException {
         Location locationOfLeftHex = getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
         Location locationOfRightHex = getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
 
@@ -74,6 +68,22 @@ public class World {
 
     }
 
+    public Location getTentativeLeftHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
+        HexOrientation leftHexOrientation = CoordinateSystem.getLeftHexOrientationFromTileOrientation(tileOrientation);
+
+        Location locationOfLeftHex = CoordinateSystem.getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, leftHexOrientation);
+
+        return locationOfLeftHex;
+    }
+
+    public Location getTentativeRightHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
+        HexOrientation rightHexOrientation = CoordinateSystem.getRightHexOrientationFromTileOrientation(tileOrientation);
+
+        Location locationOfRightHex = CoordinateSystem.getHexLocationRelativeToOrientationAndCenter(locationOfVolcano, rightHexOrientation);
+
+        return locationOfRightHex;
+    }
+
     public boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws TilePlacementException {
         int xCoordinate = locationOfVolcano.getxCoordinate();
         int yCoordinate = locationOfVolcano.getyCoordinate();
@@ -105,13 +115,11 @@ public class World {
 
         if (tileArrowOrientation == upArrowOrientation) {
 
-            sortByLargestXAndLargestYAtEndOfList(locationOfHexesList);
             adjecentHexLocations = CoordinateSystem.getAdjacentHexLocationsToTile(locationOfHexes);
 
         }
 
         else {
-            sortBySmallestXAndLargestYAtEndOfList(locationOfHexesList);
             adjecentHexLocations = CoordinateSystem.getAdjacentHexLocationsToTile(locationOfHexes);
         }
 
@@ -132,45 +140,7 @@ public class World {
 
 
 
-    private void sortBySmallestXAndLargestYAtEndOfList(ArrayList<Location> locationOfHexesList) {
-        locationOfHexesList.sort(new Comparator<Location>() {
-            @Override
-            public int compare(Location o1, Location o2) {
-                int o1XCoordinate = o1.getxCoordinate();
-                int o2XCoordinate = o2.getxCoordinate();
 
-                int o1YCoordinate = o1.getyCoordinate();
-                int o2YCoordinate = o2.getyCoordinate();
-
-                if (o1XCoordinate < o2XCoordinate && o1YCoordinate > o2YCoordinate) {
-                    return 1;
-                }
-                else {
-                    return -1;
-                }
-            }
-        });
-    }
-
-    private void sortByLargestXAndLargestYAtEndOfList(ArrayList<Location> locationOfHexesList) {
-        locationOfHexesList.sort(new Comparator<Location>() {
-            @Override
-            public int compare(Location o1, Location o2) {
-                int o1XCoordinate = o1.getxCoordinate();
-                int o2XCoordinate = o2.getxCoordinate();
-
-                int o1YCoordinate = o1.getyCoordinate();
-                int o2YCoordinate = o2.getyCoordinate();
-
-                if (o1XCoordinate > o2XCoordinate && o1YCoordinate > o2YCoordinate) {
-                    return 1;
-                }
-                else {
-                    return -1;
-                }
-            }
-        });
-    }
 
 
     public boolean noAirBelowTile(Location[] locationOfTileHexes) throws AirBelowTileException {
@@ -220,43 +190,7 @@ public class World {
         }
     }
 
-    private HexOrientation[] getHexOrientationFromTileOrientation(TileOrientation tileOrientation) {
-        HexOrientation[] hexOrientations = new HexOrientation[2];
 
-        switch(tileOrientation) {
-            case SOUTHWEST_SOUTHEAST:
-                hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION] = HexOrientation.SOUTHWEST;
-                hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION] = HexOrientation.SOUTHEAST;
-                break;
-
-            case WEST_SOUTHWEST:
-                hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION] = HexOrientation.WEST;
-                hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION] = HexOrientation.SOUTHWEST;
-                break;
-
-            case NORTHWEST_WEST:
-                hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION] = HexOrientation.NORTHWEST;
-                hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION] = HexOrientation.WEST;
-                break;
-
-            case NORTHEAST_NORTHWEST:
-                hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION] = HexOrientation.NORTHEAST;
-                hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION] = HexOrientation.NORTHWEST;
-                break;
-
-            case EAST_NORTHEAST:
-                hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION] = HexOrientation.EAST;
-                hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION] = HexOrientation.NORTHEAST;
-                break;
-
-            case SOUTHEAST_EAST:
-                hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION] = HexOrientation.SOUTHEAST;
-                hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION] = HexOrientation.EAST;
-                break;
-        }
-
-        return hexOrientations;
-    }
 
 
 
@@ -366,21 +300,7 @@ public class World {
     }
 
 
-    public Location getTentativeLeftHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
-        HexOrientation[] hexOrientations = getHexOrientationFromTileOrientation(tileOrientation);
 
-        Location locationOfLeftHex = CoordinateSystem.getLocationRelativeToOrientationAndCenter(locationOfVolcano, hexOrientations[ARRAY_INDEX_OF_LEFT_HEX_ORIENTATION]);
-
-        return locationOfLeftHex;
-    }
-
-    public Location getTentativeRightHexLocation(Location locationOfVolcano, TileOrientation tileOrientation) {
-        HexOrientation[] hexOrientations = getHexOrientationFromTileOrientation(tileOrientation);
-
-        Location locationOfRightHex = CoordinateSystem.getLocationRelativeToOrientationAndCenter(locationOfVolcano, hexOrientations[ARRAY_INDEX_OF_RIGHT_HEX_ORIENTATION]);
-
-        return locationOfRightHex;
-    }
 
 
 }
