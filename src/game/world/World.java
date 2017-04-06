@@ -12,14 +12,14 @@ public class World {
     private TileManager tileManager;
     public TileRulesManager tileRulesManager;
 
-    public boolean firstTileHasBeenPlaced = false;
-
     public World() {
         tileManager = new TileManager();
         tileRulesManager = new TileRulesManager(tileManager);
+
     }
 
     public void attemptToInsertTileIntoTileManager(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws IllegalTilePlacementException {
+
         Location locationOfLeftHex = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
         Location locationOfRightHex = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
 
@@ -28,7 +28,7 @@ public class World {
         locationOfTileHexes[1] = locationOfLeftHex;
         locationOfTileHexes[2] = locationOfRightHex;
 
-        boolean ableToPlaceTile = tileRulesManager.ableToPlaceTileAtLocation(tile, locationOfTileHexes, firstTileHasBeenPlaced);
+        boolean ableToPlaceTile = tileRulesManager.ableToPlaceTileAtLocation(tile, locationOfTileHexes);
 
         if(ableToPlaceTile) {
             tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tile, locationOfTileHexes);
@@ -37,13 +37,11 @@ public class World {
     }
 
     public void placeFirstTile(Tile tile, TileOrientation orientation) throws IllegalTilePlacementException {
+        if (tileRulesManager.ableToPlaceFirstTile()) {
+            tileManager.placeFirstTile();
+        }
+    }
 
-        attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), orientation);
-        firstTileHasBeenPlaced = true;
-    }
-    public boolean getFirstTileHasBeenPlaced(){
-        return firstTileHasBeenPlaced;
-    }
     public ArrayList<Hex> getAllHexesInWorld() {
         return tileManager.allHexesInWorld;
     }

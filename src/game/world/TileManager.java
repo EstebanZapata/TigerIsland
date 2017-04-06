@@ -2,6 +2,8 @@ package game.world;
 
 import game.world.rules.exceptions.IllegalTilePlacementException;
 import game.world.rules.exceptions.NoHexAtLocationException;
+import game.world.rules.exceptions.SpecialFirstTileHasNotBeenPlacedException;
+import tile.FirstTile;
 import tile.Hex;
 import tile.Location;
 import tile.Tile;
@@ -16,13 +18,17 @@ public class TileManager {
     private static final int SIZE_OF_BOARD = 200;
     private static final int ORIGIN_OFFSET = SIZE_OF_BOARD/2;
 
+    private boolean firstTileHasBeenPlaced;
 
     public TileManager() {
         hexCoordinateSystem = new Hex[SIZE_OF_BOARD][SIZE_OF_BOARD];
         allHexesInWorld = new ArrayList<>();
+
+        firstTileHasBeenPlaced = false;
     }
 
     public void insertTileIntoCoordinateSystemAndAddHexesToList(Tile tile, Location[] locationsOfTileHexes) {
+
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -53,6 +59,42 @@ public class TileManager {
         int arrayCoordinateY = getArrayCoordinateFromTrueCoordinate(y);
 
         hexCoordinateSystem[arrayCoordinateX][arrayCoordinateY] = hex;
+    }
+
+    public void placeFirstTile()  {
+        Location startingLocationOfVolcanoHex = new Location(0,0, 0);
+        Location startingLocationOfJungleHex = new Location(0,1, 0);
+        Location startingLocationOfLakeHex = new Location(1,1, 0);
+        Location startingLocationOfGrasslandsHex = new Location(0,-1, 0);
+        Location startingLocationOfRockyHex = new Location(-1,-1, 0);
+
+        FirstTile firstTile = new FirstTile();
+
+        Hex volcano = firstTile.getVolcanoHex();
+        Hex jungle = firstTile.getJungleHex();
+        Hex lake = firstTile.getLakeHex();
+        Hex grasslands = firstTile.getGrasslandsHex();
+        Hex rocky = firstTile.getRockyHex();
+
+        insertHexIntoCoordinateSystemAtLocation(volcano, startingLocationOfVolcanoHex);
+        insertHexIntoCoordinateSystemAtLocation(jungle, startingLocationOfJungleHex);
+        insertHexIntoCoordinateSystemAtLocation(lake, startingLocationOfLakeHex);
+        insertHexIntoCoordinateSystemAtLocation(grasslands, startingLocationOfGrasslandsHex);
+        insertHexIntoCoordinateSystemAtLocation(rocky, startingLocationOfRockyHex);
+
+        volcano.setLocation(startingLocationOfVolcanoHex);
+        jungle.setLocation(startingLocationOfJungleHex);
+        lake.setLocation(startingLocationOfLakeHex);
+        grasslands.setLocation(startingLocationOfGrasslandsHex);
+        rocky.setLocation(startingLocationOfRockyHex);
+
+        allHexesInWorld.add(volcano);
+        allHexesInWorld.add(jungle);
+        allHexesInWorld.add(lake);
+        allHexesInWorld.add(grasslands);
+        allHexesInWorld.add(rocky);
+
+        firstTileHasBeenPlaced = true;
     }
 
     private int getArrayCoordinateFromTrueCoordinate(int trueCoordinate) {
@@ -92,6 +134,9 @@ public class TileManager {
     }
 
 
+    public boolean getFirstTileHasBeenPlaced() {
+        return firstTileHasBeenPlaced;
+    }
 
 
 

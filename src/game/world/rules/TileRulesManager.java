@@ -12,7 +12,11 @@ public class TileRulesManager {
         this.tileManager = tileManager;
     }
 
-    public boolean ableToPlaceTileAtLocation(Tile tile, Location[] locationsOfTileHexes, boolean firstTileHasBeePlaced) throws IllegalTilePlacementException {
+    public boolean ableToPlaceTileAtLocation(Tile tile, Location[] locationsOfTileHexes) throws IllegalTilePlacementException {
+        if (!tileManager.getFirstTileHasBeenPlaced()) {
+            throw new SpecialFirstTileHasNotBeenPlacedException("Special first tile has not been placed!");
+        }
+
         verifyNoHexesExistAtLocations(locationsOfTileHexes);
 
         int zCoordinate = locationsOfTileHexes[0].getzCoordinate();
@@ -20,15 +24,15 @@ public class TileRulesManager {
             return ableToPlaceTileOnUpperLayer(tile, locationsOfTileHexes);
         }
         else {
-            return ableToPlaceTileOnBaseLayer(tile, locationsOfTileHexes, firstTileHasBeePlaced);
+            return ableToPlaceTileOnBaseLayer(tile, locationsOfTileHexes);
         }
     }
 
-    public boolean ableToPlaceTileOnUpperLayer(Tile tile, Location[] locationsOfTileHexes) throws IllegalTilePlacementException {
+    private boolean ableToPlaceTileOnUpperLayer(Tile tile, Location[] locationsOfTileHexes) throws IllegalTilePlacementException {
         return noAirBelowTile(locationsOfTileHexes) && topVolcanoCoversOneBelow(locationsOfTileHexes[0]) && tileDoesNotLieCompletelyOnAnother(locationsOfTileHexes);
     }
 
-    public void verifyNoHexesExistAtLocations(Location[] locationOfHexes) throws HexAlreadyAtLocationException {
+    private void verifyNoHexesExistAtLocations(Location[] locationOfHexes) throws HexAlreadyAtLocationException {
         boolean ableToInsertTileIntoWorld = true;
         Location notEmptyLocation = null;
 
@@ -57,8 +61,8 @@ public class TileRulesManager {
         }
     }
 
-    private boolean ableToPlaceTileOnBaseLayer(Tile tile, Location[] locationsOfTileHexes, boolean firstTileHasBeenPlaced) throws IllegalTilePlacementException {
-        return !firstTileHasBeenPlaced || tileIsAdjacentToAnExistingTile(locationsOfTileHexes);
+    private boolean ableToPlaceTileOnBaseLayer(Tile tile, Location[] locationsOfTileHexes) throws IllegalTilePlacementException {
+        return tileIsAdjacentToAnExistingTile(locationsOfTileHexes);
     }
 
     public boolean noAirBelowTile(Location[] locationOfTileHexes) throws AirBelowTileException {
@@ -141,6 +145,16 @@ public class TileRulesManager {
             return true;
         }
         return false;
+    }
+
+    public boolean ableToPlaceFirstTile() throws SpecialFirstTileHasAlreadyBeenPlacedExeption {
+        if (tileManager.getFirstTileHasBeenPlaced()) {
+            throw new SpecialFirstTileHasAlreadyBeenPlacedExeption("Special first tile has already been placed!");
+        }
+
+        else {
+            return true;
+        }
     }
 }
 
