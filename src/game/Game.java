@@ -1,10 +1,11 @@
 package game;
 
 
-import tile.Location;
+import game.world.*;
+import game.world.exceptions.*;
 import tile.Terrain;
 import tile.Tile;
-import tile.orientation.TileOrientationRelativeToVolcano;
+import tile.orientation.TileOrientation;
 
 public class Game {
     public World world;
@@ -20,27 +21,16 @@ public class Game {
     public void play()  {
         Tile tile = drawTile();
         try {
-            world.placeFirstTile(tile, TileOrientationRelativeToVolcano.NORTHWEST_WEST);
-            world.placeFirstTile(tile, TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
+            world.placeFirstTile(tile, TileOrientation.NORTHWEST_WEST);
+            world.placeFirstTile(tile, TileOrientation.NORTHEAST_NORTHWEST);
 
 
         }
-        catch (HexAlreadyAtLocationException e) {
+        catch (TilePlacementException e) {
             System.out.println(e.getMessage());
-        }
-        catch (AirBelowTileException e) {
-            System.out.println(e.getMessage());
-        } catch (NoHexAtLocationException e) {
-            System.out.println(e.getMessage());
-        } catch (TopVolcanoDoesNotCoverBottomVolcanoException e) {
-            System.out.println(e.getMessage());
-        } catch (TileNotAdjacentToAnotherException e) {
-            e.printStackTrace();
-        } catch (TileCompletelyOverlapsAnotherException e) {
-            e.printStackTrace();
         }
 
-        world.printAllHexesAndTheirInformation();
+
 
 
     }
