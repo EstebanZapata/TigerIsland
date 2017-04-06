@@ -37,7 +37,7 @@ public class SuccessfullyPlacingAnotherTileOnTheFirstLayer {
         locationOfTile[1] = tileTwo.getLeftHexRelativeToVolcano().getLocation();
         locationOfTile[2] = tileTwo.getRightHexRelativeToVolcano().getLocation();
 
-        Assert.assertEquals(true, world.tileIsAdjacentToAnExistingTile(locationOfTile, TileOrientation.EAST_NORTHEAST));
+        Assert.assertEquals(true, world.tileRulesManager.tileIsAdjacentToAnExistingTile(locationOfTile, TileOrientation.EAST_NORTHEAST));
     }
 
     @When("^it is not overlapping another tile$")

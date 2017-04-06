@@ -46,12 +46,12 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
 
     @When("^the upper tile volcano covers a lower volcano$")
     public void the_upper_tile_volcano_covers_a_lower_volcano() throws Throwable {
-        Assert.assertEquals(true, world.topVolcanoCoversOneBelow(locationOfHexes[0]));
+        Assert.assertEquals(true, world.tileRulesManager.topVolcanoCoversOneBelow(locationOfHexes[0]));
     }
 
     @When("^there is no air gap below the tile$")
     public void there_is_no_air_gap_below_the_tile() throws Throwable {
-        Assert.assertEquals(true, world.noAirBelowTile(locationOfHexes));
+        Assert.assertEquals(true, world.tileRulesManager.noAirBelowTile(locationOfHexes));
     }
 
     @Then("^The tile should be placed on the board on the higher layer$")

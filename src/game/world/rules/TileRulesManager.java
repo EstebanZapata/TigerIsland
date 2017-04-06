@@ -1,13 +1,13 @@
 package game.world.rules;
 
+import game.world.CoordinateSystemHelper;
 import game.world.TileManager;
-import game.world.rules.exceptions.HexAlreadyAtLocationException;
-import game.world.rules.exceptions.NoHexAtLocationException;
-import game.world.rules.exceptions.TileCompletelyOverlapsAnotherException;
-import game.world.rules.exceptions.TilePlacementException;
+import game.world.rules.exceptions.*;
 import tile.Hex;
 import tile.Location;
+import tile.Terrain;
 import tile.Tile;
+import tile.orientation.TileOrientation;
 
 public class TileRulesManager {
     private TileManager tileManager;
@@ -20,7 +20,46 @@ public class TileRulesManager {
 
     //}
 
+    public boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws TilePlacementException {
+        int xCoordinate = locationOfVolcano.getxCoordinate();
+        int yCoordinate = locationOfVolcano.getyCoordinate();
+        int zCoordinateToCheck = locationOfVolcano.getzCoordinate() - 1;
+        if (tileManager.getHexByCoordinate(xCoordinate,yCoordinate,zCoordinateToCheck).getTerrain() != Terrain.VOLCANO) {
+            throw new TopVolcanoDoesNotCoverBottomVolcanoException(String.format("Hex at (%d,%d,%d) is not volcano", xCoordinate,yCoordinate,zCoordinateToCheck));
+        }
+        return true;
+    }
 
+    public boolean tileIsAdjacentToAnExistingTile(Location[] locationOfHexes, TileOrientation tileOrientation) throws TileNotAdjacentToAnotherException {
+        Location[] adjecentHexLocations = CoordinateSystemHelper.getAdjacentHexLocationsToTile(locationOfHexes);
+
+        for (int i = 0; i < 9; i++) {
+            try {
+                Hex hex = tileManager.getHexByLocation(adjecentHexLocations[i]);
+                return true;
+
+            } catch (NoHexAtLocationException e) {
+                continue;
+            }
+        }
+        throw new TileNotAdjacentToAnotherException("Tile being placed is not adjacent to an existing tile");
+    }
+
+    public boolean noAirBelowTile(Location[] locationOfTileHexes) throws AirBelowTileException {
+        int zCoordinate = locationOfTileHexes[0].getzCoordinate();
+        int zLayerToCheck = zCoordinate - 1;
+
+        try {
+            tileManager.getHexByCoordinate(locationOfTileHexes[0].getxCoordinate(), locationOfTileHexes[0].getyCoordinate(), zLayerToCheck);
+            tileManager.getHexByCoordinate(locationOfTileHexes[1].getxCoordinate(), locationOfTileHexes[1].getyCoordinate(), zLayerToCheck);
+            tileManager.getHexByCoordinate(locationOfTileHexes[2].getxCoordinate(), locationOfTileHexes[2].getyCoordinate(), zLayerToCheck);
+        }
+        catch (NoHexAtLocationException e) {
+            throw new AirBelowTileException("Air below tile");
+        }
+
+        return true;
+    }
 
     public boolean tileDoesNotLieCompletelyOnAnother(Location[] locationOfTileHexes) throws TilePlacementException {
 
