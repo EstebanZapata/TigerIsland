@@ -8,7 +8,6 @@ public class Hex {
     public Hex(Tile owner, Terrain terrain) {
         this.owner = owner;
         this.terrain = terrain;
-
     }
 
     public Terrain getTerrain() {
@@ -25,5 +24,10 @@ public class Hex {
 
     public Location getLocation() {
         return this.location;
+    }
+
+    public int getHeight() {
+        int height = this.location.getzCoordinate();
+        return height;
     }
 }
