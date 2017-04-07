@@ -14,6 +14,11 @@ Feature: Placing tiles on the first layer
       And it is not the special first tile
     Then that tile cannot be placed on the board
 
+  Scenario: Placing the special first tile again
+    Given The special first tile has been placed
+    When I place another special first tile
+    Then that tile is not placed on the board
+
   Scenario: Successfully placing another tile on the first layer
     Given a non-empty board
     When I place the tile on the first layer
