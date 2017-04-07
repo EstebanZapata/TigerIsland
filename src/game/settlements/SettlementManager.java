@@ -14,6 +14,7 @@ public class SettlementManager {
     public void foundSettlement(Hex foundingHex) {
         Settlement newSettlement = new Settlement(foundingHex);
         settlements.add(newSettlement);
+        foundingHex.setSettlement(newSettlement);
     }
 
     public Boolean hasSettlementOnHex(Hex hex) {

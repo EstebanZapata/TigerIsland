@@ -9,10 +9,11 @@ public class Settlement {
     private boolean hasTiger = false;
 
     public Settlement(Hex foundingHex) {
+        settlementHexes = new ArrayList<>();
         settlementHexes.add(foundingHex);
     }
 
-    public Boolean containsHex(Hex hexToSearchFor) {
+    public boolean containsHex(Hex hexToSearchFor) {
         for (Hex settlementHex: settlementHexes) {
             if (settlementHex == hexToSearchFor) {
                 return true;

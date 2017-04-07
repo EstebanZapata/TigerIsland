@@ -1,4 +1,4 @@
-package acceptance.tile;
+package acceptance.java.world;
 
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
