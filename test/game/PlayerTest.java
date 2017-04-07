@@ -1,6 +1,5 @@
-package UnitTests.game;
+package game;
 
-import game.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

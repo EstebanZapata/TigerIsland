@@ -1,4 +1,4 @@
-package UnitTests.pieces;
+package pieces;
 
 import UnitTests.tile.Location;
 
