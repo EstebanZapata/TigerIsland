@@ -1,4 +1,4 @@
-package acceptance.tile;
+package AcceptanceTests.tile;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -9,7 +9,6 @@ import tile.Terrain;
 import tile.Tile;
 
 import game.world.World;
-import tile.orientation.TileOrientation;
 
 public class PlacingTheFirstTile {
     private Tile tile;

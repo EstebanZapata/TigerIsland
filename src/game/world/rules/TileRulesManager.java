@@ -115,7 +115,7 @@ public class TileRulesManager {
 
 
         if (tileOne == tileTwo && tileOne == tileThree) {
-            throw new TileCompletelyOverlapsAnotherException("Tile completely overlaps another");
+            throw new TileCompletelyOverlapsAnotherException("tile completely overlaps another");
         }
         else {
             return true;
@@ -134,7 +134,7 @@ public class TileRulesManager {
                 continue;
             }
         }
-        throw new TileNotAdjacentToAnotherException("Tile being placed is not adjacent to an existing tile");
+        throw new TileNotAdjacentToAnotherException("tile being placed is not adjacent to an existing tile");
     }
 
     private boolean hexLocationIsEmpty(Location location) {
