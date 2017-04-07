@@ -1,10 +1,13 @@
 package game.world;
 
+import game.world.rules.exceptions.IllegalTilePlacementException;
 import game.world.rules.exceptions.NoHexAtLocationException;
+import game.world.rules.exceptions.SpecialFirstTileHasNotBeenPlacedException;
 import tile.FirstTile;
 import tile.Hex;
 import tile.Location;
 import tile.Tile;
+import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
@@ -101,7 +104,7 @@ public class TileManager {
     public Hex getHexByLocation(Location location) throws NoHexAtLocationException {
         int x = location.getxCoordinate();
         int y = location.getyCoordinate();
-        int z = location.getHeight();
+        int z = location.getzCoordinate();
 
         return getHexByCoordinate(x, y, z);
     }
@@ -122,24 +125,12 @@ public class TileManager {
 
     }
 
-    public Location getLocationDirectlyAboveHexByXY(int xCoordinate, int yCoordinate) {
-        int heightOfNewLocation = getHeightOfTileAtLocation(xCoordinate,yCoordinate) + 1;
-        return new Location(xCoordinate, yCoordinate, heightOfNewLocation);
-    }
-
-    public int getHeightOfTileAtLocation(int xCoordinate, int yCoordinate) {
-        Hex hex = hexCoordinateSystem[xCoordinate][yCoordinate];
-        Location locationOfHex = hex.getLocation();
-        return locationOfHex.getHeight();
-    }
-
     private boolean hexDoesNotExist(Hex hex) {
         return hex == null;
     }
 
     private boolean hexDoesNotMatchGivenHeight(Hex hex, int z) {
-        Location locationOfHex = hex.getLocation();
-        return locationOfHex.getHeight() != z;
+        return hex.getLocation().getzCoordinate() != z;
     }
 
 

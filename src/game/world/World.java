@@ -2,8 +2,8 @@ package game.world;
 
 import game.world.rules.TileRulesManager;
 import game.world.rules.exceptions.*;
-import tile.*;
-import tile.orientation.TileOrientation;
+import UnitTests.tile.*;
+import UnitTests.tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
@@ -36,18 +36,22 @@ public class World {
 
     }
 
-    public void placeFirstTile(Tile tile, TileOrientation orientation) throws IllegalTilePlacementException {
+    public void placeFirstTile() throws IllegalTilePlacementException {
         if (tileRulesManager.ableToPlaceFirstTile()) {
             tileManager.placeFirstTile();
         }
     }
 
     public ArrayList<Hex> getAllHexesInWorld() {
-        return tileManager.allHexesInWorld;
+        return tileManager.getAllHexesInWorld();
     }
 
     public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {
         return tileManager.getHexByCoordinate(x,y,z);
+    }
+
+    public Hex getHexByLocation(Location locationOfHex) throws NoHexAtLocationException {
+        return tileManager.getHexByLocation(locationOfHex);
     }
 
 
