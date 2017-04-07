@@ -25,6 +25,7 @@ public class HexAcceptanceTest {
     @When("^I check the Terrain type$")
     public void i_check_the_Terrain_type() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
+        hexes = new Hex[3];
         hexes[0] = testHexOwner.getVolcanoHex();
     }
 

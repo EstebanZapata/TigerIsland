@@ -4,14 +4,13 @@ Feature: Placing tiles on the first layer
   So that I can expand the island
 
   Scenario: Placing the first tile
-    Given I have a tile
-    And No other tiles have been placed
-    When I place the tile
-    Then The tile should be placed on the board
+    Given No other tiles have been placed
+    When I place the first tile
+    Then The tile should be placed on the board with the volcano at the origin
 
   Scenario: Successfully placing another tile on the first layer
     Given a non-empty board
-    When I place the tile on  the first layer
+    When I place the tile on the first layer
     And it is adjacent to an existing tile
     And it is not overlapping another tile
     Then the tile should be placed on the board adjacent to an existing tile
