@@ -2,8 +2,8 @@ package game.world;
 
 import game.world.rules.TileRulesManager;
 import game.world.rules.exceptions.*;
-import tile.*;
-import tile.orientation.TileOrientation;
+import UnitTests.tile.*;
+import UnitTests.tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
