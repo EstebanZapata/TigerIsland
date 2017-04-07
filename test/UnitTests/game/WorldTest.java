@@ -1,4 +1,4 @@
-package game;
+package UnitTests.game;
 
 import game.world.*;
 import game.world.rules.exceptions.*;
