@@ -27,17 +27,18 @@ public class Server {
             String inputLine, outputLine;
             // Initiate conversation with client
             Protocol kkp = new Protocol();
-            //Startup Loop. Sends messages without client input
-            while (startup<5) {
+            //Startup condition. Sends message without client input
+            if (startup<1) {
                 outputLine = kkp.processInput(null);
                 out.println(outputLine);
-                startup++;
+               startup++;
             }
             //Client feedback loop
             while ((inputLine = in.readLine()) != null) {
                 outputLine = kkp.processInput(inputLine);
                 out.println(outputLine);
-                if (outputLine.equals("Bye."))
+                System.out.println(outputLine);
+                if (outputLine.equals("THANK YOU FOR PLAYING! GOODBYE"))
                     break;
             }
         } catch (IOException e) {
