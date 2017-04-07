@@ -44,7 +44,71 @@ public class WorldTest {
         world.placeFirstTile();
     }
 
+    @Test
+    public void testPlaceTileWithSouthwestSoutheastOrientation() throws IllegalTilePlacementException {
+        world.placeFirstTile();
 
+        world.attemptToInsertTileIntoTileManager(tile, new Location(2,1,0), TileOrientation.SOUTHWEST_SOUTHEAST);
+
+        Assert.assertEquals(tile.getVolcanoHex(), world.getHexByCoordinate(2,1,0));
+        Assert.assertEquals(tile.getLeftHexRelativeToVolcano(), world.getHexByCoordinate(1,0,0));
+        Assert.assertEquals(tile.getRightHexRelativeToVolcano(), world.getHexByCoordinate(2,0,0));
+    }
+
+    @Test
+    public void testPlaceTileWithWestSouthwestOrientation() throws IllegalTilePlacementException {
+        world.placeFirstTile();
+
+        world.attemptToInsertTileIntoTileManager(tile, new Location(-2,-2,0), TileOrientation.WEST_SOUTHWEST);
+
+        Assert.assertEquals(tile.getVolcanoHex(), world.getHexByCoordinate(-2,-2,0));
+        Assert.assertEquals(tile.getLeftHexRelativeToVolcano(), world.getHexByCoordinate(-3,-2,0));
+        Assert.assertEquals(tile.getRightHexRelativeToVolcano(), world.getHexByCoordinate(-3,-3,0));
+    }
+
+    @Test
+    public void testPlaceTileWithNorthwestWestOrientation() throws IllegalTilePlacementException {
+        world.placeFirstTile();
+
+        world.attemptToInsertTileIntoTileManager(tile, new Location(1,2,0), TileOrientation.NORTHWEST_WEST);
+
+        Assert.assertEquals(tile.getVolcanoHex(), world.getHexByCoordinate(1,2,0));
+        Assert.assertEquals(tile.getLeftHexRelativeToVolcano(), world.getHexByCoordinate(1,3,0));
+        Assert.assertEquals(tile.getRightHexRelativeToVolcano(), world.getHexByCoordinate(0,2,0));
+    }
+
+    @Test
+    public void testPlaceTileWithNortheastNorthwestOrientation() throws IllegalTilePlacementException {
+        world.placeFirstTile();
+
+        world.attemptToInsertTileIntoTileManager(tile, new Location(2,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+
+        Assert.assertEquals(tile.getVolcanoHex(), world.getHexByCoordinate(2,0,0));
+        Assert.assertEquals(tile.getLeftHexRelativeToVolcano(), world.getHexByCoordinate(3,1,0));
+        Assert.assertEquals(tile.getRightHexRelativeToVolcano(), world.getHexByCoordinate(2,1,0));
+    }
+
+    @Test
+    public void testPlaceTileWithEastNortheastOrientation() throws IllegalTilePlacementException {
+        world.placeFirstTile();
+
+        world.attemptToInsertTileIntoTileManager(tile, new Location(2,2,0), TileOrientation.EAST_NORTHEAST);
+
+        Assert.assertEquals(tile.getVolcanoHex(), world.getHexByCoordinate(2,2,0));
+        Assert.assertEquals(tile.getLeftHexRelativeToVolcano(), world.getHexByCoordinate(3,2,0));
+        Assert.assertEquals(tile.getRightHexRelativeToVolcano(), world.getHexByCoordinate(3,3,0));
+    }
+
+    @Test
+    public void testPlaceTileWithSoutheastEastOrientation() throws IllegalTilePlacementException {
+        world.placeFirstTile();
+
+        world.attemptToInsertTileIntoTileManager(tile, new Location(-2,1,0), TileOrientation.SOUTHEAST_EAST);
+
+        Assert.assertEquals(tile.getVolcanoHex(), world.getHexByCoordinate(-2,1,0));
+        Assert.assertEquals(tile.getLeftHexRelativeToVolcano(), world.getHexByCoordinate(-2,0,0));
+        Assert.assertEquals(tile.getRightHexRelativeToVolcano(), world.getHexByCoordinate(-1,1,0));
+    }
 
 
 

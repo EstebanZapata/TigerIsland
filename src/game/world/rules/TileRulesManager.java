@@ -125,7 +125,7 @@ public class TileRulesManager {
     public boolean tileIsAdjacentToAnExistingTile(Location[] locationOfHexes) throws TileNotAdjacentToAnotherException {
         Location[] adjecentHexLocations = CoordinateSystemHelper.getAdjacentHexLocationsToTile(locationOfHexes);
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 12; i++) {
             try {
                 Hex hex = tileManager.getHexByLocation(adjecentHexLocations[i]);
                 return true;
