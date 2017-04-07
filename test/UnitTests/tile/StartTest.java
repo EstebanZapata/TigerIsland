@@ -1,6 +1,7 @@
 package UnitTests.tile;
 
 import game.Start;
+import game.world.rules.exceptions.SpecialFirstTileHasAlreadyBeenPlacedExeption;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,8 +19,13 @@ public class StartTest {
 
     @Test
     public void testStarter(){
-        //boolean gameStarted = this.starter.myGame.world.getFirstTileHasBeenPlaced();
-        Assert.assertEquals(true, false);
+        boolean gameStarted = false;
+        try {
+            gameStarted = this.starter.myGame.world.tileRulesManager.ableToPlaceFirstTile();
+        } catch (SpecialFirstTileHasAlreadyBeenPlacedExeption specialFirstTileHasAlreadyBeenPlacedExeption) {
+            specialFirstTileHasAlreadyBeenPlacedExeption.printStackTrace();
+        }
+        Assert.assertEquals(true, gameStarted);
     }
 
 }
