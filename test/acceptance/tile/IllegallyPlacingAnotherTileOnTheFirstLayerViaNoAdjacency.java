@@ -3,14 +3,14 @@ package acceptance.tile;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import game.NoHexAtLocationException;
-import game.TileNotAdjacentToAnotherException;
-import game.World;
+import game.world.rules.exceptions.NoHexAtLocationException;
+import game.world.rules.exceptions.TileNotAdjacentToAnotherException;
+import game.world.World;
 import org.junit.Assert;
 import tile.Location;
 import tile.Terrain;
 import tile.Tile;
-import tile.orientation.TileOrientationRelativeToVolcano;
+import tile.orientation.TileOrientation;
 
 public class IllegallyPlacingAnotherTileOnTheFirstLayerViaNoAdjacency {
     private World world;
@@ -22,13 +22,13 @@ public class IllegallyPlacingAnotherTileOnTheFirstLayerViaNoAdjacency {
     public void a_board_with_at_least_one_tile() throws Throwable {
         world = new World();
         tileOne = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
-        world.placeFirstTile(tileOne, TileOrientationRelativeToVolcano.WEST_SOUTHWEST);
+        world.placeFirstTile(tileOne, TileOrientation.WEST_SOUTHWEST);
     }
 
     @When("^I attempt to place the tile on the first layer$")
     public void i_attempt_to_place_the_tile_on_the_first_layer() throws Throwable {
         try {
-            world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+            world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
         }
         catch (TileNotAdjacentToAnotherException e) {
         }
@@ -40,7 +40,7 @@ public class IllegallyPlacingAnotherTileOnTheFirstLayerViaNoAdjacency {
         boolean notAdjacent = false;
 
         try {
-            world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+            world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
         }
         catch (TileNotAdjacentToAnotherException e) {
             notAdjacent = true;

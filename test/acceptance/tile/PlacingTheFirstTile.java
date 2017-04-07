@@ -8,8 +8,8 @@ import tile.Hex;
 import tile.Terrain;
 import tile.Tile;
 
-import game.World;
-import tile.orientation.TileOrientationRelativeToVolcano;
+import game.world.World;
+import tile.orientation.TileOrientation;
 
 public class PlacingTheFirstTile {
     private Tile tile;
@@ -28,7 +28,7 @@ public class PlacingTheFirstTile {
 
     @When("^I place the tile$")
     public void i_place_the_tile() throws Throwable {
-        world.placeFirstTile(tile, TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
+        world.placeFirstTile(tile, TileOrientation.NORTHEAST_NORTHWEST);
     }
 
     @Then("^The tile should be placed on the board$")

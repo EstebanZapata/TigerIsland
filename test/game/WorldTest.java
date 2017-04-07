@@ -1,5 +1,7 @@
 package game;
 
+import game.world.*;
+import game.world.rules.exceptions.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,7 +9,7 @@ import tile.Hex;
 import tile.Location;
 import tile.Terrain;
 import tile.Tile;
-import tile.orientation.TileOrientationRelativeToVolcano;
+import tile.orientation.TileOrientation;
 
 public class WorldTest {
     private World world;
@@ -35,8 +37,8 @@ public class WorldTest {
     }
 
     @Test
-    public void testAfterPlacingTileWithOrientationSouthwestSoutheastGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException, AirBelowTileException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.placeFirstTile(tile,  TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
+    public void testAfterPlacingTileWithOrientationSouthwestSoutheastGetHexesByCoordinate() throws IllegalTilePlacementException {
+        world.placeFirstTile(tile,  TileOrientation.SOUTHWEST_SOUTHEAST);
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -48,8 +50,8 @@ public class WorldTest {
     }
 
     @Test
-    public void testAfterPlacingTileWithOrientationWestSouthwestGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException, AirBelowTileException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.placeFirstTile(tile,  TileOrientationRelativeToVolcano.WEST_SOUTHWEST);
+    public void testAfterPlacingTileWithOrientationWestSouthwestGetHexesByCoordinate() throws IllegalTilePlacementException {
+        world.placeFirstTile(tile,  TileOrientation.WEST_SOUTHWEST);
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -61,8 +63,8 @@ public class WorldTest {
     }
 
     @Test
-    public void testAfterPlacingTileWithOrientationNorthwestWestGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException, AirBelowTileException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.placeFirstTile(tile,  TileOrientationRelativeToVolcano.NORTHWEST_WEST);
+    public void testAfterPlacingTileWithOrientationNorthwestWestGetHexesByCoordinate() throws IllegalTilePlacementException {
+        world.placeFirstTile(tile,  TileOrientation.NORTHWEST_WEST);
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -74,8 +76,8 @@ public class WorldTest {
     }
 
     @Test
-    public void testAfterPlacingTileWithOrientationNortheastNorthwestGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException, AirBelowTileException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.placeFirstTile(tile,  TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
+    public void testAfterPlacingTileWithOrientationNortheastNorthwestGetHexesByCoordinate() throws IllegalTilePlacementException {
+        world.placeFirstTile(tile,  TileOrientation.NORTHEAST_NORTHWEST);
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -87,9 +89,9 @@ public class WorldTest {
     }
 
     @Test
-    public void testAfterPlacingTileWithOrientationEastNortheastGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException, AirBelowTileException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
+    public void testAfterPlacingTileWithOrientationEastNortheastGetHexesByCoordinate() throws IllegalTilePlacementException {
         Location locationOfVolcano = new Location(3,4,0);
-        world.insertTileIntoWorld(tile, locationOfVolcano, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tile, locationOfVolcano, TileOrientation.EAST_NORTHEAST);
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -101,8 +103,8 @@ public class WorldTest {
     }
 
     @Test
-    public void testAfterPlacingTileWithOrientationSoutheastEastGetHexesByCoordinate() throws HexAlreadyAtLocationException, NoHexAtLocationException, AirBelowTileException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.placeFirstTile(tile,  TileOrientationRelativeToVolcano.SOUTHEAST_EAST);
+    public void testAfterPlacingTileWithOrientationSoutheastEastGetHexesByCoordinate() throws IllegalTilePlacementException {
+        world.placeFirstTile(tile,  TileOrientation.SOUTHEAST_EAST);
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -114,71 +116,71 @@ public class WorldTest {
     }
 
     @Test(expected = HexAlreadyAtLocationException.class)
-    public void testCannotPlaceTileOverlappingAnotherTile() throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.insertTileIntoWorld(tile, new Location(1,2,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
-        world.insertTileIntoWorld(new Tile(Terrain.JUNGLE, Terrain.ROCKY), new Location(2,4,0), TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
+    public void testCannotPlaceTileOverlappingAnotherTile() throws IllegalTilePlacementException {
+        world.attemptToInsertTileIntoTileManager(tile, new Location(1,2,0), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(new Tile(Terrain.JUNGLE, Terrain.ROCKY), new Location(2,4,0), TileOrientation.SOUTHWEST_SOUTHEAST);
     }
 
     @Test
-    public void testSuccessfullyPlaceTileOnFirstLayerAdjacentToAnotherTile() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.placeFirstTile(tile, TileOrientationRelativeToVolcano.EAST_NORTHEAST);
-        world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+    public void testSuccessfullyPlaceTileOnFirstLayerAdjacentToAnotherTile() throws IllegalTilePlacementException {
+        world.placeFirstTile(tile, TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
 
         Assert.assertEquals(tileTwo.getVolcanoHex(), world.getHexByCoordinate(2, 0, 0));
     }
 
     @Test(expected = TileNotAdjacentToAnotherException.class)
-    public void testCannotPlaceTileOnFirstLayerWhichIsNotAdjacentToAnotherTile() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.placeFirstTile(tile, TileOrientationRelativeToVolcano.NORTHWEST_WEST);
-        world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+    public void testCannotPlaceTileOnFirstLayerWhichIsNotAdjacentToAnotherTile() throws IllegalTilePlacementException {
+        world.placeFirstTile(tile, TileOrientation.NORTHWEST_WEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
     }
 
     @Test
-    public void testSuccessfullyPlaceTileOnAnotherLayer() throws HexAlreadyAtLocationException, AirBelowTileException, NoHexAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+    public void testSuccessfullyPlaceTileOnAnotherLayer() throws IllegalTilePlacementException {
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
-        world.insertTileIntoWorld(tileThree, new Location(1,0,1),TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST );
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.NORTHEAST_NORTHWEST );
 
         Assert.assertEquals(tileThree, world.getHexByCoordinate(1,0,1).getOwner());
     }
 
     @Test(expected = TopVolcanoDoesNotCoverBottomVolcanoException.class)
-    public void testCannotPlaceTileDueToTopVolcanoNotCoveringBottomVolcano() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+    public void testCannotPlaceTileDueToTopVolcanoNotCoveringBottomVolcano() throws IllegalTilePlacementException {
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
-        world.insertTileIntoWorld(tileThree, new Location(1,1,1),TileOrientationRelativeToVolcano.SOUTHEAST_EAST );
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,1,1), TileOrientation.SOUTHEAST_EAST );
     }
 
     @Test(expected = AirBelowTileException.class)
-    public void testCannotPlaceTileDueToAirBelowTile() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+    public void testCannotPlaceTileDueToAirBelowTile() throws IllegalTilePlacementException {
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
-        world.insertTileIntoWorld(tileThree, new Location(1,1,1),TileOrientationRelativeToVolcano.EAST_NORTHEAST );
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,1,1), TileOrientation.EAST_NORTHEAST );
     }
 
     @Test(expected = TileCompletelyOverlapsAnotherException.class)
-    public void testCannotPlaceTileDueToTopTileCompletelyOverlappingBottomTile() throws HexAlreadyAtLocationException, TopVolcanoDoesNotCoverBottomVolcanoException, NoHexAtLocationException, AirBelowTileException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException{
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+    public void testCannotPlaceTileDueToTopTileCompletelyOverlappingBottomTile() throws IllegalTilePlacementException {
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
-        world.insertTileIntoWorld(tileThree, new Location(1,0,1),TileOrientationRelativeToVolcano.EAST_NORTHEAST );
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST );
 
 
     }
 
     @Test
-    public void testPlacingTileTwoLayersUp () throws NoHexAtLocationException, HexAlreadyAtLocationException, TileNotAdjacentToAnotherException, TileCompletelyOverlapsAnotherException, AirBelowTileException, TopVolcanoDoesNotCoverBottomVolcanoException {
-        world.insertTileIntoWorld(tile, new Location(0,0,0), TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(2,0,0), TileOrientationRelativeToVolcano.NORTHWEST_WEST);
-        world.insertTileIntoWorld(tileThree, new Location(3,0,0),TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST );
+    public void testPlacingTileTwoLayersUp () throws IllegalTilePlacementException {
+        world.attemptToInsertTileIntoTileManager(tile, new Location(0,0,0), TileOrientation.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.NORTHWEST_WEST);
+        world.attemptToInsertTileIntoTileManager(tileThree, new Location(3,0,0), TileOrientation.NORTHEAST_NORTHWEST );
 
-        world.insertTileIntoWorld(tileFour, new Location(0,0,1), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
-        world.insertTileIntoWorld(tileFive, new Location(2,0,1), TileOrientationRelativeToVolcano.NORTHEAST_NORTHWEST);
+        world.attemptToInsertTileIntoTileManager(tileFour, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(tileFive, new Location(2,0,1), TileOrientation.NORTHEAST_NORTHWEST);
 
-        world.insertTileIntoWorld(tileSix, new Location(2,0,2), TileOrientationRelativeToVolcano.NORTHWEST_WEST);
+        world.attemptToInsertTileIntoTileManager(tileSix, new Location(2,0,2), TileOrientation.NORTHWEST_WEST);
 
         Assert.assertEquals(tileSix, world.getHexByCoordinate(2,0,2).getOwner());
 
