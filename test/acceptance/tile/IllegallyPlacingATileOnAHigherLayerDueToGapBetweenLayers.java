@@ -3,14 +3,14 @@ package acceptance.tile;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import game.AirBelowTileException;
-import game.NoHexAtLocationException;
-import game.World;
+import game.world.rules.exceptions.AirBelowTileException;
+import game.world.rules.exceptions.NoHexAtLocationException;
+import game.world.World;
 import org.junit.Assert;
 import tile.Location;
 import tile.Terrain;
 import tile.Tile;
-import tile.orientation.TileOrientationRelativeToVolcano;
+import tile.orientation.TileOrientation;
 
 public class IllegallyPlacingATileOnAHigherLayerDueToGapBetweenLayers {
     private World world;
@@ -24,8 +24,8 @@ public class IllegallyPlacingATileOnAHigherLayerDueToGapBetweenLayers {
         tileOne = new Tile(Terrain.JUNGLE, Terrain.ROCKY);
         tileTwo = new Tile(Terrain.LAKE, Terrain.GRASSLANDS);
 
-        world.placeFirstTile(tileOne, TileOrientationRelativeToVolcano.SOUTHWEST_SOUTHEAST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientationRelativeToVolcano.SOUTHEAST_EAST);
+        world.placeFirstTile();
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHEAST_EAST);
     }
 
     @When("^I attempt to place the tile on the layer higher than the existing tiles$")
@@ -33,7 +33,7 @@ public class IllegallyPlacingATileOnAHigherLayerDueToGapBetweenLayers {
         tileThree = new Tile(Terrain.LAKE, Terrain.ROCKY);
 
         try {
-            world.insertTileIntoWorld(tileThree, new Location(1,0,1), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+            world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST);
         }
         catch (Exception e) {
 
@@ -44,7 +44,7 @@ public class IllegallyPlacingATileOnAHigherLayerDueToGapBetweenLayers {
     public void there_is_a_gap_between_tiles() throws Throwable {
         boolean airGapExists = false;
         try {
-            world.insertTileIntoWorld(tileThree, new Location(1,0,1), TileOrientationRelativeToVolcano.EAST_NORTHEAST);
+            world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST);
         }
         catch (AirBelowTileException e) {
             airGapExists = true;

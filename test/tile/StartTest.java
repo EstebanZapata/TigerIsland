@@ -18,8 +18,8 @@ public class StartTest {
 
     @Test
     public void testStarter(){
-        boolean gameStarted = this.starter.myGame.world.getFirstTileHasBeenPlaced();
-        Assert.assertEquals(true, gameStarted);
+        //boolean gameStarted = this.starter.myGame.world.getFirstTileHasBeenPlaced();
+        Assert.assertEquals(true, false);
     }
 
 }
