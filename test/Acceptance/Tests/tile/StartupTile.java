@@ -1,4 +1,4 @@
-package AcceptanceTests.tile;
+package Acceptance.Tests.tile;
 import game.*;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

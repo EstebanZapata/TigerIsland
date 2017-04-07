@@ -1,9 +1,10 @@
-package pieces;
+package UnitTests.pieces;
 
 import game.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import pieces.PieceContainer;
 
 public class PieceContainerTest {
     private PieceContainer testBag;

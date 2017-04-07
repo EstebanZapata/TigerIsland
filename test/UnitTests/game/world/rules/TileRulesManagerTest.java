@@ -1,6 +1,7 @@
-package game.world.rules;
+package UnitTests.game.world.rules;
 
 import game.world.TileManager;
+import game.world.rules.TileRulesManager;
 import game.world.rules.exceptions.*;
 import org.junit.Assert;
 import org.junit.Before;
