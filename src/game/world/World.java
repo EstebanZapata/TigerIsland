@@ -50,6 +50,10 @@ public class World {
         return tileManager.getHexByCoordinate(x,y,z);
     }
 
+    public Hex getHexByLocation(Location locationOfHex) throws NoHexAtLocationException {
+        return tileManager.getHexByLocation(locationOfHex);
+    }
+
 
 
 
