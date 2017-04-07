@@ -4,7 +4,7 @@ import game.world.rules.exceptions.NoHexAtLocationException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import UnitTests.tile.*;
+import tile.*;
 
 import java.util.ArrayList;
 

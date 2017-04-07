@@ -1,4 +1,4 @@
-package UnitTests.tile;
+package tile;
 
 public class Hex {
     private Terrain terrain;

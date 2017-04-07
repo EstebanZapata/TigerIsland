@@ -1,4 +1,4 @@
-package UnitTests.tile.orientation;
+package tile.orientation;
 
 public enum TileOrientation {
     SOUTHWEST_SOUTHEAST(4),

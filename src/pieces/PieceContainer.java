@@ -1,6 +1,6 @@
 package pieces;
 
-import UnitTests.tile.Location;
+import tile.Location;
 
 import java.util.Vector;
 

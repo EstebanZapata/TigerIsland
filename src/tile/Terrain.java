@@ -1,4 +1,4 @@
-package UnitTests.tile;
+package tile;
 
 public enum Terrain {
     JUNGLE(true),
