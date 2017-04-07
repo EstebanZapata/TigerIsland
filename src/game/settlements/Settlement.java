@@ -3,14 +3,12 @@ package game.settlements;
 import tile.*;
 import java.util.ArrayList;
 
-public class VillagerSettlement {
+public class Settlement {
     private ArrayList<Hex> settlementHexes;
+    private boolean hasTotoro = false;
+    private boolean hasTiger = false;
 
-    private int numVillagers = 1;
-    private int numTotoro = 0;
-    private int numTigers = 0;
-
-    public VillagerSettlement(Hex foundingHex) {
+    public Settlement(Hex foundingHex) {
         settlementHexes.add(foundingHex);
     }
 
@@ -20,7 +18,6 @@ public class VillagerSettlement {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -36,27 +33,19 @@ public class VillagerSettlement {
         settlementHexes.add(newHex);
     }
 
-/*    public int getNumVillagers() {
-        return numVillagers;
+    public boolean hasTotoroSanctuary() {
+        return hasTotoro;
     }
 
-    public void incrementNumVillagers(int amount) {
-        numVillagers += amount;
-    }*/
-
-    public int getNumTotoroSanctuaries() {
-        return numTotoro;
+    public void setHasTotoroSanctuary(boolean status) {
+        hasTotoro = status;
     }
 
-    public void incrementNumTotoroSanctuaries() {
-        numTotoro++;
+    public boolean hasTigerPlayground() {
+        return hasTiger;
     }
 
-    public int getNumTigerPlaygrounds() {
-        return numTigers;
-    }
-
-    public void incrementNumTigerPlaygrounds() {
-        numTigers++;
+    public void setHasTigerPlayground(boolean status) {
+        hasTiger = status;
     }
 }
