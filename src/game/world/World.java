@@ -43,7 +43,7 @@ public class World {
     }
 
     public ArrayList<Hex> getAllHexesInWorld() {
-        return tileManager.allHexesInWorld;
+        return tileManager.getAllHexesInWorld();
     }
 
     public Hex getHexByCoordinate(int x, int y, int z) throws NoHexAtLocationException {

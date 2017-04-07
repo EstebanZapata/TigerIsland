@@ -15,12 +15,29 @@ public class TileRulesManagerTest {
 
     private Tile tileOne;
     private Tile tileTwo;
+    private Tile tileThree;
+    private Tile tileFour;
+    private Tile tileFive;
+    private Tile tileSix;
 
     private Location[] locationsAdjacentToSpecialFirstTile;
+    private Location[] locationsAlsoAdjacentToSpecialFirstTile;
+
     private Location[] locationsOverlappingSpecialFirstTile;
     private Location[] locationsNotAdjacentToSpecialFirtTile;
 
     private Location[] locationsOnAHigherLevelAndAreValid;
+    private Location[] locationsAlsoOnAHigherLevelAndAreValid;
+    private Location[] locationsOnAHigherLevelWhereOneCoversAVolcanoAndAnotherDoesNot;
+
+    private Location[] locationsOnAnEvenHigherLevelAndAreValid;
+
+    private Location[] locationOnAHigherLevelAndOverlaps;
+    private Location[] locationsOnAHigherLevelAndHasGapBelow;
+    private Location[] locationsOnAHigherLevelThatCompletelyOverlapsBottomTile;
+    private Location[] locationsOnAHigherLevelWhereVolcanoDoesNotCoverLowerOne;
+
+    private Location[] locationsOnEvenHigherLevelAndHaveAirGapBelow;
 
     @Before
     public void setup() {
@@ -29,16 +46,43 @@ public class TileRulesManagerTest {
 
         tileOne = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
         tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
+        tileThree = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
+        tileFour = new Tile(Terrain.LAKE, Terrain.ROCKY);
+        tileFive = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
+        tileSix = new Tile(Terrain.LAKE, Terrain.JUNGLE);
 
         locationsAdjacentToSpecialFirstTile = new Location[] {new Location(1,0,0), new Location(2,0,0), new Location(2,1,0)};
+        locationsAlsoAdjacentToSpecialFirstTile = new Location[] {new Location(1,-1,0), new Location(1,-2,0), new Location(0,-2,0)};
+
         locationsOverlappingSpecialFirstTile = new Location[] {new Location(0,0,0), new Location(1,0,0), new Location(1,1,0)};
         locationsNotAdjacentToSpecialFirtTile = new Location[] {new Location(2,0,0), new Location(3,0,0), new Location(3,1,0)};
-        locationsOnAHigherLevelAndAreValid = new Location[] {new Location(0,0,1), new Location(1,0,1), new Location(1,1,1)};
 
+        locationsOnAHigherLevelAndAreValid = new Location[] {new Location(0,0,1), new Location(1,0,1), new Location(1,1,1)};
+        locationsAlsoOnAHigherLevelAndAreValid = new Location[] {new Location(0,-1,1), new Location(1,-1,1), new Location(0,-2,1)};
+        locationsOnAHigherLevelWhereOneCoversAVolcanoAndAnotherDoesNot = new Location[] {new Location(0,0,1), new Location(1,0,1), new Location(0,-1,1)};
+
+        locationsOnAnEvenHigherLevelAndAreValid = new Location[] {new Location(0,-1,2), new Location(1,0,2), new Location(1,-1,2)};
+
+        locationOnAHigherLevelAndOverlaps = new Location[] {new Location(0,-1,1), new Location(1,-1,1), new Location(1,0,1)};
+        locationsOnAHigherLevelAndHasGapBelow = new Location[] {new Location(1,-1,1), new Location(2,0,1), new Location(2,-1,1)};
+        locationsOnAHigherLevelThatCompletelyOverlapsBottomTile = new Location[] {new Location(0,0,1), new Location(-1,-1,1), new Location(0,-1,1)};
+        locationsOnAHigherLevelWhereVolcanoDoesNotCoverLowerOne = new Location[] {new Location(0,-1,1), new Location(1,0,1), new Location(1,-1,1)};
+
+        locationsOnEvenHigherLevelAndHaveAirGapBelow = new Location[] {new Location(0,0,2), new Location(0,-2,2), new Location(-1,-1,2)};
+
+
+    }
+
+    private void alsoSetUpValidLowestLevelLocations() {
+        tileManager.placeFirstTile();
+
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileOne, locationsAdjacentToSpecialFirstTile);
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileTwo, locationsAlsoAdjacentToSpecialFirstTile);
     }
 
     @Test(expected = SpecialFirstTileHasNotBeenPlacedException.class)
     public void testFirstTilePlacedMustBeSpecialTile() throws IllegalTilePlacementException {
+        Assert.assertTrue(tileRulesManager.ableToPlaceFirstTile());
         tileRulesManager.ableToPlaceTileAtLocation(tileOne, locationsAdjacentToSpecialFirstTile);
     }
 
@@ -77,6 +121,65 @@ public class TileRulesManagerTest {
         tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileOne, locationsAdjacentToSpecialFirstTile);
 
         Assert.assertTrue(tileRulesManager.ableToPlaceTileAtLocation(tileTwo, locationsOnAHigherLevelAndAreValid));
+    }
+
+    @Test
+    public void testLegalPlacementOfTileOnAHigherLevelEvenIfOneVolcanoIsUncoveredButAnotherIsCovered() {
+        alsoSetUpValidLowestLevelLocations();
+
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileThree, locationsOnAHigherLevelWhereOneCoversAVolcanoAndAnotherDoesNot);
+    }
+
+    @Test
+    public void testLegalPlacementOfTileOnAnEvenHigherLevel() throws IllegalTilePlacementException {
+        alsoSetUpValidLowestLevelLocations();
+
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileThree, locationsOnAHigherLevelAndAreValid);
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileFour, locationsAlsoOnAHigherLevelAndAreValid);
+
+        Assert.assertTrue(tileRulesManager.ableToPlaceTileAtLocation(tileFive, locationsOnAnEvenHigherLevelAndAreValid));
+    }
+
+    @Test(expected = HexAlreadyAtLocationException.class)
+    public void testIllegalPlacementOnUpperLevelDueToOverlap() throws IllegalTilePlacementException {
+        alsoSetUpValidLowestLevelLocations();
+
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileThree, locationsOnAHigherLevelAndAreValid);
+
+        tileRulesManager.ableToPlaceTileAtLocation(tileFour, locationOnAHigherLevelAndOverlaps);
+
+    }
+
+    @Test(expected = AirBelowTileException.class)
+    public void testIllegalPlacementOnUpperLevelDueToAirBelow() throws IllegalTilePlacementException {
+        alsoSetUpValidLowestLevelLocations();
+
+        tileRulesManager.ableToPlaceTileAtLocation(tileThree, locationsOnAHigherLevelAndHasGapBelow);
+    }
+
+    @Test(expected = TileCompletelyOverlapsAnotherException.class)
+    public void testIllegalPlacementOnUpperLevelDueToCompleteCoverageOfTile() throws IllegalTilePlacementException {
+        alsoSetUpValidLowestLevelLocations();
+
+        tileRulesManager.ableToPlaceTileAtLocation(tileThree, locationsOnAHigherLevelThatCompletelyOverlapsBottomTile);
+    }
+
+    @Test(expected = TopVolcanoDoesNotCoverBottomVolcanoException.class)
+    public void testIllegalPlacementOnUpperLevelDueToVolcanoNotCoveringABottomOne() throws IllegalTilePlacementException {
+        alsoSetUpValidLowestLevelLocations();
+
+        tileRulesManager.ableToPlaceTileAtLocation(tileThree, locationsOnAHigherLevelWhereVolcanoDoesNotCoverLowerOne);
+
+    }
+
+    @Test(expected = AirBelowTileException.class)
+    public void testIllegalPlacementOnEvenHigherLevelDueToAirGapBelow() throws IllegalTilePlacementException {
+        alsoSetUpValidLowestLevelLocations();
+
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileThree, locationsOnAHigherLevelAndAreValid);
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileFour, locationsAlsoOnAHigherLevelAndAreValid);
+
+        tileRulesManager.ableToPlaceTileAtLocation(tileSix, locationsOnEvenHigherLevelAndHaveAirGapBelow);
 
     }
 

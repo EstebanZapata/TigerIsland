@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class TileManager {
     public Hex[][] hexCoordinateSystem;
-    public ArrayList<Hex> allHexesInWorld;
+    private ArrayList<Hex> allHexesInWorld;
 
     private static final int SIZE_OF_BOARD = 200;
     private static final int ORIGIN_OFFSET = SIZE_OF_BOARD/2;
@@ -28,7 +28,6 @@ public class TileManager {
     }
 
     public void insertTileIntoCoordinateSystemAndAddHexesToList(Tile tile, Location[] locationsOfTileHexes) {
-
 
         Hex volcanoHex = tile.getVolcanoHex();
         Hex leftHex = tile.getLeftHexRelativeToVolcano();
@@ -122,7 +121,6 @@ public class TileManager {
         }
 
         return hex;
-
     }
 
     private boolean hexDoesNotExist(Hex hex) {
@@ -138,7 +136,9 @@ public class TileManager {
         return firstTileHasBeenPlaced;
     }
 
-
+    public ArrayList<Hex> getAllHexesInWorld() {
+        return this.allHexesInWorld;
+    }
 
 
 }
