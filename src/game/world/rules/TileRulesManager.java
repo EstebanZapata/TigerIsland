@@ -3,7 +3,6 @@ package game.world.rules;
 import game.world.CoordinateSystemHelper;
 import game.world.TileManager;
 import game.world.rules.exceptions.*;
-import tile.*;
 import tile.Hex;
 import tile.Location;
 import tile.Terrain;
@@ -23,7 +22,7 @@ public class TileRulesManager {
 
         verifyNoHexesExistAtLocations(locationsOfTileHexes);
 
-        int zCoordinate = locationsOfTileHexes[0].getzCoordinate();
+        int zCoordinate = locationsOfTileHexes[0].getHeight();
         if (zCoordinate > 0) {
             return ableToPlaceTileOnUpperLayer(tile, locationsOfTileHexes);
         }
@@ -70,13 +69,13 @@ public class TileRulesManager {
     }
 
     public boolean noAirBelowTile(Location[] locationOfTileHexes) throws AirBelowTileException {
-        int zCoordinate = locationOfTileHexes[0].getzCoordinate();
+        int zCoordinate = locationOfTileHexes[0].getHeight();
         int zLayerToCheck = zCoordinate - 1;
 
         try {
-            tileManager.getHexByCoordinate(locationOfTileHexes[0].getxCoordinate(), locationOfTileHexes[0].getyCoordinate(), zLayerToCheck);
-            tileManager.getHexByCoordinate(locationOfTileHexes[1].getxCoordinate(), locationOfTileHexes[1].getyCoordinate(), zLayerToCheck);
-            tileManager.getHexByCoordinate(locationOfTileHexes[2].getxCoordinate(), locationOfTileHexes[2].getyCoordinate(), zLayerToCheck);
+            tileManager.getHexByCoordinate(locationOfTileHexes[0].getXCoordinate(), locationOfTileHexes[0].getYCoordinate(), zLayerToCheck);
+            tileManager.getHexByCoordinate(locationOfTileHexes[1].getXCoordinate(), locationOfTileHexes[1].getYCoordinate(), zLayerToCheck);
+            tileManager.getHexByCoordinate(locationOfTileHexes[2].getXCoordinate(), locationOfTileHexes[2].getYCoordinate(), zLayerToCheck);
         }
         catch (NoHexAtLocationException e) {
             throw new AirBelowTileException("Air below UnitTests.tile");
@@ -86,9 +85,9 @@ public class TileRulesManager {
     }
 
     public boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws IllegalTilePlacementException {
-        int xCoordinate = locationOfVolcano.getxCoordinate();
-        int yCoordinate = locationOfVolcano.getyCoordinate();
-        int zCoordinateToCheck = locationOfVolcano.getzCoordinate() - 1;
+        int xCoordinate = locationOfVolcano.getXCoordinate();
+        int yCoordinate = locationOfVolcano.getYCoordinate();
+        int zCoordinateToCheck = locationOfVolcano.getHeight() - 1;
         if (tileManager.getHexByCoordinate(xCoordinate,yCoordinate,zCoordinateToCheck).getTerrain() != Terrain.VOLCANO) {
             throw new TopVolcanoDoesNotCoverBottomVolcanoException(String.format("Hex at (%d,%d,%d) is not volcano", xCoordinate,yCoordinate,zCoordinateToCheck));
         }
@@ -101,15 +100,15 @@ public class TileRulesManager {
         Tile tileTwo;
         Tile tileThree;
 
-        int zCoordinateToCheck = locationOfTileHexes[0].getzCoordinate() - 1;
+        int zCoordinateToCheck = locationOfTileHexes[0].getHeight() - 1;
 
         Location locationOne = locationOfTileHexes[0];
         Location locationTwo = locationOfTileHexes[1];
         Location locationThree = locationOfTileHexes[2];
 
-        Location locationOneToCheck = new Location(locationOne.getxCoordinate(), locationOne.getyCoordinate(), zCoordinateToCheck);
-        Location locationTwoToCheck = new Location(locationTwo.getxCoordinate(), locationTwo.getyCoordinate(), zCoordinateToCheck);
-        Location locationThreeToCheck = new Location(locationThree.getxCoordinate(), locationThree.getyCoordinate(), zCoordinateToCheck);
+        Location locationOneToCheck = new Location(locationOne.getXCoordinate(), locationOne.getYCoordinate(), zCoordinateToCheck);
+        Location locationTwoToCheck = new Location(locationTwo.getXCoordinate(), locationTwo.getYCoordinate(), zCoordinateToCheck);
+        Location locationThreeToCheck = new Location(locationThree.getXCoordinate(), locationThree.getYCoordinate(), zCoordinateToCheck);
 
 
         tileOne = tileManager.getHexByLocation(locationOneToCheck).getOwner();
