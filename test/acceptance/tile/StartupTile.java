@@ -23,7 +23,7 @@ public class StartupTile {
 
     @Then("^My tile should be placed on the board$")
     public void my_tile_should_be_placed_on_the_board() throws Throwable {
-        boolean gameStarted = this.myStarter.myGame.world.getFirstTileHasBeenPlaced();
-        Assert.assertEquals(true, gameStarted);
+        //boolean gameStarted = this.myStarter.myGame.world.getFirstTileHasBeenPlaced();
+        Assert.assertEquals(true, false);
     }
 }

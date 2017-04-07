@@ -1,20 +1,25 @@
 package game.settlements;
 
-import game.world.CoordinateSystem;
+import game.world.CoordinateSystemHelper;
 import game.settlements.exceptions.*;
 import tile.*;
+
 import java.util.ArrayList;
 
 public class SettlementManager {
-    public ArrayList<VillagerSettlement> villagerSettlements;
+    private ArrayList<Settlement> settlements;
+
+    public ArrayList<Settlement> getSettlements() {
+        return settlements;
+    }
 
     public void startSettlement(Hex hexToStartSettlementOn) {
-        VillagerSettlement newSettlement = new VillagerSettlement(hexToStartSettlementOn);
-        villagerSettlements.add(newSettlement);
+        Settlement newSettlement = new Settlement(hexToStartSettlementOn);
+        settlements.add(newSettlement);
     }
 
     public Boolean hasSettlementOnHex(Hex hex) {
-        for(VillagerSettlement settlement : villagerSettlements) {
+        for(Settlement settlement : settlements) {
             if (settlement.containsHex(hex)) {
                 return true;
             }
@@ -34,37 +39,7 @@ public class SettlementManager {
         return numVillagers;
     }
 
-    public ArrayList<Hex> getPotentialExpansion(VillagerSettlement existingSettlement, Terrain terrainType) {
-        ArrayList<Hex> potentialSettlementHexes = null;
-
-        if (terrainType == Terrain.VOLCANO) {
-            return null;
-        }
-
-        for (int i=0; i<existingSettlement.getSettlementSize(); i++) {
-            Hex settlementHex = existingSettlement.getHexFromSettlement(i);
-            Location hexLocation = settlementHex.getLocation();
-            Location[] hexLocationsAdjacentToCenter = CoordinateSystem.getHexLocationsAdjacentToCenter(hexLocation);
-
-            for (int j=0; j<hexLocationsAdjacentToCenter.length; j++) {
-                Location adjacentHexLocation = hexLocationsAdjacentToCenter[j];
-                int adjacentXCoordinate = adjacentHexLocation.getxCoordinate();
-                int adjacentYCoordinate = adjacentHexLocation.getyCoordinate();
-                int adjacentZCoordinate = adjacentHexLocation.getzCoordinate();
-                Hex adjacentHex = getHexByCoordinate(adjacentXCoordinate, adjacentYCoordinate, adjacentZCoordinate);
-
-                if (adjacentHex.getTerrain() == terrainType) {
-                    if (!adjacentHex.isOccupied()) {
-                        potentialSettlementHexes.add(adjacentHex);
-                    }
-                }
-            }
-        }
-
-        return potentialSettlementHexes;
-    }
-
-    public void expandSettlement(VillagerSettlement existingSettlement, ArrayList<Hex> potentialSettlementHexes) {
+    public void expandSettlement(Settlement existingSettlement, ArrayList<Hex> potentialSettlementHexes) {
     //    int newVillagers = 0;
 
         for (int i=0; i<potentialSettlementHexes.size(); i++) {
@@ -77,57 +52,6 @@ public class SettlementManager {
        // existingSettlement.incrementNumVillagers(newVillagers);
     }
 
-    public void buildTotoroSanctuary(Hex hexToBuildOn) throws
-            HexIsOccupiedException,
-            SettlementCannotBeBuiltOnVolcanoException,
-            BuildConditionsNotMetException
-    {
-        boolean approvedHex = false;
-        VillagerSettlement adjacentSettlement = null;
-
-        if (hexToBuildOn.isOccupied()) {
-            String errorMessage = String.format("Hex is already occupied.");
-            throw new HexIsOccupiedException(errorMessage);
-        }
-
-        if (hexToBuildOn.getTerrain() == Terrain.VOLCANO) {
-            String errorMessage = String.format("You cannot build a sanctuary on a Volcano");
-            throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
-        }
-
-        Location hexLocation = hexToBuildOn.getLocation();
-        Location[] hexLocationsAdjacentToCenter = CoordinateSystem.getHexLocationsAdjacentToCenter(hexLocation);
-
-        for (int i=0; i<hexLocationsAdjacentToCenter.length; i++) {
-            Location adjacentHexLocation = hexLocationsAdjacentToCenter[i];
-            int adjacentXCoordinate = adjacentHexLocation.getxCoordinate();
-            int adjacentYCoordinate = adjacentHexLocation.getyCoordinate();
-            int adjacentZCoordinate = adjacentHexLocation.getzCoordinate();
-            Hex adjacentHex = getHexByCoordinate(adjacentXCoordinate, adjacentYCoordinate, adjacentZCoordinate);
-
-            for (int j=0; j<villagerSettlements.size(); j++) {
-                VillagerSettlement potentialSanctuary = villagerSettlements.get(j);
-
-                if ((potentialSanctuary.getSettlementSize() >= 5) && (potentialSanctuary.getNumTotoroSanctuaries() < 1))
-                {
-                    for (int k=0; k<potentialSanctuary.getSettlementSize(); k++) {
-                        if (potentialSanctuary.getHexFromSettlement(k) == adjacentHex) {
-                            approvedHex = true;
-                            adjacentSettlement = potentialSanctuary;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!approvedHex) {
-            String errorMessage = String.format("This hex is not adjacent to a settlement of size >= 5 missing a totoro.");
-            throw new BuildConditionsNotMetException(errorMessage);
-        }
-
-        adjacentSettlement.incrementNumTotoroSanctuaries();
-    }
-
     public void buildTigerPlayground(Hex hexToBuildOn) throws
             HexIsOccupiedException,
             SettlementCannotBeBuiltOnVolcanoException,
@@ -135,7 +59,7 @@ public class SettlementManager {
             BuildConditionsNotMetException
     {
         boolean approvedHex = false;
-        VillagerSettlement adjacentSettlement = null;
+        Settlement adjacentSettlement = null;
 
         if (hexToBuildOn.isOccupied()) {
             String errorMessage = String.format("Hex is already occupied.");
@@ -164,8 +88,8 @@ public class SettlementManager {
             int adjacentZCoordinate = adjacentHexLocation.getzCoordinate();
             Hex adjacentHex = getHexByCoordinate(adjacentXCoordinate, adjacentYCoordinate, adjacentZCoordinate);
 
-            for (int j=0; j<villagerSettlements.size(); j++) {
-                VillagerSettlement potentialPlayground = villagerSettlements.get(j);
+            for (int j = 0; j< settlements.size(); j++) {
+                Settlement potentialPlayground = settlements.get(j);
 
                 if (potentialPlayground.getNumTigerPlaygrounds() < 1)
                 {
@@ -189,8 +113,8 @@ public class SettlementManager {
 
     public void mergeSettlements() {
 
-        for (int i = 0; i < villagerSettlements.size(); i++) {
-            VillagerSettlement settlement = villagerSettlements.get(i);
+        for (int i = 0; i < settlements.size(); i++) {
+            Settlement settlement = settlements.get(i);
 
             for (int j = 0; j < settlement.getSettlementSize(); j++) {
                 // ???

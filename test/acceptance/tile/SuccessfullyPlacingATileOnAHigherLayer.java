@@ -3,6 +3,7 @@ package acceptance.tile;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import game.world.CoordinateSystemHelper;
 import game.world.World;
 import org.junit.Assert;
 import tile.Hex;
@@ -22,8 +23,8 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
         world = new World();
         Tile tileOne = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
-        world.placeFirstTile(tileOne, TileOrientation.NORTHEAST_NORTHWEST);
-        world.insertTileIntoWorld(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
+        world.placeFirstTile();
+        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^I attempt to place the tile on the layer higher than those two tiles$")
@@ -34,28 +35,28 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
 
         locationOfHexes = new Location[3];
         locationOfHexes[0] = locationOfVolcano;
-        locationOfHexes[1] = world.getTentativeLeftHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
-        locationOfHexes[2] = world.getTentativeRightHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
+        locationOfHexes[1] = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
+        locationOfHexes[2] = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^it does not completely overlap a tile$")
     public void it_does_not_completely_overlap_a_tile() throws Throwable {
-         Assert.assertEquals(true, world.tileDoesNotLieCompletelyOnAnother(locationOfHexes));
+         Assert.assertEquals(true, world.tileRulesManager.tileDoesNotLieCompletelyOnAnother(locationOfHexes));
     }
 
     @When("^the upper tile volcano covers a lower volcano$")
     public void the_upper_tile_volcano_covers_a_lower_volcano() throws Throwable {
-        Assert.assertEquals(true, world.topVolcanoCoversOneBelow(locationOfHexes[0]));
+        Assert.assertEquals(true, world.tileRulesManager.topVolcanoCoversOneBelow(locationOfHexes[0]));
     }
 
     @When("^there is no air gap below the tile$")
     public void there_is_no_air_gap_below_the_tile() throws Throwable {
-        Assert.assertEquals(true, world.noAirBelowTile(locationOfHexes));
+        Assert.assertEquals(true, world.tileRulesManager.noAirBelowTile(locationOfHexes));
     }
 
     @Then("^The tile should be placed on the board on the higher layer$")
     public void the_should_be_placed_on_the_board() throws Throwable {
-        world.insertTileIntoWorld(upperTile, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
+        world.attemptToInsertTileIntoTileManager(upperTile, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
 
         Hex volcanoHex = upperTile.getVolcanoHex();
         Hex leftHex = upperTile.getLeftHexRelativeToVolcano();
