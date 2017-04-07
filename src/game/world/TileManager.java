@@ -100,7 +100,7 @@ public class TileManager {
     public Hex getHexByLocation(Location location) throws NoHexAtLocationException {
         int x = location.getxCoordinate();
         int y = location.getyCoordinate();
-        int z = location.getzCoordinate();
+        int z = location.getHeight();
 
         return getHexByCoordinate(x, y, z);
     }
@@ -120,12 +120,24 @@ public class TileManager {
         return hex;
     }
 
+    public Location getLocationDirectlyAboveHexByXY(int xCoordinate, int yCoordinate) {
+        int heightOfNewLocation = getHeightOfTileAtLocation(xCoordinate,yCoordinate) + 1;
+        return new Location(xCoordinate, yCoordinate, heightOfNewLocation);
+    }
+
+    public int getHeightOfTileAtLocation(int xCoordinate, int yCoordinate) {
+        Hex hex = hexCoordinateSystem[xCoordinate][yCoordinate];
+        Location locationOfHex = hex.getLocation();
+        return locationOfHex.getHeight();
+    }
+
     private boolean hexDoesNotExist(Hex hex) {
         return hex == null;
     }
 
     private boolean hexDoesNotMatchGivenHeight(Hex hex, int z) {
-        return hex.getLocation().getzCoordinate() != z;
+        Location locationOfHex = hex.getLocation();
+        return locationOfHex.getHeight() != z;
     }
 
 

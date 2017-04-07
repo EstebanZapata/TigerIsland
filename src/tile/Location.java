@@ -5,12 +5,12 @@ import java.util.Objects;
 public class Location {
     private int xCoordinate;
     private int yCoordinate;
-    private int zCoordinate;
+    private int height;
 
-    public Location(int xCoordinate, int col, int height) {
+    public Location(int xCoordinate, int yCoordinate, int height) {
         this.xCoordinate = xCoordinate;
-        this.yCoordinate = col;
-        this.zCoordinate = height;
+        this.yCoordinate = yCoordinate;
+        this.height = height;
     }
 
     public int getxCoordinate() {
@@ -21,25 +21,25 @@ public class Location {
         return yCoordinate;
     }
 
-    public int getzCoordinate() {
-        return zCoordinate;
+    public int getHeight() {
+        return height;
     }
 
     public void setxCoordinate(int xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
-    public void setyCoordinate(int col) {
-        this.yCoordinate = col;
+    public void setyCoordinate(int yCoordinate) {
+        this.yCoordinate = yCoordinate;
     }
 
-    public void setzCoordinate(int height) {
-        this.zCoordinate = height;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Override
     public String toString() {
-        return String.format("(%d,%d,%d)", xCoordinate,yCoordinate,zCoordinate);
+        return String.format("(%d,%d,%d)", xCoordinate,yCoordinate, height);
     }
 
     @Override
@@ -60,9 +60,9 @@ public class Location {
 
         int otherX = otherLocation.getxCoordinate();
         int otherY = otherLocation.getyCoordinate();
-        int otherZ = otherLocation.getzCoordinate();
+        int otherZ = otherLocation.getHeight();
 
-        if (this.xCoordinate == otherX && this.yCoordinate == otherY && this.zCoordinate == otherZ) {
+        if (this.xCoordinate == otherX && this.yCoordinate == otherY && this.height == otherZ) {
             return true;
         }
         else {
@@ -73,7 +73,7 @@ public class Location {
 
     @Override
     public int hashCode() {
-        return Objects.hash(xCoordinate,yCoordinate,zCoordinate);
+        return Objects.hash(xCoordinate,yCoordinate, height);
     }
 
 }
