@@ -22,7 +22,7 @@ public class IllegallyPlacingAnotherTileOnTheFirstLayerViaNoAdjacency {
     public void a_board_with_at_least_one_tile() throws Throwable {
         world = new World();
         tileOne = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
-        world.placeFirstTile(tileOne, TileOrientation.WEST_SOUTHWEST);
+        world.placeFirstTile();
     }
 
     @When("^I attempt to place the tile on the first layer$")

@@ -36,7 +36,7 @@ public class World {
 
     }
 
-    public void placeFirstTile(Tile tile, TileOrientation orientation) throws IllegalTilePlacementException {
+    public void placeFirstTile() throws IllegalTilePlacementException {
         if (tileRulesManager.ableToPlaceFirstTile()) {
             tileManager.placeFirstTile();
         }

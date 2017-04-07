@@ -23,7 +23,7 @@ public class IllegallyPlacingATileOnAHigherLayerDueToNotCoveringVolcano {
         tileOne = new Tile(Terrain.JUNGLE, Terrain.ROCKY);
         tileTwo = new Tile(Terrain.LAKE, Terrain.GRASSLANDS);
 
-        world.placeFirstTile(tileOne, TileOrientation.SOUTHWEST_SOUTHEAST);
+        world.placeFirstTile();
         world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHEAST_EAST);
     }
 

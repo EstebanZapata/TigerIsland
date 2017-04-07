@@ -23,7 +23,7 @@ public class SuccessfullyPlacingATileOnAHigherLayer {
         world = new World();
         Tile tileOne = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
-        world.placeFirstTile(tileOne, TileOrientation.NORTHEAST_NORTHWEST);
+        world.placeFirstTile();
         world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
     }
 

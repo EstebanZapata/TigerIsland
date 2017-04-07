@@ -28,7 +28,7 @@ public class PlacingTheFirstTile {
 
     @When("^I place the tile$")
     public void i_place_the_tile() throws Throwable {
-        world.placeFirstTile(tile, TileOrientation.NORTHEAST_NORTHWEST);
+        world.placeFirstTile();
     }
 
     @Then("^The tile should be placed on the board$")

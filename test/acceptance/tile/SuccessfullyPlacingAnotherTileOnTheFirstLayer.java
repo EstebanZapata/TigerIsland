@@ -21,7 +21,7 @@ public class SuccessfullyPlacingAnotherTileOnTheFirstLayer {
     public void a_non_empty_board() throws IllegalTilePlacementException {
         world = new World();
         tileOne = new Tile(Terrain.GRASSLANDS,Terrain.JUNGLE);
-        world.placeFirstTile(tileOne, TileOrientation.EAST_NORTHEAST);
+        world.placeFirstTile();
     }
 
     @When("^I place the tile on  the first layer$")
