@@ -26,14 +26,14 @@ public class IllegallyPlacingATileOnAHigherLayerDueToCompleteOverlap {
         tileTwo = new Tile(Terrain.LAKE, Terrain.GRASSLANDS);
 
         world.placeFirstTile();
-        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHEAST_EAST);
+        world.insertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHEAST_EAST);
     }
 
     @When("^I attempt to place the tile on the layer higher than those$")
     public void i_attempt_to_place_the_tile_on_the_layer_higher_than_those() throws Throwable {
         tileThree = new Tile(Terrain.LAKE, Terrain.ROCKY);
         try {
-            world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.SOUTHEAST_EAST);
+            world.insertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.SOUTHEAST_EAST);
         }
         catch (Exception e) {
 
@@ -44,7 +44,7 @@ public class IllegallyPlacingATileOnAHigherLayerDueToCompleteOverlap {
     public void it_completely_overlaps_a_tile() throws Throwable {
         boolean completelyOverlapsATile = false;
         try {
-            world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.SOUTHEAST_EAST);
+            world.insertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.SOUTHEAST_EAST);
         }
         catch (TileCompletelyOverlapsAnotherException e) {
             completelyOverlapsATile = true;

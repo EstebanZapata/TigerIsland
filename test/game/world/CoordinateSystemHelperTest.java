@@ -230,4 +230,5 @@ public class CoordinateSystemHelperTest {
         Assert.assertEquals(new Location(4,4,2), locationFive);
 
     }
+
 }

@@ -27,7 +27,7 @@ public class SuccessfullyPlacingAnotherTileOnTheFirstLayer {
     @When("^I place the tile on  the first layer$")
     public void i_place_the_tile_on_the_first_layer() throws IllegalTilePlacementException {
         tileTwo = new Tile(Terrain.LAKE, Terrain.ROCKY);
-        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
+        world.insertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
     }
 
     @When("^it is adjacent to an existing tile$")

@@ -28,7 +28,7 @@ public class IllegallyPlacingAnotherTileOnTheFirstLayerViaNoAdjacency {
     @When("^I attempt to place the tile on the first layer$")
     public void i_attempt_to_place_the_tile_on_the_first_layer() throws Throwable {
         try {
-            world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
+            world.insertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
         }
         catch (TileNotAdjacentToAnotherException e) {
         }
@@ -40,7 +40,7 @@ public class IllegallyPlacingAnotherTileOnTheFirstLayerViaNoAdjacency {
         boolean notAdjacent = false;
 
         try {
-            world.attemptToInsertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
+            world.insertTileIntoTileManager(tileTwo, new Location(2,0,0), TileOrientation.EAST_NORTHEAST);
         }
         catch (TileNotAdjacentToAnotherException e) {
             notAdjacent = true;

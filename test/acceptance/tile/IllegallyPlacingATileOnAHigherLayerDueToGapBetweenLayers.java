@@ -25,7 +25,7 @@ public class IllegallyPlacingATileOnAHigherLayerDueToGapBetweenLayers {
         tileTwo = new Tile(Terrain.LAKE, Terrain.GRASSLANDS);
 
         world.placeFirstTile();
-        world.attemptToInsertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHEAST_EAST);
+        world.insertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHEAST_EAST);
     }
 
     @When("^I attempt to place the tile on the layer higher than the existing tiles$")
@@ -33,7 +33,7 @@ public class IllegallyPlacingATileOnAHigherLayerDueToGapBetweenLayers {
         tileThree = new Tile(Terrain.LAKE, Terrain.ROCKY);
 
         try {
-            world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST);
+            world.insertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST);
         }
         catch (Exception e) {
 
@@ -44,7 +44,7 @@ public class IllegallyPlacingATileOnAHigherLayerDueToGapBetweenLayers {
     public void there_is_a_gap_between_tiles() throws Throwable {
         boolean airGapExists = false;
         try {
-            world.attemptToInsertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST);
+            world.insertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST);
         }
         catch (AirBelowTileException e) {
             airGapExists = true;
