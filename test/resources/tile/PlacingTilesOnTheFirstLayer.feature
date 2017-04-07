@@ -8,6 +8,12 @@ Feature: Placing tiles on the first layer
     When I place the first tile
     Then The tile should be placed on the board with the volcano at the origin
 
+  Scenario: Placing a first tile that is not the special first tile
+    Given No tiles have been placed
+    When I place the first tile on the board
+      And it is not the special first tile
+    Then that tile cannot be placed on the board
+
   Scenario: Successfully placing another tile on the first layer
     Given a non-empty board
     When I place the tile on the first layer
