@@ -1,4 +1,4 @@
-package UnitTests.pieces;
+package pieces;
 
 import game.Player;
 import org.junit.Assert;
