@@ -1,10 +1,7 @@
 package game;
 
 
-import tile.Location;
-import tile.Terrain;
-import tile.Tile;
-import tile.orientation.TileOrientationRelativeToVolcano;
+import game.world.*;
 
 public class Game {
     public World world;
@@ -13,16 +10,11 @@ public class Game {
         this.world = new World();
     }
 
-    public Tile drawTile() {
-        return new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
-    }
-
-    public void play()  {
-        Tile tile = drawTile();
-        world.printAllHexesAndTheirInformation();
-
-
-    }
-
+public void play() {
 
 }
+
+}
+
+
+
