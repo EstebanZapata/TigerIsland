@@ -44,8 +44,8 @@ public class TileManager {
     }
 
     private void insertHexIntoCoordinateSystemAtLocation(Hex hex, Location location) {
-        int x = location.getxCoordinate();
-        int y = location.getyCoordinate();
+        int x = location.getXCoordinate();
+        int y = location.getYCoordinate();
 
         insertHexIntoCoordinateSystemAtCoordinates(hex, x, y);
     }
@@ -98,9 +98,9 @@ public class TileManager {
     }
 
     public Hex getHexByLocation(Location location) throws NoHexAtLocationException {
-        int x = location.getxCoordinate();
-        int y = location.getyCoordinate();
-        int z = location.getzCoordinate();
+        int x = location.getXCoordinate();
+        int y = location.getYCoordinate();
+        int z = location.getHeight();
 
         return getHexByCoordinate(x, y, z);
     }
@@ -125,7 +125,7 @@ public class TileManager {
     }
 
     private boolean hexDoesNotMatchGivenHeight(Hex hex, int z) {
-        return hex.getLocation().getzCoordinate() != z;
+        return hex.getLocation().getHeight() != z;
     }
 
 

@@ -96,8 +96,8 @@ public class CoordinateSystemHelper {
     public static Location[] getHexLocationsAdjacentToCenter(Location center) {
         Location[] adjacentLocations = new Location[6];
 
-        int xCoordinateOfCenter = center.getxCoordinate();
-        int yCoordinateOfCenter = center.getyCoordinate();
+        int xCoordinateOfCenter = center.getXCoordinate();
+        int yCoordinateOfCenter = center.getYCoordinate();
         int zCoordinateOfCenter = center.getHeight();
 
 

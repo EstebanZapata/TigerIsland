@@ -13,11 +13,11 @@ public class Location {
         this.height = height;
     }
 
-    public int getxCoordinate() {
+    public int getXCoordinate() {
         return xCoordinate;
     }
 
-    public int getyCoordinate() {
+    public int getYCoordinate() {
         return yCoordinate;
     }
 
@@ -58,8 +58,8 @@ public class Location {
             return true;
         }
 
-        int otherX = otherLocation.getxCoordinate();
-        int otherY = otherLocation.getyCoordinate();
+        int otherX = otherLocation.getXCoordinate();
+        int otherY = otherLocation.getYCoordinate();
         int otherZ = otherLocation.getHeight();
 
         if (this.xCoordinate == otherX && this.yCoordinate == otherY && this.height == otherZ) {

@@ -1,6 +1,5 @@
 package game;
 
-import game.Game;
 import tile.Location;
 
 public class Start {
@@ -14,8 +13,8 @@ public class Start {
 
 
     static String convertClientCoordinatesToServerCoordinates(Location locationToConvert) {
-        int serverXCoordinate = locationToConvert.getxCoordinate();
-        int serverZCoordinate = locationToConvert.getyCoordinate();
+        int serverXCoordinate = locationToConvert.getXCoordinate();
+        int serverZCoordinate = locationToConvert.getYCoordinate();
         int serverYCoordinate = -(serverXCoordinate + serverZCoordinate);
         String serverCoordinates = Integer.toString(serverXCoordinate) + ' ' + Integer.toString(serverYCoordinate) + ' ' + Integer.toString(serverZCoordinate);
         return serverCoordinates;
