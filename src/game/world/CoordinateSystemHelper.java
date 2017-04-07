@@ -1,8 +1,8 @@
 package game.world;
 
-import UnitTests.tile.Location;
-import UnitTests.tile.orientation.HexOrientation;
-import UnitTests.tile.orientation.TileOrientation;
+import tile.Location;
+import tile.orientation.HexOrientation;
+import tile.orientation.TileOrientation;
 
 import java.util.Arrays;
 import java.util.HashSet;

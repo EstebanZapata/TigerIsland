@@ -5,9 +5,9 @@ import game.world.rules.exceptions.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import UnitTests.tile.Location;
-import UnitTests.tile.Terrain;
-import UnitTests.tile.Tile;
+import tile.Location;
+import tile.Terrain;
+import tile.Tile;
 
 public class TileRulesManagerTest {
     private TileManager tileManager;

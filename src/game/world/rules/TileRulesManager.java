@@ -3,7 +3,11 @@ package game.world.rules;
 import game.world.CoordinateSystemHelper;
 import game.world.TileManager;
 import game.world.rules.exceptions.*;
-import UnitTests.tile.*;
+import tile.*;
+import tile.Hex;
+import tile.Location;
+import tile.Terrain;
+import tile.Tile;
 
 public class TileRulesManager {
     private TileManager tileManager;

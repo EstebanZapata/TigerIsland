@@ -1,4 +1,4 @@
-package UnitTests.tile;
+package tile;
 
 import java.util.Objects;
 

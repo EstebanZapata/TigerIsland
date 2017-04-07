@@ -1,4 +1,4 @@
-package UnitTests.tile;
+package tile;
 
 public class Tile {
     protected Hex[] hexes;

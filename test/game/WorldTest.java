@@ -4,10 +4,10 @@ import game.world.*;
 import game.world.rules.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
-import UnitTests.tile.Location;
-import UnitTests.tile.Terrain;
-import UnitTests.tile.Tile;
-import UnitTests.tile.orientation.TileOrientation;
+import tile.Location;
+import tile.Terrain;
+import tile.Tile;
+import tile.orientation.TileOrientation;
 
 public class WorldTest {
     private World world;

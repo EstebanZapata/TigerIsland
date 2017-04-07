@@ -3,9 +3,9 @@ package game.world;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import UnitTests.tile.Location;
-import UnitTests.tile.orientation.HexOrientation;
-import UnitTests.tile.orientation.TileOrientation;
+import tile.Location;
+import tile.orientation.HexOrientation;
+import tile.orientation.TileOrientation;
 
 public class CoordinateSystemHelperTest {
     private Location origin;

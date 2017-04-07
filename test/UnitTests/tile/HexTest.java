@@ -3,6 +3,9 @@ package UnitTests.tile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import tile.Hex;
+import tile.Terrain;
+import tile.Tile;
 
 
 public class HexTest {
