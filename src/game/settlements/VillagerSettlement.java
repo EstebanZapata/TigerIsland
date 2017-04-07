@@ -5,23 +5,31 @@ import java.util.ArrayList;
 
 public class VillagerSettlement {
     private ArrayList<Hex> settlementHexes;
-   // private int numVillagers;
-   private int numTotoro;
-   private int numTigers;
+
+    private int numVillagers = 1;
+    private int numTotoro = 0;
+    private int numTigers = 0;
 
     public VillagerSettlement(Hex foundingHex) {
         settlementHexes.add(foundingHex);
- //       numVillagers = 1;
-        numTotoro = 0;
-        numTigers = 0;
+    }
+
+    public Boolean containsHex(Hex hexToSearchFor) {
+        for (Hex settlementHex: settlementHexes) {
+            if (settlementHex == hexToSearchFor) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public int getSettlementSize(){
         return settlementHexes.size();
     }
 
-    public Hex getHexFromSettlement(int index) {
-        return settlementHexes.get(index);
+    public ArrayList<Hex> getHexesFromSettlement() {
+        return settlementHexes;
     }
 
     public void addHexToSettlement(Hex newHex) {

@@ -6,42 +6,39 @@ import tile.*;
 import java.util.ArrayList;
 
 public class SettlementManager {
-    ArrayList<VillagerSettlement> villagerSettlements;
+    public ArrayList<VillagerSettlement> villagerSettlements;
 
-    public void foundSettlement(Hex hexToBuildOn) throws
-            HexIsOccupiedException,
-            SettlementCannotBeBuiltOnVolcanoException,
-            SettlementHeightRequirementException
-    {
-        if (hexToBuildOn.isOccupied()) {
-            String errorMessage = String.format("Hex is already occupied.");
-            throw new HexIsOccupiedException(errorMessage);
-        }
-
-        if (hexToBuildOn.getTerrain() == Terrain.VOLCANO) {
-            String errorMessage = String.format("You cannot build a settlement on a Volcano");
-            throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
-        }
-
-        if (hexToBuildOn.getHeight() != 1) {
-            String errorMessage = String.format("You can only found a settlement on a level 1 hex.");
-            throw new SettlementHeightRequirementException(errorMessage);
-        }
-
-        VillagerSettlement newSettlement = new VillagerSettlement(hexToBuildOn);
+    public void startSettlement(Hex hexToStartSettlementOn) {
+        VillagerSettlement newSettlement = new VillagerSettlement(hexToStartSettlementOn);
         villagerSettlements.add(newSettlement);
     }
 
-    public ArrayList<Hex> getPotentialExpansion(VillagerSettlement existingSettlement, Terrain terrainType) throws
-            SettlementCannotBeBuiltOnVolcanoException,
-            SettlementCannotBeExpandedException
-    {
+    public Boolean hasSettlementOnHex(Hex hex) {
+        for(VillagerSettlement settlement : villagerSettlements) {
+            if (settlement.containsHex(hex)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int getNumberOfVillagersRequiredToExpandToHexes(ArrayList<Hex> hexesToExpandTo) {
+        int numVillagers = 0;
+
+        for (Hex hex : hexesToExpandTo) {
+            int hexHeight = hex.getHeight();
+            numVillagers += hexHeight;
+        }
+
+        return numVillagers;
+    }
+
+    public ArrayList<Hex> getPotentialExpansion(VillagerSettlement existingSettlement, Terrain terrainType) {
         ArrayList<Hex> potentialSettlementHexes = null;
-        boolean adjacentEmptyHex = false;
 
         if (terrainType == Terrain.VOLCANO) {
-            String errorMessage = String.format("You cannot build a settlement on a Volcano");
-            throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
+            return null;
         }
 
         for (int i=0; i<existingSettlement.getSettlementSize(); i++) {
@@ -58,21 +55,14 @@ public class SettlementManager {
 
                 if (adjacentHex.getTerrain() == terrainType) {
                     if (!adjacentHex.isOccupied()) {
-                        adjacentEmptyHex = true;
                         potentialSettlementHexes.add(adjacentHex);
                     }
                 }
             }
         }
 
-        if (!adjacentEmptyHex) {
-            String errorMessage = String.format("There are no expansion options for this settlement.");
-            throw new SettlementCannotBeExpandedException(errorMessage);
-        }
-
         return potentialSettlementHexes;
     }
-
 
     public void expandSettlement(VillagerSettlement existingSettlement, ArrayList<Hex> potentialSettlementHexes) {
     //    int newVillagers = 0;
