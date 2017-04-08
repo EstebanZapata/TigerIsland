@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 
 public class Client {
-    private static MessageParser parser = new MessageParser();
+    public static MessageParser parser = new MessageParser();
     public static void main(String[] args) throws IOException {
 
         if (args.length != 2) {

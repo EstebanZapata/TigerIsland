@@ -8,7 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Start {
-
+    private static Client myClient = new Client();
     public static void main(String[] args) throws InterruptedException {
 
         BlockingQueue<Message> gameOneMessageQueue = new LinkedBlockingQueue<>();
@@ -18,8 +18,8 @@ public class Start {
 
         gameOne.start();
 
-
-        gameOneMessageQueue.add(new GameCommandMessage("1", 5.0, new Tile(Terrain.GRASSLANDS, Terrain.LAKE)));
+        GameCommandMessage debug = new GameCommandMessage("1", 5.0, new Tile(Terrain.GRASSLANDS, Terrain.LAKE));
+        gameOneMessageQueue.add(myClient.parser.commandMessage);
 
         while(true) {
             Message msg = null;

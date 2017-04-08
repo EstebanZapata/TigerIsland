@@ -20,6 +20,8 @@ public class MessageParser {
     private String opponent;
     private String activeGame;
     private int moveNumber = 0;
+    public GameCommandMessage commandMessage;
+
     public String parseServerInput(String s){
         System.out.println(s);
         String parts[] = s.split(" ");
@@ -80,7 +82,7 @@ public class MessageParser {
         Terrain A = toTerrain(types[0]);
         Terrain B = toTerrain(types[1]);
         Tile tileToBePlaced = new Tile(A,B);
-        new GameCommandMessage(gid,moveTime,tileToBePlaced);
+        commandMessage = new GameCommandMessage(gid,moveTime,tileToBePlaced);
     }
 
     private Terrain toTerrain(String type) {
