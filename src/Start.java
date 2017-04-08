@@ -1,4 +1,3 @@
-import game.Game;
 import tile.Terrain;
 import tile.Tile;
 
@@ -9,7 +8,7 @@ public class Start {
 
     public static void main(String[] args) throws InterruptedException {
 
-        BlockingQueue<GameMessage> gameOneMessageQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<Message> gameOneMessageQueue = new LinkedBlockingQueue<>();
         BlockingQueue<Message> gameOneResponseQueue = new LinkedBlockingQueue<>();
 
         GameThread gameOne = new GameThread(gameOneMessageQueue, gameOneResponseQueue, "1");
@@ -18,7 +17,7 @@ public class Start {
 
         Thread.sleep(1000);
 
-        gameOneMessageQueue.add(new GameMessage("1", 2.0, new Tile(Terrain.GRASSLANDS, Terrain.LAKE)));
+        gameOneMessageQueue.add(new GameCommandMessage("1", 4.0, new Tile(Terrain.GRASSLANDS, Terrain.LAKE)));
 
         while(true) {
             Message msg = null;
