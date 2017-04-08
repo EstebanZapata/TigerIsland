@@ -1,32 +1,25 @@
 package game.player;
 
+import game.*;
 import game.player.exceptions.*;
 import game.settlements.*;
 import game.settlements.exceptions.*;
 import game.world.*;
-import game.world.rules.exceptions.*;
 import tile.*;
 
-import java.util.ArrayList;
-
 public class Player {
-    public static final int FOUND_SETTLEMENT_POINTS = 1;
-    public static final int BUILD_TOTORO_SANCTUARY_POINTS = 200;
-    public static final int BUILD_TIGER_PLAYGROUND_POINTS = 75;
-
-    private static final int STARTING_SCORE_COUNT = 0;
-    private static final int STARTING_TOTORO_COUNT = 3;
-    private static final int STARTING_TIGER_COUNT = 2;
-    private static final int STARTING_VILLAGER_COUNT = 20;
-
-    private int score = STARTING_SCORE_COUNT;
-    private int totoroCount = STARTING_TOTORO_COUNT;
-    private int tigerCount = STARTING_TIGER_COUNT;
-    private int villagerCount = STARTING_VILLAGER_COUNT;
+    private int score;
+    private int totoroCount;
+    private int tigerCount;
+    private int villagerCount;
 
     public SettlementManager settlementManager;
 
     public Player() {
+        this.score = Settings.STARTING_SCORE_COUNT;
+        this.totoroCount = Settings.STARTING_TOTORO_COUNT;
+        this.tigerCount = Settings.STARTING_TIGER_COUNT;
+        this.villagerCount = Settings.STARTING_VILLAGER_COUNT;
         this.settlementManager = new SettlementManager();
     }
 
@@ -34,7 +27,7 @@ public class Player {
         return this.score;
     }
 
-    public void playVillagers(int count) throws NotEnoughPiecesException {
+    public void useVillagers(int count) throws NotEnoughPiecesException {
         if (this.villagerCount < count) {
             String errorMessage = String.format("You do not have enough Villagers");
             throw new NotEnoughPiecesException(errorMessage);
@@ -43,7 +36,7 @@ public class Player {
         this.villagerCount -= count;
     }
 
-    public void playATotoro() throws NotEnoughPiecesException {
+    public void useTotoro() throws NotEnoughPiecesException {
         if (this.totoroCount == 0) {
             String errorMessage = String.format("You do not have enough Totoros.");
             throw new NotEnoughPiecesException(errorMessage);
@@ -52,7 +45,7 @@ public class Player {
         this.totoroCount -= 1;
     }
 
-    public void playATiger() throws NotEnoughPiecesException {
+    public void useTiger() throws NotEnoughPiecesException {
         if (this.tigerCount == 0) {
             String errorMessage = String.format("You do not have enough Tigers.");
             throw new NotEnoughPiecesException(errorMessage);
@@ -66,9 +59,9 @@ public class Player {
             NoPlayableHexException
     {
         try {
-            this.playVillagers(1);
+            this.useVillagers(1);
             this.settlementManager.foundSettlement(existingWorld);
-            this.score += FOUND_SETTLEMENT_POINTS;
+            this.score += Settings.FOUND_SETTLEMENT_POINTS;
         }
         catch (NotEnoughPiecesException e) {
             throw new NotEnoughPiecesException(e.getMessage());
@@ -84,7 +77,7 @@ public class Player {
     {
         try {
             int numberOfVillagersRequiredToExpand = this.settlementManager.getNumberOfVillagersRequiredToExpand(existingWorld, Terrain.GRASSLANDS);
-            this.playVillagers(numberOfVillagersRequiredToExpand);
+            this.useVillagers(numberOfVillagersRequiredToExpand);
             this.settlementManager.expandSettlement(existingWorld, Terrain.GRASSLANDS);
         }
         catch (SettlementCannotBeBuiltOnVolcanoException e) {
@@ -107,9 +100,9 @@ public class Player {
             BuildConditionsNotMetException
     {
         try {
-            this.playATotoro();
+            this.useTotoro();
             this.settlementManager.buildTotoroSanctuary(existingWorld);
-            this.score += BUILD_TOTORO_SANCTUARY_POINTS;
+            this.score += Settings.BUILD_TOTORO_SANCTUARY_POINTS;
         }
         catch (NotEnoughPiecesException e) {
             throw new NotEnoughPiecesException(e.getMessage());
@@ -125,9 +118,9 @@ public class Player {
             BuildConditionsNotMetException
     {
         try {
-            this.playATiger();
+            this.useTiger();
             this.settlementManager.buildTigerPlayground(existingWorld);
-            this.score += BUILD_TIGER_PLAYGROUND_POINTS;
+            this.score += Settings.BUILD_TIGER_PLAYGROUND_POINTS;
         }
         catch (NotEnoughPiecesException e) {
             throw new NotEnoughPiecesException(e.getMessage());
@@ -137,26 +130,4 @@ public class Player {
             throw new BuildConditionsNotMetException(e.getMessage());
         }
     }
-
-    /*
-    public boolean hasTotoroSanctuary(Hex hexToCheck) {
-        Settlement checkingSettlement = this.getSettlementFromHex(hexToCheck);
-
-        if (checkingSettlement != null) {
-            return settlementManager.hasTotoroSanctuary(checkingSettlement);
-        }
-
-        return false;
-    }
-
-    public boolean hasTigerPlayground(Hex hexToCheck) {
-        Settlement checkingSettlement = this.getSettlementFromHex(hexToCheck);
-
-        if (checkingSettlement != null) {
-            return settlementManager.hasTigerPlayground(checkingSettlement);
-        }
-
-        return false;
-    }
-    */
 }

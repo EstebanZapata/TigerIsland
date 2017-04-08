@@ -1,20 +1,13 @@
 package game;
 
-
-import game.player.exceptions.NotEnoughPiecesException;
-import game.settlements.Settlement;
+import game.player.*;
+import game.player.exceptions.*;
 import game.settlements.exceptions.*;
 import game.world.*;
-import game.player.*;
-import game.world.rules.exceptions.IllegalTilePlacementException;
-import game.world.rules.exceptions.NoHexAtLocationException;
+import game.world.rules.exceptions.*;
 import tile.*;
 
-import java.util.ArrayList;
-
 public class Game {
-    private static final int START_SETTLEMENT_HEX_HEIGHT_REQUIREMENT = 1;
-
     public World world;
     public Player player1;
     public Player player2;
@@ -52,7 +45,11 @@ public class Game {
                 //if cannot do any, break from while loop and set flag
                 try {
                     foundSettlement(player1);
-                } catch (BuildConditionsNotMetException e) {
+                }
+                catch (NotEnoughPiecesException e) {
+                    System.out.println(e.getMessage());
+                }
+                catch (NoPlayableHexException e) {
                     System.out.println(e.getMessage());
                 }
             }
@@ -82,7 +79,10 @@ public class Game {
         // check failed build action flag --> determine winner from turn
     }
 
-    public void foundSettlement(Player currentlyActivePlayer) throws BuildConditionsNotMetException {
+    public void foundSettlement(Player currentlyActivePlayer) throws
+            NotEnoughPiecesException,
+            NoPlayableHexException
+    {
         try {
             currentlyActivePlayer.foundSettlement(world);
         }
@@ -109,7 +109,10 @@ public class Game {
         }
     }
 
-    public void buildTotoroSanctuary(Player currentlyActivePlayer)  {
+    public void buildTotoroSanctuary(Player currentlyActivePlayer) throws
+            NotEnoughPiecesException,
+            BuildConditionsNotMetException
+    {
         try {
             currentlyActivePlayer.buildTotoroSanctuary(world);
         }
@@ -121,7 +124,10 @@ public class Game {
         }
     }
 
-    public void buildTigerPlayground(Player currentlyActivePlayer) {
+    public void buildTigerPlayground(Player currentlyActivePlayer) throws
+            NotEnoughPiecesException,
+            BuildConditionsNotMetException
+    {
         try {
             currentlyActivePlayer.buildTigerPlayground(world);
         }
