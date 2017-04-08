@@ -1,5 +1,6 @@
 package game.settlements;
 
+import game.settlements.exceptions.SettlementCannotBeCompletelyWipedOutException;
 import tile.*;
 import java.util.ArrayList;
 
@@ -14,12 +15,7 @@ public class Settlement {
     }
 
     public boolean containsHex(Hex hexToSearchFor) {
-        for (Hex settlementHex: settlementHexes) {
-            if (settlementHex == hexToSearchFor) {
-                return true;
-            }
-        }
-        return false;
+        return settlementHexes.contains(hexToSearchFor);
     }
 
     public int getSettlementSize(){
@@ -34,19 +30,30 @@ public class Settlement {
         settlementHexes.add(newHex);
     }
 
+    public void removeHexFromSettlement(Hex hexToBeRemoved) throws SettlementCannotBeCompletelyWipedOutException {
+        if (settlementHexes.size() > 1) {
+            settlementHexes.remove(hexToBeRemoved);
+        }
+
+        else {
+            String errorMessage = "A settlement cannot be completely wiped out.";
+            throw new SettlementCannotBeCompletelyWipedOutException(errorMessage);
+        }
+    }
+
     public boolean hasTotoroSanctuary() {
         return hasTotoro;
     }
 
-    public void setHasTotoroSanctuary(boolean status) {
-        hasTotoro = status;
+    public void setHasTotoroSanctuary() {
+        hasTotoro = true;
     }
 
     public boolean hasTigerPlayground() {
         return hasTiger;
     }
 
-    public void setHasTigerPlayground(boolean status) {
-        hasTiger = status;
+    public void setHasTigerPlayground() {
+        hasTiger = true;
     }
 }

@@ -72,6 +72,10 @@ public class Player {
         return settlementManager.hasSettlementOnHex(hexToSearchFor);
     }
 
+    public Settlement getSettlementFromHex(Hex hexToSearchFor) {
+        return settlementManager.getSettlementFromHex(hexToSearchFor);
+    }
+
     public void expandSettlement(Settlement existingSettlement, ArrayList<Hex> hexesToExpandTo) {
         settlementManager.expandSettlement(existingSettlement, hexesToExpandTo);
     }
@@ -90,5 +94,25 @@ public class Player {
 
     public void mergeSettlements() {
         settlementManager.mergeSettlements();
+    }
+
+    public boolean hasTotoroSanctuary(Hex hexToCheck) {
+        Settlement checkingSettlement = this.getSettlementFromHex(hexToCheck);
+
+        if (checkingSettlement != null) {
+            return settlementManager.hasTotoroSanctuary(checkingSettlement);
+        }
+
+        return false;
+    }
+
+    public boolean hasTigerPlayground(Hex hexToCheck) {
+        Settlement checkingSettlement = this.getSettlementFromHex(hexToCheck);
+
+        if (checkingSettlement != null) {
+            return settlementManager.hasTigerPlayground(checkingSettlement);
+        }
+
+        return false;
     }
 }

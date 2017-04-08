@@ -97,7 +97,7 @@ public class Game {
 
         // for now, choose first possible hex that meets conditions
         for (Hex worldHex : worldHexes) {
-            if (checkSettlementHexConditions(worldHex, player1, player2)) {
+            if (checkSettlementHexConditions(worldHex)) {
                 foundingSettlementHex = worldHex;
                 break;
             }
@@ -113,7 +113,7 @@ public class Game {
         currentlyActivePlayer.incrementScore(Player.FOUND_SETTLEMENT_POINTS);
     }
 
-    private boolean checkSettlementHexConditions(Hex hexBeingChecked, Player player1, Player player2) {
+    private boolean checkSettlementHexConditions(Hex hexBeingChecked) {
         if (hexBeingChecked.getTerrain() == Terrain.VOLCANO) {
             return false;
         }
@@ -206,7 +206,7 @@ public class Game {
                 try {
                     Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
                     if (!potentialSettlementHexes.contains(adjacentHex)) {
-                        if (checkExpansionHexConditions(adjacentHex, terrainType, player1, player2)) {
+                        if (checkExpansionHexConditions(adjacentHex, terrainType)) {
                             potentialSettlementHexes.add(adjacentHex);
                         }
                     }
@@ -220,7 +220,7 @@ public class Game {
         return potentialSettlementHexes;
     }
 
-    private boolean checkExpansionHexConditions(Hex hexBeingChecked, Terrain terrainType, Player player1, Player player2) {
+    private boolean checkExpansionHexConditions(Hex hexBeingChecked, Terrain terrainType) {
         if (hexBeingChecked.getTerrain() != terrainType) {
             return false;
         }
@@ -248,28 +248,21 @@ public class Game {
             throw new BuildConditionsNotMetException(errorMessage);
         }
 
-        if (!checkSanctuaryHexConditions(sanctuaryHex, player1, player2)) {
+        if (!checkSanctuaryHexConditions(sanctuaryHex)) {
             String errorMessage = String.format("The hex is not suitable for founding a sanctuary.");
             throw new BuildConditionsNotMetException(errorMessage);
         }
 
         Location sanctuaryHexLocation = sanctuaryHex.getLocation();
         Location[] adjacentHexLocationsToSanctuaryHex = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(sanctuaryHexLocation);
-        ArrayList<Settlement> settlements = currentlyActivePlayer.getSettlements();
 
         for (Location adjacentHexLocation : adjacentHexLocationsToSanctuaryHex) {
             try {
                 Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                if (currentlyActivePlayer.hasSettlementOnHex(adjacentHex)) {
-                    for (Settlement settlement : settlements) {
-                        if (checkSanctuarySettlementConditions(settlement)) {
-                            ArrayList<Hex> hexes = settlement.getHexesFromSettlement();
-                            for (Hex hex : hexes) {
-                                if (hex == adjacentHex) {
-                                    adjacentSettlement = settlement;
-                                }
-                            }
-                        }
+                Settlement settlement = currentlyActivePlayer.getSettlementFromHex(adjacentHex);
+                if (settlement != null) {
+                    if (checkSanctuarySettlementConditions(settlement)) {
+                        adjacentSettlement = settlement;
                     }
                 }
             } catch (NoHexAtLocationException e) {
@@ -302,7 +295,7 @@ public class Game {
                     for (Location adjacentHexLocation : adjacentHexLocations) {
                         try{
                             Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                            if (checkSanctuaryHexConditions(adjacentHex, player1, player2)) {
+                            if (checkSanctuaryHexConditions(adjacentHex)) {
                                 return adjacentHex;
                             }
                         } catch (NoHexAtLocationException e) {
@@ -327,7 +320,7 @@ public class Game {
         return true;
     }
 
-    private boolean checkSanctuaryHexConditions(Hex hexBeingChecked, Player player1, Player player2) {
+    private boolean checkSanctuaryHexConditions(Hex hexBeingChecked) {
         if (hexBeingChecked.getTerrain() == Terrain.VOLCANO) {
             return false;
         }
@@ -355,28 +348,21 @@ public class Game {
             throw new BuildConditionsNotMetException(errorMessage);
         }
 
-        if (!checkPlaygroundHexConditions(playgroundHex, player1, player2)) {
+        if (!checkPlaygroundHexConditions(playgroundHex)) {
             String errorMessage = String.format("The hex is not suitable for founding a playground.");
             throw new BuildConditionsNotMetException(errorMessage);
         }
 
         Location playgroundHexLocation = playgroundHex.getLocation();
         Location[] adjacentHexLocationsToPlaygroundHex = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(playgroundHexLocation);
-        ArrayList<Settlement> settlements = currentlyActivePlayer.getSettlements();
 
         for (Location adjacentHexLocation : adjacentHexLocationsToPlaygroundHex) {
             try {
                 Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                if (currentlyActivePlayer.hasSettlementOnHex(adjacentHex)) {
-                    for (Settlement settlement : settlements) {
-                        if (checkPlaygroundSettlementConditions(settlement)) {
-                            ArrayList<Hex> hexes = settlement.getHexesFromSettlement();
-                            for (Hex hex : hexes) {
-                                if (hex == adjacentHex) {
-                                    adjacentSettlement = settlement;
-                                }
-                            }
-                        }
+                Settlement settlement = currentlyActivePlayer.getSettlementFromHex(adjacentHex);
+                if (settlement != null) {
+                    if (checkPlaygroundSettlementConditions(settlement)) {
+                        adjacentSettlement = settlement;
                     }
                 }
             } catch (NoHexAtLocationException e) {
@@ -409,7 +395,7 @@ public class Game {
                     for (Location adjacentHexLocation : adjacentHexLocations) {
                         try{
                             Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                            if (checkPlaygroundHexConditions(adjacentHex, player1, player2)) {
+                            if (checkPlaygroundHexConditions(adjacentHex)) {
                                 return adjacentHex;
                             }
                         } catch (NoHexAtLocationException e) {
@@ -422,7 +408,7 @@ public class Game {
         return playgroundHex;
     }
 
-    private boolean checkPlaygroundHexConditions(Hex hexBeingChecked, Player player1, Player player2) {
+    private boolean checkPlaygroundHexConditions(Hex hexBeingChecked) {
         int hexHeight = hexBeingChecked.getHeight();
 
         if (hexBeingChecked.getTerrain() == Terrain.VOLCANO) {
@@ -442,5 +428,13 @@ public class Game {
 
     private boolean checkPlaygroundSettlementConditions(Settlement existingSettlement) {
         return !(existingSettlement.hasTigerPlayground());
+    }
+
+    public boolean hasTotoroSanctuary(Hex hexToCheck) {
+        return (player1.hasTotoroSanctuary(hexToCheck) || player2.hasTotoroSanctuary(hexToCheck));
+    }
+
+    public boolean hasTigerPlayground(Hex hexToCheck) {
+        return (player1.hasTigerPlayground(hexToCheck) || player2.hasTigerPlayground(hexToCheck));
     }
 }

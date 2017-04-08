@@ -26,6 +26,15 @@ public class SettlementManager {
         return false;
     }
 
+    public Settlement getSettlementFromHex(Hex hex) {
+        for(Settlement settlement : settlements) {
+            if (settlement.containsHex(hex)) {
+                return settlement;
+            }
+        }
+        return null;
+    }
+
     public void expandSettlement(Settlement existingSettlement, ArrayList<Hex> potentialSettlementHexes) {
         for (Hex potentialSettlementHex : potentialSettlementHexes) {
             existingSettlement.addHexToSettlement(potentialSettlementHex);
@@ -33,12 +42,12 @@ public class SettlementManager {
     }
 
     public void buildTotoroSanctuary(Settlement existingSettlement, Hex newSanctuaryHex) {
-        existingSettlement.setHasTotoroSanctuary(true);
+        existingSettlement.setHasTotoroSanctuary();
         existingSettlement.addHexToSettlement(newSanctuaryHex);
     }
 
     public void buildTigerPlayground(Settlement existingSettlement, Hex newPlaygroundHex) {
-        existingSettlement.setHasTigerPlayground(true);
+        existingSettlement.setHasTigerPlayground();
         existingSettlement.addHexToSettlement(newPlaygroundHex);
     }
 
@@ -50,5 +59,13 @@ public class SettlementManager {
                 // ???
             }
         }*/
+    }
+
+    public boolean hasTotoroSanctuary(Settlement settlement) {
+        return settlement.hasTotoroSanctuary();
+    }
+
+    public boolean hasTigerPlayground(Settlement settlement) {
+        return settlement.hasTigerPlayground();
     }
 }
