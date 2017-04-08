@@ -9,9 +9,9 @@ public class Protocol {
     String rounds = "<rounds>";
     String rid = "<rid>";
     String gid = "<gid>";
-    String timeMove = "<timemove>";
-    String moveNum = "<#>";
-    String tile = "<tile>";
+    String timeMove = "1500";
+    String moveNum = "0";
+    String tile = "LAKE+JUNGLE";
     private String[] startup = {"WELCOME TO ANOTHER EDITION OF THUNDERDOME!",
             "TWO SHALL ENTER, ONE SHALL LEAVE",
             "WAIT FOR THE TOURNAMENT TO BEGIN " + pid+"\n",
