@@ -1,11 +1,17 @@
-package game;
+import thread.GameCommandMessage;
+import tile.Terrain;
+import tile.Tile;
+
+import java.util.DoubleSummaryStatistics;
+
+import static tile.Terrain.*;
 
 public class MessageParser {
     private String tournamentPassword = "<tournament_password>";
-    private String username = "<username>";
-    private String userpassword = "<password>";
+    private String userName = "<userName>";
+    private String userPassword = "<password>";
     private String enterDome = "ENTER THUNDERDOME "+tournamentPassword;
-    private String introduction = "I AM "+username+" "+userpassword;
+    private String introduction = "I AM "+ userName +" "+ userPassword;
     private String pid = "<pid>";
     private String cid = "<cid>";
     private String response = "WAITING";
@@ -42,20 +48,49 @@ public class MessageParser {
             opponent = parts[parts.length-1];
         }
         else if (parts[0].equals("MAKE")){
+            moveNumber = Integer.parseInt(parts[10]);
             activeGame = parts[5];
+            Double moveTime = Double.parseDouble(parts[7]);
+            String tile = parts[parts.length-1];
             //call to subroutine to make move in activeGame
+            sendActionPromptToGame(activeGame, moveTime, tile);
             String move = "GAME " +activeGame+ " MOVE " + moveNumber +
                     " PLACE <tile> AT <x> <y> <z> <orientation> " +
                     " FOUND SETTLEMENT AT <x> <y> <z> ";
 
             return move;
         }
+        else if (parts[0].equals("GAME") && parts[2].equals("MOVE")){
+
+            String observeGame = parts[1];
+            if(!observeGame.equals(activeGame)){
+                //sendMoveToGame();
+            }
+            //call subroutine to log a move in
+        }
         else if (parts[0].equals("GAME") && parts[2].equals("OVER")){
             String gameToEnd = parts[1];
             //call subroutine to kill gameToEnd
         }
-
-
       return response;
+    }
+
+    private void sendActionPromptToGame(String gid, Double moveTime, String tile) {
+        String types[] = tile.split("\\+");
+        Terrain A = toTerrain(types[0]);
+        Terrain B = toTerrain(types[1]);
+        Tile tileToBePlaced = new Tile(A,B);
+        new GameCommandMessage(gid,moveTime,tileToBePlaced);
+    }
+
+    private Terrain toTerrain(String type) {
+        if(type.equals("JUNGLE"))
+            return JUNGLE;
+        if(type.equals("LAKE"))
+            return LAKE;
+        if(type.equals("GRASS"))
+            return GRASSLANDS;
+        else//(type.equals("ROCK"))
+            return ROCKY;
     }
 }

@@ -1,6 +1,3 @@
-package game;
-import game.Protocol;
-
 import java.net.*;
 import java.io.*;
 
