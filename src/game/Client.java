@@ -24,7 +24,12 @@ public class Client {
             String fromServer;
             while ((fromServer = in.readLine()) != null) {
                 String clientResponse = parser.parseServerInput(fromServer);
-                out.println(clientResponse);
+                if (!clientResponse.equals("WAITING")) {
+                    System.out.println(clientResponse);
+                    out.println(clientResponse);
+                }
+                else
+                    out.println();
                }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host STRANGER DANGER" + hostName);

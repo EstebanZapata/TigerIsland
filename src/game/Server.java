@@ -35,6 +35,7 @@ public class Server {
             }
             //Client feedback loop
             while ((inputLine = in.readLine()) != null) {
+                System.out.println(inputLine);
                 outputLine = kkp.processInput(inputLine);
                 out.println(outputLine);
                 System.out.println(outputLine);
