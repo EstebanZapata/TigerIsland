@@ -34,12 +34,23 @@ public class Server {
             }
             //io.Client feedback loop
             while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
-                outputLine = kkp.processInput(inputLine);
-                out.println(outputLine);
-                System.out.println(outputLine);
-                if (outputLine.equals("THANK YOU FOR PLAYING! GOODBYE"))
-                    break;
+                System.out.println("Client: " + inputLine);
+
+
+                if (inputLine.contains("I AM")) {
+
+                    for (int i = 0; i < 5; i++) {
+                        outputLine = kkp.processInput(inputLine);
+                        out.println(outputLine);
+                        System.out.println("Server: " + outputLine);
+                    }
+                }
+                else {
+                    outputLine = kkp.processInput(inputLine);
+                    out.println(outputLine);
+                    System.out.println("Server: " + outputLine);
+                }
+
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "

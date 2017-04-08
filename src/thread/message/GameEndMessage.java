@@ -1,4 +1,4 @@
-package thread;
+package thread.message;
 
 public class GameEndMessage extends Message {
     private String gameId;

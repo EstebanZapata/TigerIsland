@@ -1,4 +1,4 @@
-package thread;
+package thread.message;
 
 public class ClientMessage extends Message {
     private String information;

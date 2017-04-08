@@ -8,7 +8,7 @@ import java.io.*;
 public class Protocol {
     private int state = 0;
     String pid = "<pid>";
-    String pid2 = "<pid>";
+    String pid2 = "<opppid>";
     String cid = "<cid>";
     String rounds = "<rounds>";
     String rid = "<rid>";
@@ -18,8 +18,8 @@ public class Protocol {
     String tile = "LAKE+JUNGLE";
     private String[] startup = {"WELCOME TO ANOTHER EDITION OF THUNDERDOME!",
             "TWO SHALL ENTER, ONE SHALL LEAVE",
-            "WAIT FOR THE TOURNAMENT TO BEGIN " + pid+"\n",
-            "NEW CHALLENGE " +cid+ " YOU WILL PLAY " + rounds + " MATCHES\n",
+            "WAIT FOR THE TOURNAMENT TO BEGIN " + pid,
+            "NEW CHALLENGE " +cid+ " YOU WILL PLAY " + rounds + " MATCHES",
             "BEGIN ROUND " + rid +" of " + rounds,
             "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER "+ pid2,
             "MAKE YOUR MOVE IN GAME "+ gid+ " WITHIN "+timeMove+" SECONDS: MOVE "+moveNum+" PLACE " + tile,

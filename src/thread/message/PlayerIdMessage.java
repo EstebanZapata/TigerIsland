@@ -1,4 +1,4 @@
-package thread;
+package thread.message;
 
 public class PlayerIdMessage extends Message {
     private String playerId;

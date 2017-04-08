@@ -21,6 +21,10 @@ public class Player {
     private int tigerCount = STARTING_TIGER_COUNT;
     private int villagerCount = STARTING_VILLAGER_COUNT;
 
+    private String playerId;
+
+
+
     public SettlementManager settlementManager = new SettlementManager();
 
     public int getScore() {
@@ -90,5 +94,13 @@ public class Player {
 
     public void mergeSettlements() {
         settlementManager.mergeSettlements();
+    }
+
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
+    }
+
+    public String getPlayerId() {
+        return this.playerId;
     }
 }

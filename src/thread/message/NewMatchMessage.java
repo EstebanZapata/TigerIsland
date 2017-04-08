@@ -1,4 +1,4 @@
-package thread;
+package thread.message;
 
 public class NewMatchMessage extends Message {
     private String opponentId;

@@ -1,15 +1,15 @@
 package io;
 
-import game.Game;
+import game.settlements.BuildAction;
 import game.tile.Location;
 import game.tile.orientation.TileOrientation;
-import thread.*;
 import game.tile.Terrain;
 import game.tile.Tile;
+import thread.message.*;
 
 import static game.tile.Terrain.*;
 
-public class MessageParser {
+public class ServerToClientParser {
     private static String tournamentPassword = "<tournament_password>";
     private static String userName = "<userName>";
     private static String userPassword = "<password>";
@@ -32,11 +32,11 @@ public class MessageParser {
         }
         else if (serverInput.contains(ServerStrings.NEW_CHALLENGE)){
 
-            actionToTake = Message.EMPTY;
+            actionToTake = Message.NO_ACTION;
         }
         else if (serverInput.contains(ServerStrings.BEGIN_ROUND)){
 
-            actionToTake = Message.EMPTY;
+            actionToTake = Message.NO_ACTION;
         }
 
         else if (serverInput.contains(ServerStrings.NEW_MATCH)){
@@ -47,11 +47,12 @@ public class MessageParser {
         else if (serverInput.contains(ServerStrings.MAKE_YOUR_MOVE)){
             String gameId = parts[5];
             double moveTime = Double.parseDouble(parts[7]);
+            int moveNumber = Integer.parseInt(parts[10]);
             String tileString = parts[parts.length-1];
 
             Tile tileToPlace = getTileFromServerTerrain(tileString);
 
-            actionToTake = new GameCommandMessage(gameId, moveTime, tileToPlace);
+            actionToTake = new GameCommandMessage(gameId, moveTime, moveNumber, tileToPlace);
         }
 
         else if (parts[0].equals("GAME") && parts[2].equals("MOVE")){
@@ -61,8 +62,6 @@ public class MessageParser {
                 actionToTake = new GameEndMessage(gameId);
             }
             else {
-
-
                 actionToTake = composeGameActionMessage(parts);
             }
 
@@ -73,7 +72,7 @@ public class MessageParser {
             actionToTake = new GameEndMessage(gameIdToEnd);
         }
         else {
-            actionToTake = Message.EMPTY;
+            actionToTake = Message.NO_ACTION;
         }
         
       return actionToTake;
@@ -89,65 +88,69 @@ public class MessageParser {
     }
 
     private static GameActionMessage composeGameActionMessage(String parts[]) {
+        String gameId = parts[1];
+        int moveNumber = Integer.parseInt(parts[3]);
         String playerId = parts[5];
+
         String tileString = parts[7];
         Tile tilePlaced = getTileFromServerTerrain(tileString);
 
-        int x = Integer.parseInt(parts[9]);
-        int y = Integer.parseInt(parts[10]);
-        int z = Integer.parseInt(parts[11]);
+        String serverX = parts[9];
+        String serverY = parts[10];
+        String serverZ = parts[11];
 
-        Location locationOfVolcano = new Location(x,y,z);
+        Location locationOfVolcano = convertServerCoordinatesToClientLocation(serverX, serverY, serverZ);
 
         int intOrientation = Integer.parseInt(parts[12]);
         TileOrientation tileOrientation = TileOrientation.getOrientationFromServerOrientation(intOrientation);
 
         BuildAction buildAction = null;
 
-        int buildX = 0;
-        int buildY = 0;
-        int buildZ = 0;
+        String serverBuildX = null;
+        String serverBuildY = null;
+        String serverBuildZ = null;
 
         Terrain terrainToExpandOnto = null;
 
         if (parts[13].equals("FOUND")) {
             buildAction = BuildAction.FOUNDED_SETTLEMENT;
 
-            buildX = Integer.parseInt(parts[16]);
-            buildY = Integer.parseInt(parts[17]);
-            buildZ = Integer.parseInt(parts[18]);
+            serverBuildX = parts[16];
+            serverBuildY = parts[17];
+            serverBuildZ = parts[18];
         }
         else if(parts[13].equals("EXPAND")) {
             buildAction = BuildAction.EXPANDED_SETTLEMENT;
 
-            buildX = Integer.parseInt(parts[16]);
-            buildY = Integer.parseInt(parts[17]);
-            buildZ = Integer.parseInt(parts[18]);
+            serverBuildX = parts[16];
+            serverBuildY = parts[17];
+            serverBuildZ = parts[18];
 
             terrainToExpandOnto = stringToTerrain(parts[19]);
         }
         else if(parts[13].equals("BUILD") && parts[14].equals("TOTORO")) {
             buildAction = BuildAction.BUILT_TOTORO_SANCTUARY;
 
-            buildX = Integer.parseInt(parts[17]);
-            buildY = Integer.parseInt(parts[18]);
-            buildZ = Integer.parseInt(parts[19]);
+            serverBuildX = parts[17];
+            serverBuildY = parts[18];
+            serverBuildZ = parts[19];
         }
         else if(parts[13].equals("BUILD") && parts[14].equals("TIGER")) {
             buildAction = BuildAction.BUILT_TIGER_PLAYGROUND;
 
-            buildX = Integer.parseInt(parts[17]);
-            buildY = Integer.parseInt(parts[18]);
-            buildZ = Integer.parseInt(parts[19]);
+            serverBuildX = parts[17];
+            serverBuildY = parts[18];
+            serverBuildZ = parts[19];
         }
         else if(parts[13].equals("UNABLE")) {
             buildAction = BuildAction.UNABLE_TO_BUILD;
         }
 
-        Location locationOfBuildAction = new Location(buildX, buildY, buildZ);
+        Location locationOfBuildAction = convertServerCoordinatesToClientLocation(serverBuildX, serverBuildY, serverBuildZ);
 
-        GameActionMessage actionToTake = new GameActionMessage(playerId, tilePlaced, locationOfVolcano, tileOrientation, buildAction,
-                locationOfBuildAction, terrainToExpandOnto);
+        GameActionMessage actionToTake
+                = new GameActionMessage(gameId, moveNumber, playerId, tilePlaced, locationOfVolcano, tileOrientation,
+                buildAction, locationOfBuildAction, terrainToExpandOnto);
 
         return actionToTake;
 
@@ -160,11 +163,20 @@ public class MessageParser {
             return LAKE;
         if(type.equals("GRASS"))
             return GRASSLANDS;
-        else//(type.equals("ROCK"))
+        else
             return ROCKY;
+
+
     }
 
+    private static Location convertServerCoordinatesToClientLocation(String x, String y, String z)
+    {
+        int clientX = Integer.parseInt(x);
+        int clientY = Integer.parseInt(z);
+        int clientZ = 0;
 
+        return new Location(clientX, clientY, clientZ);
+    }
 
 
 }

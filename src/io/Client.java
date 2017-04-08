@@ -32,6 +32,9 @@ public class Client extends Thread {
                 stringsFromServerQueue.add(stringFromServer);
 
                 String responseToServer = waitForResponseToServer();
+                if (responseToServer.equals("")) {
+                    continue;
+                }
 
                 System.out.println("Client: " + responseToServer);
                 out.println(responseToServer);

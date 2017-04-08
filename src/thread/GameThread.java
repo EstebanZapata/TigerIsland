@@ -1,8 +1,12 @@
 package thread;
 
 import game.Game;
+import game.settlements.BuildAction;
 import game.tile.Location;
 import game.tile.orientation.TileOrientation;
+import thread.message.GameActionMessage;
+import thread.message.GameCommandMessage;
+import thread.message.Message;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -13,19 +17,24 @@ public class GameThread extends Thread {
     private BlockingQueue<Message> gameMessageQueue;
     private BlockingQueue<Message> gameResponseQueue;
 
-    private String gameId;
-
     private Game game;
 
-    public GameThread(BlockingQueue<Message> gameMessageQueue, BlockingQueue<Message> gameResponseQueue, String gameId) {
+    private String myPlayerId;
+    private String opponentPlayerId;
+
+    private boolean opponentPlayerIdHasNotBeenSet;
+
+    public GameThread(GameThreadCommunication communication, String myPlayerId) {
         super();
 
-        this.gameMessageQueue = gameMessageQueue;
-        this.gameResponseQueue = gameResponseQueue;
-
-        this.gameId = gameId;
+        this.gameMessageQueue = communication.getGameMessageQueue();
+        this.gameResponseQueue = communication.getGameResponseQueue();
 
         this.game = new Game();
+
+        this.myPlayerId = myPlayerId;
+
+        opponentPlayerIdHasNotBeenSet = false;
     }
 
     @Override
@@ -62,10 +71,10 @@ public class GameThread extends Thread {
 
     }
 
-
-
     private Message processCommand(GameCommandMessage message) {
         double secondsToTakeAction = message.getMoveTime();
+
+        int moveNumber = message.getMoveNumber();
 
         int millisecondsToTakeAction = (int) Math.floor(secondsToTakeAction * MILLISECONDS_PER_SECOND);
         int safeMillisecondsToTakeAction = (int) Math.floor(millisecondsToTakeAction * TIME_TO_TAKE_ACTION_SAFETY_BUFFER);
@@ -77,18 +86,21 @@ public class GameThread extends Thread {
 
         }
 
-        Message response = new GameActionMessage("PlaterID", message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.BUILT_TIGER_PLAYGROUND, new Location(3,0,0), null);
+        Message response = new GameActionMessage("PlaterID", moveNumber, myPlayerId, message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.BUILT_TIGER_PLAYGROUND, new Location(3,0,0), null);
 
         return response;
+    }
+
+    private boolean opponentPlayerIdHasNotBeenSet() {
+        return opponentPlayerIdHasNotBeenSet;
+    }
+
+    public void setOpponentPlayerId(String opponentPlayerId) {
+        this.opponentPlayerId = opponentPlayerId;
+        opponentPlayerIdHasNotBeenSet = false;
     }
 
     private void processOpponentAction(GameActionMessage message) {
 
     }
-
-    public String getGameId() {
-        return this.gameId;
-    }
-
-
 }

@@ -5,12 +5,17 @@ import org.junit.Before;
 import org.junit.Test;
 import game.tile.Terrain;
 import game.tile.Tile;
+import thread.message.GameCommandMessage;
+import thread.message.Message;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameThreadTest {
     private String gameId;
+    private String myPlayerId;
+
+    private int moveNumber;
 
     private BlockingQueue<Message> gameMessageQueue;
     private BlockingQueue<Message> gameResponseQueue;
@@ -27,18 +32,23 @@ public class GameThreadTest {
 
     @Before
     public void setupGameThread() {
-        gameId = "1";
+        gameId = "Spaghetti";
+        myPlayerId = "Spagett";
+
+        moveNumber = 1;
 
         gameMessageQueue = new LinkedBlockingQueue<>();
         gameResponseQueue = new LinkedBlockingQueue<>();
 
-        gameThread = new GameThread(gameMessageQueue, gameResponseQueue, gameId);
+        GameThreadCommunication gameThreadCommunication = new GameThreadCommunication(gameMessageQueue, gameResponseQueue);
+
+        gameThread = new GameThread(gameThreadCommunication, myPlayerId);
 
         moveTimeInSeconds = 0.10;
 
         tileToPlace = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
 
-        gameCommandMessage = new GameCommandMessage(gameId, moveTimeInSeconds, tileToPlace);
+        gameCommandMessage = new GameCommandMessage(gameId, moveTimeInSeconds, moveNumber, tileToPlace);
     }
 
     @Test
