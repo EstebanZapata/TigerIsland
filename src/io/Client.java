@@ -1,8 +1,5 @@
 package io;
 
-import thread.InformationMessage;
-import thread.Message;
-
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.BlockingQueue;
@@ -10,16 +7,15 @@ import java.util.concurrent.BlockingQueue;
 public class Client extends Thread {
     private String hostName;
     private int portNumber;
-    private BlockingQueue<Message> messagesFromServerQueue;
-    private BlockingQueue<Message> messagesToServerQueue;
-
+    private BlockingQueue<String> stringsFromServerQueue;
+    private BlockingQueue<String> stringsToServerQueue;
 
     public Client(String hostName, int portNumber,
-                  BlockingQueue<Message> messagesFromServerQueue, BlockingQueue<Message> messagesToServerQueue) throws IOException {
+                  BlockingQueue<String> stringsFromServerQueue, BlockingQueue<String> stringsToServerQueue) throws IOException {
         this.hostName = hostName;
         this.portNumber = portNumber;
-        this.messagesFromServerQueue = messagesFromServerQueue;
-        this.messagesToServerQueue = messagesToServerQueue;
+        this.stringsFromServerQueue = stringsFromServerQueue;
+        this.stringsToServerQueue = stringsToServerQueue;
     }
 
     @Override
@@ -33,13 +29,11 @@ public class Client extends Thread {
             while ((stringFromServer = in.readLine()) != null) {
                 System.out.println("Server: " + stringFromServer);
 
-                InformationMessage messageFromServer = new InformationMessage(stringFromServer);
+                stringsFromServerQueue.add(stringFromServer);
 
-                messagesFromServerQueue.add(messageFromServer);
+                String responseToServer = waitForResponseToServer();
 
-                InformationMessage responseToServer = waitForResponseToServer();
-
-                System.out.println("Client: " + responseToServer.getInformation());
+                System.out.println("Client: " + responseToServer);
                 out.println(responseToServer);
             }
         } catch (UnknownHostException e) {
@@ -52,12 +46,12 @@ public class Client extends Thread {
         }
     }
 
-    private InformationMessage waitForResponseToServer() {
+    private String waitForResponseToServer() {
         while(true) {
-            InformationMessage responseToServer = null;
+            String responseToServer = null;
 
             try {
-                responseToServer = (InformationMessage) messagesToServerQueue.take();
+                responseToServer = stringsToServerQueue.take();
             }
             catch(InterruptedException e) {
             }

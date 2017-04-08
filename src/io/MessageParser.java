@@ -8,22 +8,22 @@ import thread.Message;
 import static game.tile.Terrain.*;
 
 public class MessageParser {
-    private String tournamentPassword = "<tournament_password>";
-    private String userName = "<userName>";
-    private String userPassword = "<password>";
-    private String enterDome = "ENTER THUNDERDOME "+tournamentPassword;
-    private String introduction = "I AM "+ userName +" "+ userPassword;
-    private String pid = "<pid>";
-    private String cid = "<cid>";
-    private String response = "WAITING";
-    private String rid;
-    private String numOfRounds;
-    private String opponent;
-    private String activeGame;
-    private int moveNumber = 0;
-    public GameCommandMessage commandMessage;
+    private static String tournamentPassword = "<tournament_password>";
+    private static String userName = "<userName>";
+    private static String userPassword = "<password>";
+    private static String enterDome = "ENTER THUNDERDOME "+tournamentPassword;
+    private static String introduction = "I AM "+ userName +" "+ userPassword;
+    private static String pid = "<pid>";
+    private static String cid = "<cid>";
+    private static String response = "WAITING";
+    private static String rid;
+    private static String numOfRounds;
+    private static String opponent;
+    private static String activeGame;
+    private static int moveNumber = 0;
+    public static GameCommandMessage commandMessage;
 
-    public String parseServerInputAndComposeResponse(String serverInput){
+    public static String parseServerInputAndComposeAction(String serverInput){
         String parts[] = serverInput.split(" ");
         if (serverInput.contains(ServerStrings.WELCOME)){
             //System.out.println(enterDome);
@@ -77,7 +77,7 @@ public class MessageParser {
       return response;
     }
 
-    private void sendActionPromptToGame(String gid, Double moveTime, String tile) {
+    private static void sendActionPromptToGame(String gid, Double moveTime, String tile) {
         String types[] = tile.split("\\+");
         Terrain A = toTerrain(types[0]);
         Terrain B = toTerrain(types[1]);
@@ -85,7 +85,7 @@ public class MessageParser {
         commandMessage = new GameCommandMessage(gid,moveTime,tileToBePlaced);
     }
 
-    private Terrain toTerrain(String type) {
+    private static Terrain toTerrain(String type) {
         if(type.equals("JUNGLE"))
             return JUNGLE;
         if(type.equals("LAKE"))
