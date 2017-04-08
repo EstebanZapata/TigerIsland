@@ -4,7 +4,7 @@ import tile.Location;
 import tile.Tile;
 import tile.orientation.TileOrientation;
 
-public class GameResponseMessage extends Message {
+public class GameActionMessage extends Message {
     private Tile tilePlaced;
     private Location locationOfVolcano;
     private TileOrientation tileOrientationPlaced;
@@ -12,8 +12,8 @@ public class GameResponseMessage extends Message {
     private BuildAction buildActionPerformed;
     private Location locationOfBuildAction;
 
-    public GameResponseMessage(Tile tilePlaced, Location locationOfVolcano, TileOrientation tileOrientationPlaced,
-                               BuildAction buildActionPerformed, Location locationOfBuildAction)
+    public GameActionMessage(Tile tilePlaced, Location locationOfVolcano, TileOrientation tileOrientationPlaced,
+                             BuildAction buildActionPerformed, Location locationOfBuildAction)
     {
         this.tilePlaced = tilePlaced;
         this.locationOfVolcano = locationOfVolcano;
