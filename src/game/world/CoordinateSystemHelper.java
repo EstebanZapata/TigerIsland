@@ -98,7 +98,7 @@ public class CoordinateSystemHelper {
 
         int xCoordinateOfCenter = center.getxCoordinate();
         int yCoordinateOfCenter = center.getyCoordinate();
-        int zCoordinateOfCenter = center.getzCoordinate();
+        int zCoordinateOfCenter = center.getHeight();
 
 
         adjacentLocations[HexOrientation.SOUTHWEST.getOrientationInteger()] =

@@ -19,7 +19,7 @@ public class TileRulesManager {
 
         verifyNoHexesExistAtLocations(locationsOfTileHexes);
 
-        int zCoordinate = locationsOfTileHexes[0].getzCoordinate();
+        int zCoordinate = locationsOfTileHexes[0].getHeight();
         if (zCoordinate > 0) {
             return ableToPlaceTileOnUpperLayer(tile, locationsOfTileHexes);
         }
@@ -66,7 +66,7 @@ public class TileRulesManager {
     }
 
     public boolean noAirBelowTile(Location[] locationOfTileHexes) throws AirBelowTileException {
-        int zCoordinate = locationOfTileHexes[0].getzCoordinate();
+        int zCoordinate = locationOfTileHexes[0].getHeight();
         int zLayerToCheck = zCoordinate - 1;
 
         try {
@@ -84,7 +84,7 @@ public class TileRulesManager {
     public boolean topVolcanoCoversOneBelow(Location locationOfVolcano) throws IllegalTilePlacementException {
         int xCoordinate = locationOfVolcano.getxCoordinate();
         int yCoordinate = locationOfVolcano.getyCoordinate();
-        int zCoordinateToCheck = locationOfVolcano.getzCoordinate() - 1;
+        int zCoordinateToCheck = locationOfVolcano.getHeight() - 1;
         if (tileManager.getHexByCoordinate(xCoordinate,yCoordinate,zCoordinateToCheck).getTerrain() != Terrain.VOLCANO) {
             throw new TopVolcanoDoesNotCoverBottomVolcanoException(String.format("Hex at (%d,%d,%d) is not volcano", xCoordinate,yCoordinate,zCoordinateToCheck));
         }
@@ -97,7 +97,7 @@ public class TileRulesManager {
         Tile tileTwo;
         Tile tileThree;
 
-        int zCoordinateToCheck = locationOfTileHexes[0].getzCoordinate() - 1;
+        int zCoordinateToCheck = locationOfTileHexes[0].getHeight() - 1;
 
         Location locationOne = locationOfTileHexes[0];
         Location locationTwo = locationOfTileHexes[1];
