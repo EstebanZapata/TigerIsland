@@ -1,13 +1,10 @@
 package game.world;
 
-import game.world.rules.exceptions.IllegalTilePlacementException;
 import game.world.rules.exceptions.NoHexAtLocationException;
-import game.world.rules.exceptions.SpecialFirstTileHasNotBeenPlacedException;
-import tile.FirstTile;
-import tile.Hex;
-import tile.Location;
-import tile.Tile;
-import tile.orientation.TileOrientation;
+import game.tile.FirstTile;
+import game.tile.Hex;
+import game.tile.Location;
+import game.tile.Tile;
 
 import java.util.ArrayList;
 

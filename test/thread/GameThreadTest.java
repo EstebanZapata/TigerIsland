@@ -3,8 +3,8 @@ package thread;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import tile.Terrain;
-import tile.Tile;
+import game.tile.Terrain;
+import game.tile.Tile;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -34,7 +34,7 @@ public class GameThreadTest {
 
         gameThread = new GameThread(gameMessageQueue, gameResponseQueue, gameId);
 
-        moveTimeInSeconds = 5.0;
+        moveTimeInSeconds = 0.10;
 
         tileToPlace = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
 
@@ -49,7 +49,7 @@ public class GameThreadTest {
 
         gameThread.start();
 
-        Thread.sleep(100);
+        Thread.sleep(50);
 
         Assert.assertTrue(gameMessageQueue.isEmpty());
 

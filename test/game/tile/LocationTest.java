@@ -1,4 +1,4 @@
-package tile;
+package game.tile;
 
 import org.junit.Assert;
 import org.junit.Before;

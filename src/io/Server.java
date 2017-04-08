@@ -1,3 +1,5 @@
+package io;
+
 import java.net.*;
 import java.io.*;
 
@@ -6,7 +8,7 @@ public class Server {
     void main(String[] args) throws IOException {
         int startup = 0;
         if (args.length != 1) {
-            System.err.println("Usage: java Server <port number>");
+            System.err.println("Usage: java io.Server <port number>");
             System.exit(1);
         }
 
@@ -30,7 +32,7 @@ public class Server {
                 out.println(outputLine);
                startup++;
             }
-            //Client feedback loop
+            //io.Client feedback loop
             while ((inputLine = in.readLine()) != null) {
                 System.out.println(inputLine);
                 outputLine = kkp.processInput(inputLine);

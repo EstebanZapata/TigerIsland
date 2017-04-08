@@ -7,11 +7,11 @@ import cucumber.api.java.en.When;
 import game.world.World;
 import game.world.rules.exceptions.IllegalTilePlacementException;
 import org.junit.Assert;
-import tile.FirstTile;
-import tile.Location;
-import tile.Terrain;
-import tile.Tile;
-import tile.orientation.TileOrientation;
+import game.tile.FirstTile;
+import game.tile.Location;
+import game.tile.Terrain;
+import game.tile.Tile;
+import game.tile.orientation.TileOrientation;
 
 public class PlacingAFirstTileThatIsNotTheSpecialFirstTile {
     private World world;

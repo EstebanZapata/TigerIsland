@@ -4,12 +4,12 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
-import tile.Hex;
-import tile.Tile;
+import game.tile.Hex;
+import game.tile.Tile;
 
-import static tile.Terrain.JUNGLE;
-import static tile.Terrain.LAKE;
-import static tile.Terrain.VOLCANO;
+import static game.tile.Terrain.JUNGLE;
+import static game.tile.Terrain.LAKE;
+import static game.tile.Terrain.VOLCANO;
 
 
 public class HexAcceptanceTest {

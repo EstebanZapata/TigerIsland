@@ -2,8 +2,8 @@ package game.world;
 
 import game.world.rules.TileRulesManager;
 import game.world.rules.exceptions.*;
-import tile.*;
-import tile.orientation.TileOrientation;
+import game.tile.*;
+import game.tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
@@ -15,6 +15,8 @@ public class World {
     public World() {
         tileManager = new TileManager();
         tileRulesManager = new TileRulesManager(tileManager);
+
+
 
     }
 

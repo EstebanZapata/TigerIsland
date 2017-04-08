@@ -1,3 +1,5 @@
+package io;
+
 import java.net.*;
 import java.io.*;
 
@@ -11,7 +13,7 @@ public class Protocol {
     String gid = "<gid>";
     String timeMove = "<timemove>";
     String moveNum = "<#>";
-    String tile = "<tile>";
+    String tile = "<game.tile>";
     private String[] startup = {"WELCOME TO ANOTHER EDITION OF THUNDERDOME!",
             "TWO SHALL ENTER, ONE SHALL LEAVE",
             "WAIT FOR THE TOURNAMENT TO BEGIN " + pid+"\n",

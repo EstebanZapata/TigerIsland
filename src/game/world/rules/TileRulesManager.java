@@ -3,7 +3,7 @@ package game.world.rules;
 import game.world.CoordinateSystemHelper;
 import game.world.TileManager;
 import game.world.rules.exceptions.*;
-import tile.*;
+import game.tile.*;
 
 public class TileRulesManager {
     private TileManager tileManager;
@@ -14,7 +14,7 @@ public class TileRulesManager {
 
     public boolean ableToPlaceTileAtLocation(Tile tile, Location[] locationsOfTileHexes) throws IllegalTilePlacementException {
         if (!tileManager.getFirstTileHasBeenPlaced()) {
-            throw new SpecialFirstTileHasNotBeenPlacedException("Special first tile has not been placed!");
+            throw new SpecialFirstTileHasNotBeenPlacedException("Special first game.tile has not been placed!");
         }
 
         verifyNoHexesExistAtLocations(locationsOfTileHexes);
@@ -75,7 +75,7 @@ public class TileRulesManager {
             tileManager.getHexByCoordinate(locationOfTileHexes[2].getxCoordinate(), locationOfTileHexes[2].getyCoordinate(), zLayerToCheck);
         }
         catch (NoHexAtLocationException e) {
-            throw new AirBelowTileException("Air below tile");
+            throw new AirBelowTileException("Air below game.tile");
         }
 
         return true;
@@ -134,7 +134,7 @@ public class TileRulesManager {
                 continue;
             }
         }
-        throw new TileNotAdjacentToAnotherException("Tile being placed is not adjacent to an existing tile");
+        throw new TileNotAdjacentToAnotherException("Tile being placed is not adjacent to an existing game.tile");
     }
 
     private boolean hexLocationIsEmpty(Location location) {
@@ -149,7 +149,7 @@ public class TileRulesManager {
 
     public boolean ableToPlaceFirstTile() throws SpecialFirstTileHasAlreadyBeenPlacedExeption {
         if (tileManager.getFirstTileHasBeenPlaced()) {
-            throw new SpecialFirstTileHasAlreadyBeenPlacedExeption("Special first tile has already been placed!");
+            throw new SpecialFirstTileHasAlreadyBeenPlacedExeption("Special first game.tile has already been placed!");
         }
 
         else {

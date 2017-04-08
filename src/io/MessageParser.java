@@ -1,10 +1,11 @@
+package io;
+
 import thread.GameCommandMessage;
-import tile.Terrain;
-import tile.Tile;
+import game.tile.Terrain;
+import game.tile.Tile;
+import thread.Message;
 
-import java.util.DoubleSummaryStatistics;
-
-import static tile.Terrain.*;
+import static game.tile.Terrain.*;
 
 public class MessageParser {
     private String tournamentPassword = "<tournament_password>";
@@ -22,14 +23,13 @@ public class MessageParser {
     private int moveNumber = 0;
     public GameCommandMessage commandMessage;
 
-    public String parseServerInput(String s){
-        System.out.println(s);
-        String parts[] = s.split(" ");
-        if (s.equals("WELCOME TO ANOTHER EDITION OF THUNDERDOME!")){
+    public String parseServerInputAndComposeResponse(String serverInput){
+        String parts[] = serverInput.split(" ");
+        if (serverInput.contains(ServerStrings.WELCOME)){
             //System.out.println(enterDome);
             return enterDome;
         }
-        else if (s.equals("TWO SHALL ENTER, ONE SHALL LEAVE")){
+        else if (serverInput.contains("TWO SHALL ENTER, ONE SHALL LEAVE")){
             //System.out.println(introduction);
             return introduction;
         }
@@ -57,7 +57,7 @@ public class MessageParser {
             //call to subroutine to make move in activeGame
             sendActionPromptToGame(activeGame, moveTime, tile);
             String move = "GAME " +activeGame+ " MOVE " + moveNumber +
-                    " PLACE <tile> AT <x> <y> <z> <orientation> " +
+                    " PLACE <game.tile> AT <x> <y> <z> <orientation> " +
                     " FOUND SETTLEMENT AT <x> <y> <z> ";
 
             return move;
@@ -95,4 +95,6 @@ public class MessageParser {
         else//(type.equals("ROCK"))
             return ROCKY;
     }
+
+
 }

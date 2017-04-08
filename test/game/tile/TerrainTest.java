@@ -1,8 +1,7 @@
-package tile;
+package game.tile;
 
 import org.junit.Assert;
 import org.junit.Test;
-import tile.Terrain;
 
 public class TerrainTest {
 

@@ -1,4 +1,4 @@
-package tile;
+package game.tile;
 
 public class Tile {
     protected Hex[] hexes;

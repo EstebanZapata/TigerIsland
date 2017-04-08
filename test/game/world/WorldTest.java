@@ -1,14 +1,13 @@
 package game.world;
 
-import game.world.*;
 import game.world.rules.exceptions.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import tile.Location;
-import tile.Terrain;
-import tile.Tile;
-import tile.orientation.TileOrientation;
+import game.tile.Location;
+import game.tile.Terrain;
+import game.tile.Tile;
+import game.tile.orientation.TileOrientation;
 
 public class WorldTest {
     private World world;

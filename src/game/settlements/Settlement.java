@@ -1,6 +1,6 @@
 package game.settlements;
 
-import tile.*;
+import game.tile.*;
 import java.util.ArrayList;
 
 public class Settlement {

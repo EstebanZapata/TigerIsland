@@ -7,10 +7,10 @@ import game.world.rules.exceptions.NoHexAtLocationException;
 import game.world.rules.exceptions.TopVolcanoDoesNotCoverBottomVolcanoException;
 import game.world.World;
 import org.junit.Assert;
-import tile.Location;
-import tile.Terrain;
-import tile.Tile;
-import tile.orientation.TileOrientation;
+import game.tile.Location;
+import game.tile.Terrain;
+import game.tile.Tile;
+import game.tile.orientation.TileOrientation;
 
 public class IllegallyPlacingATileOnAHigherLayerDueToNotCoveringVolcano {
     private World world;

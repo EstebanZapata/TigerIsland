@@ -1,4 +1,4 @@
-package tile;
+package game.tile;
 
 public class FirstTile extends Tile {
     private static final int HEXES_ON_STARTING_TILE = 5;

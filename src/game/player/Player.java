@@ -1,7 +1,7 @@
 package game.player;
 
 import game.player.exceptions.NotEnoughPiecesException;
-import tile.*;
+import game.tile.*;
 import game.settlements.*;
 
 import java.util.ArrayList;

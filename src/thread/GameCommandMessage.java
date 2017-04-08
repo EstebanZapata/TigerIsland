@@ -1,6 +1,6 @@
 package thread;
 
-import tile.Tile;
+import game.tile.Tile;
 
 public class GameCommandMessage extends Message {
     private String gameId;

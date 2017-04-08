@@ -6,7 +6,7 @@ import cucumber.api.java.en.When;
 import game.world.World;
 import game.world.rules.exceptions.SpecialFirstTileHasAlreadyBeenPlacedExeption;
 import org.junit.Assert;
-import tile.FirstTile;
+import game.tile.FirstTile;
 
 public class PlacingTheSpecialFirstTileAgain {
     private World world;

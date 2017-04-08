@@ -4,12 +4,9 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
-import tile.Hex;
-import tile.Terrain;
-import tile.Tile;
+import game.tile.Terrain;
 
 import game.world.World;
-import tile.orientation.TileOrientation;
 
 public class PlacingTheFirstTile {
     private World world;

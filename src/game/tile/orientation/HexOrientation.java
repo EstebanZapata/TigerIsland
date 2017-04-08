@@ -1,4 +1,4 @@
-package tile.orientation;
+package game.tile.orientation;
 
 public enum HexOrientation {
     SOUTHWEST(0),

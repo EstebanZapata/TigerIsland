@@ -1,8 +1,8 @@
 package thread;
 
-import tile.Location;
-import tile.Tile;
-import tile.orientation.TileOrientation;
+import game.tile.Location;
+import game.tile.Tile;
+import game.tile.orientation.TileOrientation;
 
 public class GameActionMessage extends Message {
     private Tile tilePlaced;

@@ -1,4 +1,4 @@
-package tile;
+package game.tile;
 
 import java.util.Objects;
 

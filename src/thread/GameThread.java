@@ -1,8 +1,8 @@
 package thread;
 
 import game.Game;
-import tile.Location;
-import tile.orientation.TileOrientation;
+import game.tile.Location;
+import game.tile.orientation.TileOrientation;
 
 import java.util.concurrent.BlockingQueue;
 

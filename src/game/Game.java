@@ -9,7 +9,7 @@ import game.world.*;
 import game.player.*;
 import game.world.rules.exceptions.IllegalTilePlacementException;
 import game.world.rules.exceptions.NoHexAtLocationException;
-import tile.*;
+import game.tile.*;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class Game {
         boolean tilePlaced = false;
 
         while (true) {
-            Tile tile = drawTile(); // need to add first tile condition
+            Tile tile = drawTile(); // need to add first game.tile condition
 
             if (player1Turn) {
                 while (!tilePlaced) {

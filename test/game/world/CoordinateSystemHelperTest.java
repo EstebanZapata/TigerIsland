@@ -2,11 +2,10 @@ package game.world;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import tile.Location;
-import tile.orientation.HexOrientation;
-import tile.orientation.TileOrientation;
+import game.tile.Location;
+import game.tile.orientation.HexOrientation;
+import game.tile.orientation.TileOrientation;
 
 public class CoordinateSystemHelperTest {
     private Location origin;
