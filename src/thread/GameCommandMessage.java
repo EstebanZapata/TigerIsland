@@ -1,3 +1,5 @@
+package thread;
+
 import tile.Tile;
 
 public class GameCommandMessage extends Message {

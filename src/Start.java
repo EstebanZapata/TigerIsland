@@ -1,3 +1,6 @@
+import thread.GameCommandMessage;
+import thread.GameThread;
+import thread.Message;
 import tile.Terrain;
 import tile.Tile;
 
@@ -15,9 +18,8 @@ public class Start {
 
         gameOne.start();
 
-        Thread.sleep(1000);
 
-        gameOneMessageQueue.add(new GameCommandMessage("1", 4.0, new Tile(Terrain.GRASSLANDS, Terrain.LAKE)));
+        gameOneMessageQueue.add(new GameCommandMessage("1", 5.0, new Tile(Terrain.GRASSLANDS, Terrain.LAKE)));
 
         while(true) {
             Message msg = null;
