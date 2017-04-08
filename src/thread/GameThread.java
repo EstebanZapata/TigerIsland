@@ -77,7 +77,7 @@ public class GameThread extends Thread {
 
         }
 
-        Message response = new GameActionMessage(message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.BUILT_TIGER_PLAYGROUND, new Location(3,0,0));
+        Message response = new GameActionMessage("PlaterID", message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.BUILT_TIGER_PLAYGROUND, new Location(3,0,0), null);
 
         return response;
     }

@@ -1,9 +1,9 @@
 package thread;
 
-public class InformationMessage extends Message {
+public class ClientMessage extends Message {
     private String information;
 
-    public InformationMessage(String information) {
+    public ClientMessage(String information) {
         this.information = information;
     }
 

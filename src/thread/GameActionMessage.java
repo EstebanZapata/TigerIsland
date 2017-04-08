@@ -1,6 +1,7 @@
 package thread;
 
 import game.tile.Location;
+import game.tile.Terrain;
 import game.tile.Tile;
 import game.tile.orientation.TileOrientation;
 
@@ -12,8 +13,8 @@ public class GameActionMessage extends Message {
     private BuildAction buildActionPerformed;
     private Location locationOfBuildAction;
 
-    public GameActionMessage(Tile tilePlaced, Location locationOfVolcano, TileOrientation tileOrientationPlaced,
-                             BuildAction buildActionPerformed, Location locationOfBuildAction)
+    public GameActionMessage(String playerId, Tile tilePlaced, Location locationOfVolcano, TileOrientation tileOrientationPlaced,
+                             BuildAction buildActionPerformed, Location locationOfBuildAction, Terrain terrainToExpandOnto)
     {
         this.tilePlaced = tilePlaced;
         this.locationOfVolcano = locationOfVolcano;

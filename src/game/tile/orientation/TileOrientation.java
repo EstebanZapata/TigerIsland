@@ -17,4 +17,14 @@ public enum TileOrientation {
     public int getServerProtocolOrientation() {
         return this.serverProtocolOrientation;
     }
+
+    public static TileOrientation getOrientationFromServerOrientation(int serverProtocolOrientation) {
+        for (TileOrientation orientation:TileOrientation.values()) {
+            if (orientation.getServerProtocolOrientation() == serverProtocolOrientation) {
+                return orientation;
+            }
+        }
+
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 import io.Client;
 import io.MessageParser;
+import thread.Message;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,7 +24,7 @@ public class Start {
 
     private static void runTournamentLoop() {
         String stringFromServer = waitForMessageFromServer();
-        String actionToTake = MessageParser.parseServerInputAndComposeAction(stringFromServer);
+        Message actionToTake = MessageParser.parseServerInputAndComposeAction(stringFromServer);
     }
 
     private static String waitForMessageFromServer() {

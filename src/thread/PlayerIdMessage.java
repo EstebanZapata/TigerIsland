@@ -1,6 +1,6 @@
 package thread;
 
-public class PlayerIdMessage {
+public class PlayerIdMessage extends Message {
     private String playerId;
 
     public PlayerIdMessage(String playerId) {
