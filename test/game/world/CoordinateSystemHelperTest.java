@@ -231,4 +231,9 @@ public class CoordinateSystemHelperTest {
 
     }
 
+    @Test
+    public void testToGetFullCoverageOfCoordinateSystemHelper() {
+        CoordinateSystemHelper coordinateSystemHelper = new CoordinateSystemHelper();
+    }
+
 }

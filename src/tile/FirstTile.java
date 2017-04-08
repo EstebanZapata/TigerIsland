@@ -33,4 +33,8 @@ public class FirstTile extends Tile {
         return hexes[ROCKY_HEX];
     }
 
+    public Hex getVolcanoHex() {
+        return hexes[VOLCANO_HEX];
+    }
+
 }
