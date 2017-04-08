@@ -31,7 +31,7 @@ public class Hex {
     }
 
     public int getHeight() {
-        int height = this.location.getzCoordinate();
+        int height = this.location.getHeight();
         return height;
     }
 

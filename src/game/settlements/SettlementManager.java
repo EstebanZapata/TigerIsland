@@ -52,7 +52,7 @@ public class SettlementManager {
             ArrayList<Hex> hexesToExpandTo = existingSettlement.getHexesToExpandTo(world, terrainType);
             int numVillagers = 0;
             for (Hex hex : hexesToExpandTo) {
-                numVillagers += hex.getHeight();
+                numVillagers += hex.getHeight() + 1;
             }
             return numVillagers;
         }

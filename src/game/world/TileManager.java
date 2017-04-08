@@ -1,13 +1,10 @@
 package game.world;
 
-import game.world.rules.exceptions.IllegalTilePlacementException;
 import game.world.rules.exceptions.NoHexAtLocationException;
-import game.world.rules.exceptions.SpecialFirstTileHasNotBeenPlacedException;
 import tile.FirstTile;
 import tile.Hex;
 import tile.Location;
 import tile.Tile;
-import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
@@ -103,7 +100,7 @@ public class TileManager {
     public Hex getHexByLocation(Location location) throws NoHexAtLocationException {
         int x = location.getxCoordinate();
         int y = location.getyCoordinate();
-        int z = location.getzCoordinate();
+        int z = location.getHeight();
 
         return getHexByCoordinate(x, y, z);
     }
@@ -128,7 +125,7 @@ public class TileManager {
     }
 
     private boolean hexDoesNotMatchGivenHeight(Hex hex, int z) {
-        return hex.getLocation().getzCoordinate() != z;
+        return hex.getLocation().getHeight() != z;
     }
 
 
