@@ -1,6 +1,8 @@
 package game.settlements;
 
-import game.settlements.exceptions.SettlementCannotBeCompletelyWipedOutException;
+import game.settlements.exceptions.*;
+import game.world.*;
+import game.world.rules.exceptions.NoHexAtLocationException;
 import tile.*;
 import java.util.ArrayList;
 
@@ -41,19 +43,62 @@ public class Settlement {
         }
     }
 
-    public boolean hasTotoroSanctuary() {
-        return hasTotoro;
-    }
-
     public void setHasTotoroSanctuary() {
         hasTotoro = true;
     }
 
-    public boolean hasTigerPlayground() {
-        return hasTiger;
-    }
-
     public void setHasTigerPlayground() {
         hasTiger = true;
+    }
+
+    public boolean checkPlaygroundConditions() {
+        return (this.hasTiger == false);
+    }
+
+    public boolean checkSanctuaryConditions() {
+        if (this.settlementHexes.size() < 5) {
+            return false;
+        }
+
+        if (this.hasTotoro == true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public ArrayList<Hex> getHexesToExpandTo(World world, Terrain terrainType) throws
+            SettlementCannotBeBuiltOnVolcanoException,
+            NoHexesToExpandToException
+    {
+        if (terrainType == Terrain.VOLCANO) {
+            String errorMessage = String.format("You cannot build a hex on a volcano.");
+            throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
+        }
+
+        ArrayList<Hex> potentialSettlementHexes = new ArrayList<Hex>();
+        for (Hex hex : this.settlementHexes) {
+            Location hexLocation = hex.getLocation();
+            Location[] hexLocationsAdjacentToCenter = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
+            for (Location adjacentHexLocation : hexLocationsAdjacentToCenter) {
+                try {
+                    Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
+                    if (settlementHexes.contains(adjacentHex) && adjacentHex.checkExpansionConditions(terrainType))
+                    {
+                        potentialSettlementHexes.add(adjacentHex);
+                    }
+                }
+                catch (NoHexAtLocationException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        if (potentialSettlementHexes.isEmpty()) {
+            String errorMessage = String.format("There are no playable hexes for the player to expand to.");
+            throw new NoHexesToExpandToException(errorMessage);
+        }
+
+        return potentialSettlementHexes;
     }
 }

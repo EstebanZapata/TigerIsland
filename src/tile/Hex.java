@@ -1,6 +1,7 @@
 package tile;
 
 import game.settlements.Settlement;
+import game.*;
 
 public class Hex {
     private Terrain terrain;
@@ -40,5 +41,61 @@ public class Hex {
 
     public void setSettlement(Settlement settlement) {
         this.settlement = settlement;
+    }
+
+    public boolean checkSettlementConditions() {
+        if (this.terrain == Terrain.VOLCANO) {
+            return false;
+        }
+
+        if (this.getHeight() != Settings.START_SETTLEMENT_HEX_HEIGHT_REQUIREMENT) {
+            return false;
+        }
+
+        if (this.settlement != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkExpansionConditions(Terrain terrainType) {
+        if (this.terrain != terrainType) {
+            return false;
+        }
+
+        if (this.settlement != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkPlaygroundConditions() {
+        if (this.terrain == Terrain.VOLCANO) {
+            return false;
+        }
+
+        if (this.getHeight() < 3) {
+            return false;
+        }
+
+        if (this.settlement != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkSanctuaryConditons() {
+        if (this.terrain == Terrain.VOLCANO) {
+            return false;
+        }
+
+        if (this.settlement != null) {
+            return false;
+        }
+
+        return true;
     }
 }

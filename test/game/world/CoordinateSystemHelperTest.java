@@ -12,7 +12,6 @@ public class CoordinateSystemHelperTest {
     private Location origin;
     private Location arbitraryLocation;
 
-
     @Before
     public void setupOriginAndArbitraryLocation() {
         origin = new Location(0, 0, 0);
