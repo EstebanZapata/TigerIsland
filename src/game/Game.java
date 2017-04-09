@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class Game {
     private static final int START_SETTLEMENT_HEX_HEIGHT_REQUIREMENT = 1;
-    private Ai ai;
+    public Ai ai;
 
     public World world;
     public Player player1;

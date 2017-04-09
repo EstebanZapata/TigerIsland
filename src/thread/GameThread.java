@@ -4,6 +4,7 @@ import game.Game;
 import game.settlements.BuildAction;
 import game.tile.Location;
 import game.tile.orientation.TileOrientation;
+import game.world.rules.exceptions.IllegalTilePlacementException;
 import thread.message.GameActionMessage;
 import thread.message.GameCommandMessage;
 import thread.message.Message;
@@ -84,14 +85,20 @@ public class GameThread extends MyThread {
 
         try {
             Thread.sleep(safeMillisecondsToTakeAction);
+            Message aiResponse = null;
+            try {
+                aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
+            } catch (IllegalTilePlacementException e) {
+                e.printStackTrace();
+            }
+            return aiResponse;
         }
         catch (InterruptedException e) {
+            Message mockResponse = new GameActionMessage(gameId, moveNumber, myPlayerId, message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.FOUNDED_SETTLEMENT, new Location(3,0,0), null);
 
+            return mockResponse;
         }
 
-        Message mockResponse = new GameActionMessage(gameId, moveNumber, myPlayerId, message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.BUILT_TIGER_PLAYGROUND, new Location(3,0,0), null);
-
-        return mockResponse;
     }
 
     private void processOpponentAction(GameActionMessage message) {
