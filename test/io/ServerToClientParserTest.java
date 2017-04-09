@@ -1,8 +1,11 @@
 package io;
 
 import cucumber.api.java.bm.Tetapi;
+import game.settlements.BuildAction;
+import game.tile.Location;
 import game.tile.Terrain;
 import game.tile.Tile;
+import game.tile.orientation.TileOrientation;
 import org.junit.Assert;
 import org.junit.Test;
 import thread.message.*;
@@ -89,5 +92,45 @@ public class ServerToClientParserTest {
         Assert.assertEquals(Terrain.JUNGLE, messageParsed.getTileToPlace().getRightHexRelativeToVolcano().getTerrain());
     }
 
-    
+    @Test
+    public void testServerCoordinateToClientFromOrigin() {
+        Location parsedLocation = ServerToClientParser.convertServerCoordinatesToClientLocation("0", "0", "0");
+
+        Assert.assertEquals(new Location(0,0,0), parsedLocation);
+    }
+
+    @Test
+    public void testServerCoordinateToClientFromArbitrary() {
+        Location parsedLocation = ServerToClientParser.convertServerCoordinatesToClientLocation("1", "-3", "2");
+
+        Assert.assertEquals(new Location(1,-2,0), parsedLocation);
+    }
+
+    @Test
+    public void testServerCoordinateToClientFromAnotherArbitrary() {
+        Location parsedLocation = ServerToClientParser.convertServerCoordinatesToClientLocation("-1", "3", "-2");
+
+        Assert.assertEquals(new Location(-1,2,0), parsedLocation);
+    }
+
+    @Test
+    public void testGameMoveReturnsActionMessage() {
+        String gameMove = "GAME 3 MOVE 5 PLAYER spagett PLACE GRASS+JUNGLE AT 1 -1 3 5 FOUND SETTLEMENT AT 3 4 5";
+
+        GameActionMessage gameActionMessage = (GameActionMessage) ServerToClientParser.parseServerInputAndComposeAction(gameMove);
+
+        Assert.assertEquals("3", gameActionMessage.getGameId());
+        Assert.assertEquals(5, gameActionMessage.getMoveNumber());
+        Assert.assertEquals("spagett", gameActionMessage.getPlayerId());
+
+        Assert.assertEquals(Terrain.JUNGLE, gameActionMessage.getTilePlaced().getLeftHexRelativeToVolcano().getTerrain());
+        Assert.assertEquals(Terrain.GRASSLANDS, gameActionMessage.getTilePlaced().getRightHexRelativeToVolcano().getTerrain());
+
+        Assert.assertEquals(new Location(1,-3,0), gameActionMessage.getLocationOfVolcano());
+        Assert.assertEquals(TileOrientation.WEST_SOUTHWEST, gameActionMessage.getTileOrientationPlaced());
+
+        Assert.assertEquals(BuildAction.FOUNDED_SETTLEMENT, gameActionMessage.getBuildActionPerformed());
+        Assert.assertEquals(new Location(3,-5, 0), gameActionMessage.getLocationOfBuildAction());
+
+    }
 }

@@ -74,7 +74,7 @@ public class ClientToServerParser {
 
     private static String convertClientCoordinatesToServerCoordinates(Location locationToConvert) {
         int serverXCoordinate = locationToConvert.getxCoordinate();
-        int serverZCoordinate = locationToConvert.getyCoordinate();
+        int serverZCoordinate = locationToConvert.getyCoordinate() * -1;
         int serverYCoordinate = -(serverXCoordinate + serverZCoordinate);
         String serverCoordinates = Integer.toString(serverXCoordinate) + ' ' + Integer.toString(serverYCoordinate) + ' ' + Integer.toString(serverZCoordinate);
         return serverCoordinates;

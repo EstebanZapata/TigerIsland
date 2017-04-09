@@ -166,13 +166,12 @@ public class ServerToClientParser {
         else
             return ROCKY;
 
-
     }
 
-    private static Location convertServerCoordinatesToClientLocation(String x, String y, String z)
+    public static Location convertServerCoordinatesToClientLocation(String x, String y, String z)
     {
         int clientX = Integer.parseInt(x);
-        int clientY = Integer.parseInt(z);
+        int clientY = Integer.parseInt(z) * -1;
         int clientZ = 0;
 
         return new Location(clientX, clientY, clientZ);
