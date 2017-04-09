@@ -146,6 +146,7 @@ public class TileManager {
     public ArrayList<Hex> getAllHexesInWorld() {
         return this.allHexesInWorld;
     }
+
     public Hex getLeftMostHex(){
         ArrayList<Hex> allHexes = getAllHexesInWorld();
         Hex leftyHex = allHexes.get(0);

@@ -47,7 +47,7 @@ public class GameThreadTest {
 
         gameThread = new GameThread(gameThreadCommunication, myPlayerId, opponentPlayerId, gameId);
 
-        moveTimeInSeconds = 0.05;
+        moveTimeInSeconds = 0.10;
 
         tileToPlace = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
 
@@ -76,7 +76,7 @@ public class GameThreadTest {
         gameMessageQueue.add(gameCommandMessage);
 
         double moveTimeInMilliseconds = moveTimeInSeconds * GameThread.MILLISECONDS_PER_SECOND;
-        double safetyMarginWithTestOverhead = GameThread.TIME_TO_TAKE_ACTION_SAFETY_BUFFER * 1.1;
+        double safetyMarginWithTestOverhead = GameThread.TIME_TO_TAKE_ACTION_SAFETY_BUFFER * 1.2;
         double moveTimeWithSafetyAndTestOverhead = moveTimeInMilliseconds * safetyMarginWithTestOverhead;
 
         gameThread.start();

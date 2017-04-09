@@ -16,7 +16,7 @@ public class Ai {
         this.world = world;
     }
         public GameActionMessage chooseMove(String gameID, int moveNumber, String playerID, Tile tileToBePlaced) {
-            Hex hexToBePlacedNextTo = world.tileManager.getLeftMostHex();
+            Hex hexToBePlacedNextTo = world.getLeftMostHex();
 
             int newTileXCoordinate = hexToBePlacedNextTo.getLocation().getxCoordinate() - 1;
             int newTileYCoordinate = hexToBePlacedNextTo.getLocation().getyCoordinate();
