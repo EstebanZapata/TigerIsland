@@ -67,7 +67,11 @@ public class GameThread extends MyThread {
 
         if (message instanceof GameActionMessage) {
             System.out.println("Game " + gameId + " received opponent action");
-            processOpponentAction((GameActionMessage) message);
+            try {
+                processOpponentAction((GameActionMessage) message);
+            } catch (IllegalTilePlacementException e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -76,15 +80,8 @@ public class GameThread extends MyThread {
     private Message processCommand(GameCommandMessage message) {
         String gameId = message.getGameId();
 
-        double secondsToTakeAction = message.getMoveTime();
-
         int moveNumber = message.getMoveNumber();
 
-        int millisecondsToTakeAction = (int) Math.floor(secondsToTakeAction * MILLISECONDS_PER_SECOND);
-        int safeMillisecondsToTakeAction = (int) Math.floor(millisecondsToTakeAction * TIME_TO_TAKE_ACTION_SAFETY_BUFFER);
-
-        try {
-            Thread.sleep(safeMillisecondsToTakeAction);
             Message aiResponse = null;
             try {
                 aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
@@ -94,17 +91,12 @@ public class GameThread extends MyThread {
                 e.printStackTrace();
                 return aiResponse;
             }
-        }
-        catch (InterruptedException e) {
-            Message mockResponse = new GameActionMessage(gameId, moveNumber, myPlayerId, message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.FOUNDED_SETTLEMENT, new Location(3,0,0), null);
 
-            return mockResponse;
-        }
 
     }
 
-    private void processOpponentAction(GameActionMessage message) {
-
+    private void processOpponentAction(GameActionMessage message) throws IllegalTilePlacementException {
+        game.world.insertTileIntoTileManager(message.getTilePlaced(),message.getLocationOfVolcano(),message.getTileOrientationPlaced());
 
     }
 

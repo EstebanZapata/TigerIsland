@@ -10,6 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ClientTest {
     private Client client;
+    private Client secondClient;
     private Server server;
 
     private BlockingQueue<String> stringsFromServerQueue;
@@ -25,14 +26,15 @@ public class ClientTest {
         stringsFromServerQueue = new LinkedBlockingQueue<>();
         stringsToServerQueue = new LinkedBlockingQueue<>();
 
-        client = new Client("DESKTOP-6EG7I90", port, stringsFromServerQueue, stringsToServerQueue);
+        client = new Client("Alix", port, stringsFromServerQueue, stringsToServerQueue);
+        secondClient = new Client("Alix", port-1, stringsFromServerQueue, stringsToServerQueue);
     }
 
     @Test
     public void testClientCanReceiveStringFromServer() throws Exception {
         Assert.assertTrue(stringsFromServerQueue.isEmpty());
 
-        client.start();
+        secondClient.start();
 
         Thread.sleep(100);
         Assert.assertFalse(stringsFromServerQueue.isEmpty());
