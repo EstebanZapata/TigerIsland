@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 public class World {
-    private TileManager tileManager;
+    public TileManager tileManager;
     public TileRulesManager tileRulesManager;
 
     public World() {
@@ -42,6 +42,8 @@ public class World {
         }
     }
 
+
+
     public ArrayList<Hex> getAllHexesInWorld() {
         return tileManager.getAllHexesInWorld();
     }
@@ -53,7 +55,6 @@ public class World {
     public Hex getHexByLocation(Location locationOfHex) throws NoHexAtLocationException {
         return tileManager.getHexByLocation(locationOfHex);
     }
-
 
 
 
