@@ -2,6 +2,7 @@ package game;
 
 import game.player.*;
 import game.player.exceptions.*;
+import game.settlements.*;
 import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.*;
@@ -43,15 +44,9 @@ public class Game {
 
                 // player 1 chooses a build action
                 //if cannot do any, break from while loop and set flag
-                try {
-                    foundSettlement(player1);
-                }
-                catch (NotEnoughPiecesException e) {
-                    System.out.println(e.getMessage());
-                }
-                catch (NoPlayableHexException e) {
-                    System.out.println(e.getMessage());
-                }
+
+                // found settlement code
+
             }
             else {
                 while (!tilePlaced) {
@@ -79,27 +74,27 @@ public class Game {
         // check failed build action flag --> determine winner from turn
     }
 
-    public void foundSettlement(Player currentlyActivePlayer) throws
+    public void foundSettlement(Player currentlyActivePlayer, Hex settlementHex) throws
             NotEnoughPiecesException,
-            NoPlayableHexException
+            SettlementAlreadyExistsOnHexException
     {
         try {
-            currentlyActivePlayer.foundSettlement(world);
+            currentlyActivePlayer.foundSettlement(settlementHex);
         }
         catch (NotEnoughPiecesException e) {
             System.out.println(e.getMessage());
         }
-        catch (NoPlayableHexException e) {
+        catch (SettlementAlreadyExistsOnHexException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void expandSettlement(Player currentlyActivePlayer) throws
+    public void expandSettlement(Player currentlyActivePlayer, Settlement existingSettlement) throws
             NotEnoughPiecesException,
             NoHexesToExpandToException
     {
         try {
-            currentlyActivePlayer.expandSettlement(world);
+            currentlyActivePlayer.expandSettlement(world, existingSettlement);
         }
         catch (NotEnoughPiecesException e) {
             throw new NotEnoughPiecesException(e.getMessage());

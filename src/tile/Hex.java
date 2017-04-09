@@ -76,7 +76,7 @@ public class Hex {
             return false;
         }
 
-        if (this.getHeight() < 3) {
+        if (this.getHeight() < Settings.START_PLAYGROUND_HEX_HEIGHT_REQUIREMENT) {
             return false;
         }
 

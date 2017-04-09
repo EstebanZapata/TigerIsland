@@ -12,7 +12,7 @@ public class Settlement {
     private boolean hasTiger = false;
 
     public Settlement(Hex foundingHex) {
-        settlementHexes = new ArrayList<>();
+        settlementHexes = new ArrayList<Hex>();
         settlementHexes.add(foundingHex);
     }
 
@@ -28,7 +28,13 @@ public class Settlement {
         return settlementHexes;
     }
 
-    public void addHexToSettlement(Hex newHex) {
+    public void addHexToSettlement(Hex newHex) throws SettlementAlreadyExistsOnHexException {
+        if (this.settlementHexes.contains(newHex)) {
+            String errorMessage = "A settlement already exists on the hex.";
+            throw new SettlementAlreadyExistsOnHexException(errorMessage);
+        }
+
+        newHex.setSettlement(this);
         settlementHexes.add(newHex);
     }
 
@@ -100,5 +106,13 @@ public class Settlement {
         }
 
         return potentialSettlementHexes;
+    }
+
+    public Boolean hasTotoroSanctuary() {
+        return this.hasTotoro;
+    }
+
+    public Boolean hasTigerPlayground() {
+        return this.hasTiger;
     }
 }

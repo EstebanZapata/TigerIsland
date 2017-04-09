@@ -54,40 +54,44 @@ public class Player {
         this.totoroCount += 1;
     }
 
-    public void foundSettlement(World existingWorld) throws
+    public void foundSettlement(Hex settlementHex) throws
             NotEnoughPiecesException,
-            NoPlayableHexException
+            SettlementAlreadyExistsOnHexException
     {
         try {
             this.useVillagers(1);
-            this.settlementManager.foundSettlement(existingWorld);
+            this.settlementManager.foundSettlement(settlementHex);
             this.score += Settings.FOUND_SETTLEMENT_POINTS;
         }
         catch (NotEnoughPiecesException e) {
             throw new NotEnoughPiecesException(e.getMessage());
         }
-        catch (NoPlayableHexException e) {
-            throw new NoPlayableHexException(e.getMessage());
+        catch (SettlementAlreadyExistsOnHexException e) {
+            this.villagerCount += 1;
+            throw new SettlementAlreadyExistsOnHexException(e.getMessage());
         }
     }
 
-    public void expandSettlement(World existingWorld) throws
+    public void expandSettlement(World existingWorld, Settlement existingSettlement) throws
             NotEnoughPiecesException,
             NoHexesToExpandToException
     {
         try {
             int numberOfVillagersRequiredToExpand = this.settlementManager.getNumberOfVillagersRequiredToExpand(existingWorld, Terrain.GRASSLANDS);
-            this.useVillagers(numberOfVillagersRequiredToExpand);
-            this.settlementManager.expandSettlement(existingWorld, Terrain.GRASSLANDS);
+            try {
+                this.useVillagers(numberOfVillagersRequiredToExpand);
+                this.settlementManager.expandSettlement(existingWorld, existingSettlement, Terrain.GRASSLANDS);
+            }
+            catch (NotEnoughPiecesException e) {
+                throw new NotEnoughPiecesException(e.getMessage());
+            }
+            catch (NoHexesToExpandToException e) {
+                this.villagerCount += numberOfVillagersRequiredToExpand;
+                throw new NoHexesToExpandToException(e.getMessage());
+            }
         }
         catch (SettlementCannotBeBuiltOnVolcanoException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (NotEnoughPiecesException e) {
-            throw new NotEnoughPiecesException(e.getMessage());
-        }
-        catch (NoHexesToExpandToException e) {
-            throw new NoHexesToExpandToException(e.getMessage());
+
         }
     }
 
@@ -108,7 +112,7 @@ public class Player {
             throw new NotEnoughPiecesException(e.getMessage());
         }
         catch (NoPlayableHexException e) {
-            // increment totoro back to previous count
+            this.totoroCount += 1;
             throw new BuildConditionsNotMetException(e.getMessage());
         }
     }
@@ -126,7 +130,7 @@ public class Player {
             throw new NotEnoughPiecesException(e.getMessage());
         }
         catch (NoPlayableHexException e) {
-            // increment tigers back to previous count
+            this.tigerCount += 1;
             throw new BuildConditionsNotMetException(e.getMessage());
         }
     }

@@ -11,6 +11,7 @@ import tile.Tile;
 import java.util.ArrayList;
 
 public class SettlementTest {
+    /*
     private Settlement settlement1, settlement2, settlement3, settlement4;
     private Hex hex1, hex2, hex3, hex4;
 
@@ -101,6 +102,7 @@ public class SettlementTest {
         Assert.assertTrue(!hexes.contains(hex4));
     }
 
+    /*
     @Test
     public void testCheckingForTotoro() {
         Assert.assertTrue(!settlement3.hasTotoroSanctuary());
@@ -114,4 +116,5 @@ public class SettlementTest {
         settlement4.setHasTigerPlayground();
         Assert.assertTrue(settlement4.hasTigerPlayground());
     }
+    */
 }
