@@ -16,18 +16,19 @@ public class Ai {
     public Ai(World world){
         this.world = world;
     }
-        public GameActionMessage chooseMove(String gameID, int moveNumber, String playerID, Tile tileToBePlaced) throws IllegalTilePlacementException {
-            Hex hexToBePlacedNextTo = world.getLeftMostHex();
-            int newTileXCoordinate = hexToBePlacedNextTo.getLocation().getxCoordinate() - 1;
-            int newTileYCoordinate = hexToBePlacedNextTo.getLocation().getyCoordinate();
-            Location locationOfNewTile = new Location(newTileXCoordinate, newTileYCoordinate, 0);
 
-            int buildXCoordinate = newTileXCoordinate - 1;
-            int buildYCoordinate = newTileYCoordinate;
-            Location locationOnWhichToBuild = new Location(buildXCoordinate, buildYCoordinate, 0);
-            world.insertTileIntoTileManager(tileToBePlaced,locationOfNewTile,NORTHWEST_WEST);
-            return new GameActionMessage(gameID, moveNumber, playerID, tileToBePlaced, locationOfNewTile, NORTHWEST_WEST, FOUNDED_SETTLEMENT, locationOnWhichToBuild, GRASSLANDS);
+    public GameActionMessage chooseMove(String gameID, int moveNumber, String playerID, Tile tileToBePlaced) throws IllegalTilePlacementException {
+        Hex hexToBePlacedNextTo = world.getLeftMostHex();
+        int newTileXCoordinate = hexToBePlacedNextTo.getLocation().getxCoordinate() - 1;
+        int newTileYCoordinate = hexToBePlacedNextTo.getLocation().getyCoordinate();
+        Location locationOfNewTile = new Location(newTileXCoordinate, newTileYCoordinate, 0);
 
-        }
+        int buildXCoordinate = newTileXCoordinate - 1;
+        int buildYCoordinate = newTileYCoordinate;
+        Location locationOnWhichToBuild = new Location(buildXCoordinate, buildYCoordinate, 0);
+        world.insertTileIntoTileManager(tileToBePlaced,locationOfNewTile,NORTHWEST_WEST);
+        return new GameActionMessage(gameID, moveNumber, playerID, tileToBePlaced, locationOfNewTile, NORTHWEST_WEST, FOUNDED_SETTLEMENT, locationOnWhichToBuild, GRASSLANDS);
 
     }
+
+}

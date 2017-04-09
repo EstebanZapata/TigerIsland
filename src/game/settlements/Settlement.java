@@ -3,7 +3,7 @@ package game.settlements;
 import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.NoHexAtLocationException;
-import tile.*;
+import game.tile.*;
 import java.util.ArrayList;
 
 public class Settlement {

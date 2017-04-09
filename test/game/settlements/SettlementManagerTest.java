@@ -5,9 +5,9 @@ import game.world.rules.exceptions.IllegalTilePlacementException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import tile.*;
+import game.tile.*;
+import game.tile.orientation.*;
 import game.world.*;
-import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
@@ -21,9 +21,8 @@ public class SettlementManagerTest {
     @Before
     public void setUpSettlements() {
         this.world = new World();
-        this.settlementManager = new SettlementManager();
+        this.settlementManager = new SettlementManager(this.world);
         try {
-            this.world.placeFirstTile();
             expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
             expansionTile2 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
             hex1 = new Hex(expansionTile1, Terrain.JUNGLE);
@@ -78,7 +77,7 @@ public class SettlementManagerTest {
             world.insertTileIntoTileManager(expansionTile4, volcanoLocation4, TileOrientation.NORTHEAST_NORTHWEST);
 
             newSettlement.addHexToSettlement(expansionTile3.getLeftHexRelativeToVolcano());
-            this.settlementManager.expandSettlement(world, newSettlement, Terrain.JUNGLE);
+            this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
             ArrayList<Hex> test = newSettlement.getHexesFromSettlement();
             for (Hex testing : test ) {
                 System.out.println(testing.getLocation());

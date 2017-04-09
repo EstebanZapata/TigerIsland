@@ -6,11 +6,8 @@ import game.world.rules.exceptions.IllegalTilePlacementException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import tile.Hex;
-import tile.Location;
-import tile.Terrain;
-import tile.Tile;
-import tile.orientation.TileOrientation;
+import game.tile.*;
+import game.tile.orientation.*;
 
 import java.util.ArrayList;
 
@@ -174,7 +171,6 @@ public class SettlementTest {
     public void testGetPotentialSettlementHexes() {
         World world = new World();
         try {
-            world.placeFirstTile();
             Tile expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
             Tile expansionTile2 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
             Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
@@ -201,7 +197,6 @@ public class SettlementTest {
     @Test
     public void testGetHexesToExpandTo() {
         try {
-            world.placeFirstTile();
             Tile expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
             Tile expansionTile2 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
             Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
