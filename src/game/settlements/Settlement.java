@@ -83,7 +83,7 @@ public class Settlement {
             for (Location adjacentHexLocation : hexLocationsAdjacentToCenter) {
                 try {
                     Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                    if (settlementHexes.contains(adjacentHex) && adjacentHex.checkExpansionConditions(terrainType))
+                    if (!settlementHexes.contains(adjacentHex) && adjacentHex.checkExpansionConditions(terrainType))
                     {
                         potentialSettlementHexes.add(adjacentHex);
                     }
