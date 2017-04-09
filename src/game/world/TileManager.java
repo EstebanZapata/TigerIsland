@@ -120,6 +120,16 @@ public class TileManager {
         return hex;
     }
 
+    public Hex getHexRegardlessOfHeight(int x, int y) throws NoHexAtLocationException{
+        Hex hex = hexCoordinateSystem[getArrayCoordinateFromTrueCoordinate(x)][getArrayCoordinateFromTrueCoordinate(y)];
+        if (hex == null) {
+            throw new NoHexAtLocationException(String.format("No hex at %d %d", x, y));
+        }
+        else {
+            return hex;
+        }
+    }
+
     private boolean hexDoesNotExist(Hex hex) {
         return hex == null;
     }

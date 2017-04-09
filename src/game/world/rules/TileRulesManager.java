@@ -126,8 +126,13 @@ public class TileRulesManager {
         Location[] adjecentHexLocations = CoordinateSystemHelper.getAdjacentHexLocationsToTile(locationOfHexes);
 
         for (int i = 0; i < 12; i++) {
-            if (hexExistsAtLocationOrBaseLevelAtLocation(adjecentHexLocations[i])) {
-                return true;
+            try {
+                if (hexExistsAtLocationOrBaseLevelAtLocation(adjecentHexLocations[i])) {
+                    return true;
+                }
+            }
+            catch (NoHexAtLocationException e) {
+                continue;
             }
         }
         throw new TileNotAdjacentToAnotherException("Tile being placed is not adjacent to an existing game.tile");
@@ -153,24 +158,9 @@ public class TileRulesManager {
         }
     }
 
-    private boolean hexExistsAtLocationOrBaseLevelAtLocation(Location location) {
-        try {
-            Hex hex = tileManager.getHexByLocation(location);
-            return true;
-        }
-        catch (Exception e) {
-
-        }
-
-        try {
-            Hex hex = tileManager.getHexByCoordinate(location.getxCoordinate(), location.getyCoordinate(), 0);
-            return true;
-        }
-        catch (Exception e) {
-
-        }
-
-        return false;
+    private boolean hexExistsAtLocationOrBaseLevelAtLocation(Location location) throws NoHexAtLocationException {
+        Hex hex = tileManager.getHexRegardlessOfHeight(location.getxCoordinate(), location.getyCoordinate());
+        return true;
     }
 }
 

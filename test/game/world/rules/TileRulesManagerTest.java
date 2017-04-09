@@ -183,4 +183,23 @@ public class TileRulesManagerTest {
 
     }
 
+    @Test
+    public void testAbleToPlaceTileNextToCliff() throws Exception {
+        tileManager.placeFirstTile();
+
+        Location[] locationOnFirstLevel = new Location[] {new Location(1,-1,0), new Location(1,-2,0), new Location(0,-2,0)};
+        Location[] anotherLocationOnFirstLevel = new Location[] {new Location(1,0,0), new Location(2,0,0), new Location(2,1,0)};
+
+        Location[] locationOnSecondLevel = new Location[] {new Location(1,-1,1), new Location(2,0,1), new Location(1,0,1)};
+
+        Location[] locationNextToCliff = new Location[] {new Location(3,0,0), new Location(4,0,0), new Location(3,-1,0)};
+
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileOne, locationOnFirstLevel);
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileTwo, anotherLocationOnFirstLevel);
+        tileManager.insertTileIntoCoordinateSystemAndAddHexesToList(tileThree, locationOnSecondLevel );
+
+        Assert.assertTrue(tileRulesManager.ableToPlaceTileAtLocation(tileFour, locationNextToCliff));
+
+    }
+
 }
