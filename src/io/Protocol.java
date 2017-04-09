@@ -23,6 +23,8 @@ public class Protocol {
             "BEGIN ROUND " + rid +" of " + rounds,
             "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER "+ pid2,
             "MAKE YOUR MOVE IN GAME "+ gid+ " WITHIN "+timeMove+" SECONDS: MOVE "+moveNum+" PLACE " + tile,
+            "GAME A MOVE 1 PLAYER " + pid2 + " PLACE ROCK+LAKE AT 2 1 3 2 BUILD TIGER PLAYGROUND AT 2 -1 -1",
+            "GAME " + gid + " MOVE " + moveNum + " PLAYER " + pid + " PLACE ROCK+LAKE AT 1 1 0 2 BUILD TOTORO SANCTUARY AT 2 -1 2",
             "THANK YOU FOR PLAYING! GOODBYE"
       };
     public String processInput(String theInput) {

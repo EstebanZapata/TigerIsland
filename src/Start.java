@@ -64,29 +64,29 @@ public class Start {
             addEmptyStringToServerQueue();
         }
 
-        if (actionToTake instanceof ClientMessage) {
+        else if (actionToTake instanceof ClientMessage) {
             stringsToServerQueue.add(((ClientMessage) actionToTake).getInformation());
             return;
         }
 
-        if (actionToTake instanceof PlayerIdMessage) {
+        else if (actionToTake instanceof PlayerIdMessage) {
             myPlayerId = ((PlayerIdMessage) actionToTake).getPlayerId();
             addEmptyStringToServerQueue();
             return;
         }
 
-        if (actionToTake instanceof NewMatchMessage) {
+        else if (actionToTake instanceof NewMatchMessage) {
             currentOpponentPlayerId = ((NewMatchMessage) actionToTake).getOpponentId();
             addEmptyStringToServerQueue();
         }
 
-        if (actionToTake instanceof GameCommandMessage) {
+        else if (actionToTake instanceof GameCommandMessage) {
             GameCommandMessage gameCommandMessage = (GameCommandMessage) actionToTake;
 
             String gameId = gameCommandMessage.getGameId();
 
             if (gameHasNotBeenCreated(gameId)) {
-                createGameAndUpdateMaps(gameId, myPlayerId);
+                createGameAndUpdateMaps(gameId);
             }
 
             GameThreadCommunication communication = getGameThreadCommunicationFromId.get(gameId);
@@ -100,8 +100,43 @@ public class Start {
 
         }
 
-        if (actionToTake instanceof DisconnectMessage) {
+        else if (actionToTake instanceof GameEndMessage) {
+            String gameToEnd = ((GameEndMessage) actionToTake).getGameId();
+
+            getGameFromGameId.remove(gameToEnd);
+            getGameThreadCommunicationFromId.remove(gameToEnd);
+
+            addEmptyStringToServerQueue();
+        }
+
+        else if (actionToTake instanceof GameActionMessage) {
+            GameActionMessage gameActionMessage = (GameActionMessage) actionToTake;
+
+            if (gameActionMessage.getPlayerId().equals(myPlayerId)) {
+
+            }
+            else  {
+                String gameId = gameActionMessage.getGameId();
+
+                if (gameHasNotBeenCreated(gameId)) {
+                    createGameAndUpdateMaps(gameId);
+                }
+
+                GameThreadCommunication gameThreadCommunication = getGameThreadCommunicationFromId.get(gameActionMessage.getGameId());
+                gameThreadCommunication.getGameMessageQueue().add(actionToTake);
+            }
+
+            addEmptyStringToServerQueue();
+        }
+
+        else if (actionToTake instanceof DisconnectMessage) {
             client.disconnect();
+            getGameFromGameId.clear();
+            getGameThreadCommunicationFromId.clear();
+
+            addEmptyStringToServerQueue();
+
+            System.exit(0);
         }
 
     }
@@ -122,13 +157,13 @@ public class Start {
         }
     }
 
-    private static void createGameAndUpdateMaps(String gameId, String myPlayerId) {
+    private static void createGameAndUpdateMaps(String gameId) {
         BlockingQueue<Message> gameMessageQueue = new LinkedBlockingQueue<>();
         BlockingQueue<Message> gameResponseQueue = new LinkedBlockingQueue<>();
 
         GameThreadCommunication gameThreadCommunication = new GameThreadCommunication(gameMessageQueue, gameResponseQueue);
 
-        GameThread game = new GameThread(gameThreadCommunication,  myPlayerId);
+        GameThread game = new GameThread(gameThreadCommunication,  myPlayerId, currentOpponentPlayerId);
 
         getGameFromGameId.put(gameId, game);
         getGameThreadCommunicationFromId.put(gameId, gameThreadCommunication);

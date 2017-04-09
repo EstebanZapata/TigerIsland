@@ -50,6 +50,15 @@ public class Server extends Thread {
                         System.out.println("Server: " + outputLine);
                     }
                 }
+                if (inputLine.contains("GAME") && inputLine.contains("MOVE")) {
+                    outputLine = kkp.processInput(inputLine);
+                    out.println(outputLine);
+                    System.out.println("Server: " + outputLine);
+
+                    outputLine = kkp.processInput(inputLine);
+                    out.println(outputLine);
+                    System.out.println("Server: " + outputLine);
+                }
                 else {
                     outputLine = kkp.processInput(inputLine);
                     out.println(outputLine);

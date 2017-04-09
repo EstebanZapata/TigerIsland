@@ -28,7 +28,7 @@ public class Client extends Thread {
                 BufferedReader in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
         ) {
             String stringFromServer;
-            while (((stringFromServer = in.readLine()) != null) && !disconnect) {
+            while (!disconnect && ((stringFromServer = in.readLine()) != null)) {
                 System.out.println("Server: " + stringFromServer);
 
                 stringsFromServerQueue.add(stringFromServer);

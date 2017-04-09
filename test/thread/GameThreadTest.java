@@ -15,6 +15,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class GameThreadTest {
     private String gameId;
     private String myPlayerId;
+    private String opponentPlayerId;
 
     private int moveNumber;
 
@@ -35,6 +36,7 @@ public class GameThreadTest {
     public void setupGameThread() {
         gameId = "Spaghetti";
         myPlayerId = "Spagett";
+        opponentPlayerId = "yoyo";
 
         moveNumber = 1;
 
@@ -43,7 +45,7 @@ public class GameThreadTest {
 
         GameThreadCommunication gameThreadCommunication = new GameThreadCommunication(gameMessageQueue, gameResponseQueue);
 
-        gameThread = new GameThread(gameThreadCommunication, myPlayerId);
+        gameThread = new GameThread(gameThreadCommunication, myPlayerId, opponentPlayerId);
 
         moveTimeInSeconds = 0.05;
 
@@ -84,17 +86,6 @@ public class GameThreadTest {
         Assert.assertFalse(gameResponseQueue.isEmpty());
     }
 
-    @Test
-    public void testUponCreationOpponentPlayerIdHasNotBeenSet() {
-        Assert.assertTrue(gameThread.opponentPlayerIdHasNotBeenSet());
-    }
-
-    @Test
-    public void testUponSettingOpponentPlayerIdCorrespondingBooleanIsFalse() {
-        gameThread.setOpponentPlayerId("Evil Spagett");
-
-        Assert.assertFalse(gameThread.opponentPlayerIdHasNotBeenSet());
-    }
 
     @Test
     public void testSameGameIdPassedIsReturned() {

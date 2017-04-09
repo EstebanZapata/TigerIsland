@@ -22,9 +22,7 @@ public class GameThread extends MyThread {
     private String myPlayerId;
     private String opponentPlayerId;
 
-    private boolean opponentPlayerIdHasNotBeenSet;
-
-    public GameThread(GameThreadCommunication communication, String myPlayerId) {
+    public GameThread(GameThreadCommunication communication, String myPlayerId, String opponentPlayerId) {
         super();
 
         this.gameMessageQueue = communication.getGameMessageQueue();
@@ -33,8 +31,7 @@ public class GameThread extends MyThread {
         this.game = new Game();
 
         this.myPlayerId = myPlayerId;
-
-        opponentPlayerIdHasNotBeenSet = true;
+        this.opponentPlayerId = opponentPlayerId;
     }
 
     @Override
@@ -55,18 +52,19 @@ public class GameThread extends MyThread {
     }
 
     private void processMessage(Message message) {
-        System.out.println("Game received message");
-
         Message response = null;
         if (message instanceof GameCommandMessage) {
+            System.out.println("Game received command");
             response = processCommand((GameCommandMessage) message);
+
+            gameResponseQueue.add(response);
         }
 
         if (message instanceof GameActionMessage) {
+            System.out.println("Game received opponent action");
             processOpponentAction((GameActionMessage) message);
         }
 
-        gameResponseQueue.add(response);
 
     }
 
@@ -92,16 +90,8 @@ public class GameThread extends MyThread {
         return mockResponse;
     }
 
-    public boolean opponentPlayerIdHasNotBeenSet() {
-        return opponentPlayerIdHasNotBeenSet;
-    }
-
-    public void setOpponentPlayerId(String opponentPlayerId) {
-        this.opponentPlayerId = opponentPlayerId;
-        opponentPlayerIdHasNotBeenSet = false;
-    }
-
     private void processOpponentAction(GameActionMessage message) {
+
 
     }
 }
