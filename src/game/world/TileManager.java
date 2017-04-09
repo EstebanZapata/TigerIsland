@@ -137,5 +137,27 @@ public class TileManager {
         return this.allHexesInWorld;
     }
 
+    public Hex getLeftmostHexOnBoard() {
+        try {
+            Hex leftmostHex;
+            leftmostHex = getHexByCoordinate(0,0,0);
+
+            int leftmostHexXCoordinate = 0;
+
+            for (Hex hex : allHexesInWorld) {
+                Location locationToCheck = hex.getLocation();
+                int xCoordinateToCompare = locationToCheck.getxCoordinate();
+                if (xCoordinateToCompare < leftmostHexXCoordinate) {
+                    leftmostHex = hex;
+                    leftmostHexXCoordinate = xCoordinateToCompare;
+                }
+            }
+
+            return leftmostHex;
+        } catch (NoHexAtLocationException e) {
+            return null;
+        }
+    }
+
 
 }
