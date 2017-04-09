@@ -5,7 +5,7 @@ import game.player.exceptions.*;
 import game.settlements.*;
 import game.settlements.exceptions.*;
 import game.world.*;
-import tile.*;
+import game.tile.*;
 
 public class Player {
     private int score;
@@ -73,43 +73,33 @@ public class Player {
     }
 
     public void expandSettlement(Settlement existingSettlement) throws
+            SettlementCannotBeBuiltOnVolcanoException,
             NotEnoughPiecesException,
             NoHexesToExpandToException
     {
+        int numberOfVillagersRequiredToExpand = this.settlementManager.getNumberOfVillagersRequiredToExpand(existingSettlement, Terrain.GRASSLANDS);
         try {
-            int numberOfVillagersRequiredToExpand = this.settlementManager.getNumberOfVillagersRequiredToExpand(Terrain.GRASSLANDS);
-            try {
-                this.useVillagers(numberOfVillagersRequiredToExpand);
-                this.settlementManager.expandSettlement(existingSettlement, Terrain.GRASSLANDS);
-            }
-            catch (NotEnoughPiecesException e) {
-                throw new NotEnoughPiecesException(e.getMessage());
-            }
-            catch (NoHexesToExpandToException e) {
-                this.villagerCount += numberOfVillagersRequiredToExpand;
-                throw new NoHexesToExpandToException(e.getMessage());
-            }
+            this.useVillagers(numberOfVillagersRequiredToExpand);
+            this.settlementManager.expandSettlement(existingSettlement, Terrain.GRASSLANDS);
         }
-        catch (SettlementCannotBeBuiltOnVolcanoException e) {
-
+        catch (NoHexesToExpandToException e) {
+            this.villagerCount += numberOfVillagersRequiredToExpand;
+            throw new NoHexesToExpandToException(e.getMessage());
         }
     }
 
     public void mergeSettlements(World existingWorld) {
-        this.settlementManager.mergeSettlements();
+        // this.settlementManager.mergeSettlements();
     }
 
-    public void buildTotoroSanctuary() throws
+    public void buildTotoroSanctuary(Hex sanctuaryHex) throws
             NotEnoughPiecesException,
             BuildConditionsNotMetException
     {
         try {
             this.useTotoro();
-            this.settlementManager.buildTotoroSanctuary();
+            this.settlementManager.buildTotoroSanctuary(sanctuaryHex);
             this.score += Settings.BUILD_TOTORO_SANCTUARY_POINTS;
-        }
-        catch (NotEnoughPiecesException e) {
-            throw new NotEnoughPiecesException(e.getMessage());
         }
         catch (NoPlayableHexException e) {
             this.totoroCount += 1;
@@ -117,17 +107,18 @@ public class Player {
         }
     }
 
-    public void buildTigerPlayground(Hex hexToBuildOn) throws
+    public void buildTigerPlayground(Hex playgroundHex) throws
             NotEnoughPiecesException,
             BuildConditionsNotMetException
     {
         try {
             this.useTiger();
-            this.settlementManager.buildTigerPlayground(hexToBuildOn);
+            this.settlementManager.buildTigerPlayground(playgroundHex);
             this.score += Settings.BUILD_TIGER_PLAYGROUND_POINTS;
         }
-        catch (NotEnoughPiecesException e) {
-            throw new NotEnoughPiecesException(e.getMessage());
+        catch (SettlementAlreadyHasTigerPlaygroundException e) {
+            this.tigerCount += 1;
+            throw new BuildConditionsNotMetException(e.getMessage());
         }
         catch (NoSettlementOnAdjacentHexesException e) {
             this.tigerCount += 1;

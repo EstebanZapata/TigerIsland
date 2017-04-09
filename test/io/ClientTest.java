@@ -30,6 +30,7 @@ public class ClientTest {
         secondClient = new Client("Alix", port-1, stringsFromServerQueue, stringsToServerQueue);
     }
 
+    /*
     @Test
     public void testClientCanReceiveStringFromServer() throws Exception {
         Assert.assertTrue(stringsFromServerQueue.isEmpty());
@@ -40,7 +41,9 @@ public class ClientTest {
         Assert.assertFalse(stringsFromServerQueue.isEmpty());
 
     }
+    */
 
+    /*
     @Test
     public void testClientCanSendStringToServer() throws Exception {
         String stringToServer = "Spaghetti";
@@ -58,6 +61,7 @@ public class ClientTest {
 
     }
 
+*/
 
     @After
     public void teardown() throws Exception{

@@ -2,6 +2,10 @@ package game.tile;
 
 import game.settlements.Settlement;
 import game.*;
+import game.settlements.exceptions.HexDoesNotMeetConditionsException;
+import game.settlements.exceptions.SettlementAlreadyExistsOnHexException;
+import game.settlements.exceptions.SettlementCannotBeBuiltOnVolcanoException;
+import game.settlements.exceptions.SettlementHeightRequirementException;
 
 public class Hex {
     private Terrain terrain;
@@ -43,59 +47,75 @@ public class Hex {
         this.settlement = settlement;
     }
 
-    public boolean checkFoundingConditions() {
+    public void checkFoundingConditions() throws
+            SettlementCannotBeBuiltOnVolcanoException,
+            SettlementHeightRequirementException,
+            SettlementAlreadyExistsOnHexException
+    {
         if (this.terrain == Terrain.VOLCANO) {
-            return false;
+            String errorMessage = "A settlement cannot be built on a volcano.";
+            throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
         }
 
         if (this.getHeight() != Settings.START_SETTLEMENT_HEX_HEIGHT_REQUIREMENT) {
-            return false;
+            String errorMessage = "Hex does not meet height requirement to found a settlement.";
+            throw new SettlementHeightRequirementException(errorMessage);
         }
 
         if (this.settlement != null) {
-            return false;
+            String errorMessage = "A settlement already exists on the hex.";
+            throw new SettlementAlreadyExistsOnHexException(errorMessage);
         }
-
-        return true;
     }
 
-    public boolean checkExpansionConditions(Terrain terrainType) {
+    public void checkExpansionConditions(Terrain terrainType) throws
+            HexDoesNotMeetConditionsException,
+            SettlementAlreadyExistsOnHexException
+    {
         if (this.terrain != terrainType) {
-            return false;
+            String errorMessage = "Hex does not match terrain type passed in.";
+            throw new HexDoesNotMeetConditionsException(errorMessage);
         }
 
         if (this.settlement != null) {
-            return false;
+            String errorMessage = "A settlement already exists on the hex.";
+            throw new SettlementAlreadyExistsOnHexException(errorMessage);
         }
-
-        return true;
     }
 
-    public boolean checkPlaygroundConditions() {
+    public void checkPlaygroundConditions() throws
+            SettlementCannotBeBuiltOnVolcanoException,
+            SettlementHeightRequirementException,
+            SettlementAlreadyExistsOnHexException
+    {
         if (this.terrain == Terrain.VOLCANO) {
-            return false;
+            String errorMessage = "A settlement cannot be built on a volcano.";
+            throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
         }
 
         if (this.getHeight() < Settings.START_PLAYGROUND_HEX_HEIGHT_REQUIREMENT) {
-            return false;
+            String errorMessage = "Hex does not meet height requirement to start a playground.";
+            throw new SettlementHeightRequirementException(errorMessage);
         }
 
         if (this.settlement != null) {
-            return false;
+            String errorMessage = "A settlement already exists on the hex.";
+            throw new SettlementAlreadyExistsOnHexException(errorMessage);
         }
-
-        return true;
     }
 
-    public boolean checkSanctuaryConditions() {
+    public void checkSanctuaryConditions() throws
+            SettlementCannotBeBuiltOnVolcanoException,
+            SettlementAlreadyExistsOnHexException
+    {
         if (this.terrain == Terrain.VOLCANO) {
-            return false;
+            String errorMessage = "A settlement cannot be built on a volcano.";
+            throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
         }
 
         if (this.settlement != null) {
-            return false;
+            String errorMessage = "A settlement already exists on the hex.";
+            throw new SettlementAlreadyExistsOnHexException(errorMessage);
         }
-
-        return true;
     }
 }

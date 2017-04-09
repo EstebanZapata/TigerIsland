@@ -62,6 +62,7 @@ public class World {
         return tileManager.getLeftMostHex();
     }
 
-
-
+    public Hex getHexRegardlessOfHeight(int x, int y) throws NoHexAtLocationException {
+        return tileManager.getHexRegardlessOfHeight(x, y);
+    }
 }

@@ -6,17 +6,19 @@ import game.settlements.*;
 import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.*;
-import tile.*;
+import game.tile.*;
 
 public class Game {
     public World world;
     public Player player1;
     public Player player2;
+    public Ai ai;
 
     public Game() {
         this.world = new World();
         this.player1 = new Player(this.world);
         this.player2 = new Player(this.world);
+        this.ai = new Ai(this.world);
     }
 
     public Tile drawTile() {
@@ -78,59 +80,28 @@ public class Game {
             NotEnoughPiecesException,
             SettlementAlreadyExistsOnHexException
     {
-        try {
-            currentlyActivePlayer.foundSettlement(settlementHex);
-        }
-        catch (NotEnoughPiecesException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (SettlementAlreadyExistsOnHexException e) {
-            System.out.println(e.getMessage());
-        }
+        currentlyActivePlayer.foundSettlement(settlementHex);
     }
 
     public void expandSettlement(Player currentlyActivePlayer, Settlement existingSettlement) throws
+            SettlementCannotBeBuiltOnVolcanoException,
             NotEnoughPiecesException,
             NoHexesToExpandToException
     {
-        try {
-            currentlyActivePlayer.expandSettlement(existingSettlement);
-        }
-        catch (NotEnoughPiecesException e) {
-            throw new NotEnoughPiecesException(e.getMessage());
-        }
-        catch (NoHexesToExpandToException e) {
-            throw new NoHexesToExpandToException(e.getMessage());
-        }
+        currentlyActivePlayer.expandSettlement(existingSettlement);
     }
 
-    public void buildTotoroSanctuary(Player currentlyActivePlayer) throws
+    public void buildTotoroSanctuary(Player currentlyActivePlayer, Hex sanctuaryHex) throws
             NotEnoughPiecesException,
             BuildConditionsNotMetException
     {
-        try {
-            currentlyActivePlayer.buildTotoroSanctuary();
-        }
-        catch (NotEnoughPiecesException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (BuildConditionsNotMetException e) {
-            System.out.println(e.getMessage());
-        }
+        currentlyActivePlayer.buildTotoroSanctuary(sanctuaryHex);
     }
 
-    public void buildTigerPlayground(Player currentlyActivePlayer, Hex hexToBuildOn) throws
+    public void buildTigerPlayground(Player currentlyActivePlayer, Hex playgroundHex) throws
             NotEnoughPiecesException,
             BuildConditionsNotMetException
     {
-        try {
-            currentlyActivePlayer.buildTigerPlayground(hexToBuildOn);
-        }
-        catch (NotEnoughPiecesException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (BuildConditionsNotMetException e) {
-            System.out.println(e.getMessage());
-        }
+        currentlyActivePlayer.buildTigerPlayground(playgroundHex);
     }
 }

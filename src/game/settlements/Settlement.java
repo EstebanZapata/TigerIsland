@@ -67,20 +67,26 @@ public class Settlement {
         return this.hasTiger;
     }
 
-    public boolean checkPlaygroundSettlementConditions() {
-        return (this.hasTiger == false);
+    public void checkPlaygroundSettlementConditions() throws SettlementAlreadyHasTigerPlaygroundException {
+        if (this.hasTiger == true) {
+            String errorMessage = "A tiger already exists on the settlement.";
+            throw new SettlementAlreadyHasTigerPlaygroundException(errorMessage);
+        }
     }
 
-    public boolean checkSanctuarySettlementConditions() {
+    public void checkSanctuarySettlementConditions() throws
+            SettlementDoesNotSizeRequirementsException,
+            SettlementAlreadyHasTotoroSanctuaryException
+    {
         if (this.settlementHexes.size() < 5) {
-            return false;
+            String errorMessage = "The settlement does not meet the size requirement for a totoro sanctuary.";
+            throw new SettlementDoesNotSizeRequirementsException(errorMessage);
         }
 
         if (this.hasTotoro == true) {
-            return false;
+            String errorMessage = "A tiger already exists on the settlement.";
+            throw new SettlementAlreadyHasTotoroSanctuaryException(errorMessage);
         }
-
-        return true;
     }
 
     public ArrayList<Hex> getHexesToExpandTo(World world, Terrain terrainType) throws
@@ -113,13 +119,20 @@ public class Settlement {
         for (Location adjacentHexLocation : hexLocationsAdjacentToCenter) {
             try {
                 Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                if (!settlementHexes.contains(adjacentHex) && (!potentialSettlementHexes.contains(adjacentHex)) && adjacentHex.checkExpansionConditions(terrainType))
+                adjacentHex.checkExpansionConditions(terrainType);
+                if (!settlementHexes.contains(adjacentHex) && (!potentialSettlementHexes.contains(adjacentHex)))
                 {
                     potentialSettlementHexes.add(adjacentHex);
                     return getPotentialSettlementHexes(adjacentHex, world, terrainType, potentialSettlementHexes);
                 }
             }
             catch (NoHexAtLocationException e) {
+                System.out.println(e.getMessage());
+            }
+            catch (HexDoesNotMeetConditionsException e) {
+                System.out.println(e.getMessage());
+            }
+            catch (SettlementAlreadyExistsOnHexException e) {
                 System.out.println(e.getMessage());
             }
         }
