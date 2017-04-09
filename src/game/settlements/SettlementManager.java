@@ -1,7 +1,5 @@
 package game.settlements;
 
-import game.player.Player;
-import game.player.exceptions.NotEnoughPiecesException;
 import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.*;
@@ -9,22 +7,25 @@ import tile.*;
 import java.util.ArrayList;
 
 public class SettlementManager {
-    private ArrayList<Settlement> settlements;
+    public ArrayList<Settlement> settlements;
 
     public SettlementManager() {
         this.settlements = new ArrayList<Settlement>();
     }
 
-    public void foundSettlement(World world) throws NoPlayableHexException {
+    public Settlement foundSettlement(Hex hex) throws SettlementAlreadyExistsOnHexException {
+        Settlement newSettlement = new Settlement(hex);
+        this.settlements.add(newSettlement);
+        return newSettlement;
+    }
+
+    public Hex chooseHexForSettlement(World world) throws NoPlayableHexException {
         ArrayList<Hex> hexes = world.getAllHexesInWorld();
 
         // for now, choose first possible hex that meets conditions
         for (Hex hex : hexes) {
             if (hex.checkSettlementConditions()) {
-                Settlement newSettlement = new Settlement(hex);
-                this.settlements.add(newSettlement);
-                hex.setSettlement(newSettlement);
-                return;
+                return hex;
             }
         }
 
@@ -64,22 +65,29 @@ public class SettlementManager {
         }
     }
 
-    public void expandSettlement(World world, Terrain terrainType) throws
+    public void expandSettlement(World world, Settlement existingSettlement, Terrain terrainType) throws
             SettlementCannotBeBuiltOnVolcanoException,
             NoHexesToExpandToException
     {
-        Settlement existingSettlement = chooseSettlementToExpandTo(world, terrainType);
-        try {
-            ArrayList<Hex> hexesToExpandTo = existingSettlement.getHexesToExpandTo(world, terrainType);
-            for (Hex hexToExpandTo : hexesToExpandTo) {
-                existingSettlement.addHexToSettlement(hexToExpandTo);
+        while (true) {
+            try {
+                ArrayList<Hex> hexesToExpandTo = existingSettlement.getHexesToExpandTo(world, terrainType);
+                for (Hex hexToExpandTo : hexesToExpandTo) {
+                    try {
+                        existingSettlement.addHexToSettlement(hexToExpandTo);
+                    }
+                    catch (SettlementAlreadyExistsOnHexException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
             }
-        }
-        catch (SettlementCannotBeBuiltOnVolcanoException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (NoHexesToExpandToException e) {
-            System.out.println(e.getMessage());
+            catch (SettlementCannotBeBuiltOnVolcanoException e) {
+                System.out.println(e.getMessage());
+            }
+            catch (NoHexesToExpandToException e) {
+                System.out.println(e.getMessage());
+                break;
+            }
         }
     }
 
@@ -104,6 +112,9 @@ public class SettlementManager {
                 catch (NoSettlementOnHexException e) {
                     System.out.println(e.getMessage());
                 }
+                catch (SettlementAlreadyExistsOnHexException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
         catch (NoPlayableHexException e) {
@@ -114,6 +125,7 @@ public class SettlementManager {
     public void buildTigerPlayground(World world) throws NoPlayableHexException {
         try {
             Hex playgroundHex = chooseNewPlaygroundHex(world);
+
             Location playgroundHexLocation = playgroundHex.getLocation();
             Location[] adjacentHexLocationsToPlaygroundHex = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(playgroundHexLocation);
             for (Location hexLocation : adjacentHexLocationsToPlaygroundHex) {
@@ -130,6 +142,9 @@ public class SettlementManager {
                     System.out.println(e.getMessage());
                 }
                 catch (NoSettlementOnHexException e) {
+                    System.out.println(e.getMessage());
+                }
+                catch (SettlementAlreadyExistsOnHexException e) {
                     System.out.println(e.getMessage());
                 }
             }
@@ -188,7 +203,7 @@ public class SettlementManager {
             }
         }
 
-        String errorMessage = String.format("There are no playable hexes for the player to build a playground on.");
+        String errorMessage = String.format("There are no playable hexes for the player to build a sanctuary on.");
         throw new NoPlayableHexException(errorMessage);
     }
 
