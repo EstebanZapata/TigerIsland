@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import game.tile.Terrain;
 import game.tile.Tile;
+import thread.message.GameActionMessage;
 import thread.message.GameCommandMessage;
 import thread.message.Message;
 
@@ -44,7 +45,7 @@ public class GameThreadTest {
 
         gameThread = new GameThread(gameThreadCommunication, myPlayerId);
 
-        moveTimeInSeconds = 0.10;
+        moveTimeInSeconds = 0.05;
 
         tileToPlace = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
 
@@ -81,5 +82,55 @@ public class GameThreadTest {
         Thread.sleep((int) Math.floor(moveTimeWithSafetyAndTestOverhead));
 
         Assert.assertFalse(gameResponseQueue.isEmpty());
+    }
+
+    @Test
+    public void testUponCreationOpponentPlayerIdHasNotBeenSet() {
+        Assert.assertTrue(gameThread.opponentPlayerIdHasNotBeenSet());
+    }
+
+    @Test
+    public void testUponSettingOpponentPlayerIdCorrespondingBooleanIsFalse() {
+        gameThread.setOpponentPlayerId("Evil Spagett");
+
+        Assert.assertFalse(gameThread.opponentPlayerIdHasNotBeenSet());
+    }
+
+    @Test
+    public void testSameGameIdPassedIsReturned() {
+        gameThread.start();
+        gameMessageQueue.add(gameCommandMessage);
+
+        Message gameResponse = waitForMessage();
+
+        GameActionMessage gameActionMessage = (GameActionMessage)  gameResponse;
+        Assert.assertTrue(gameId.equals(gameActionMessage.getGameId()));
+    }
+
+    @Test
+    public void testSameMoveNumberPassedIsReturned() {
+        gameThread.start();
+        gameMessageQueue.add(gameCommandMessage);
+
+        GameActionMessage gameResponse = (GameActionMessage) waitForMessage();
+
+        Assert.assertTrue(moveNumber == gameResponse.getMoveNumber());
+    }
+
+    private Message waitForMessage() {
+        Message gameResponse = null;
+        while(true) {
+            try {
+                gameResponse = gameResponseQueue.take();
+            }
+            catch (Exception e) {
+
+            }
+            if (gameResponse != null) {
+                break;
+            }
+        }
+
+        return gameResponse;
     }
 }

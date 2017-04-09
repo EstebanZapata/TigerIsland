@@ -11,7 +11,7 @@ public class Client extends Thread {
     private BlockingQueue<String> stringsToServerQueue;
 
     public Client(String hostName, int portNumber,
-                  BlockingQueue<String> stringsFromServerQueue, BlockingQueue<String> stringsToServerQueue) throws IOException {
+                  BlockingQueue<String> stringsFromServerQueue, BlockingQueue<String> stringsToServerQueue)  {
         this.hostName = hostName;
         this.portNumber = portNumber;
         this.stringsFromServerQueue = stringsFromServerQueue;

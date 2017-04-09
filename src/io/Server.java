@@ -3,9 +3,14 @@ package io;
 import java.net.*;
 import java.io.*;
 
-public class Server {
-    public static
-    void main(String[] args) throws IOException {
+public class Server extends Thread {
+    private int portNumber;
+
+    public Server(int portNumber) {
+        this.portNumber = portNumber;
+    }
+
+    public static void main(String[] args) throws IOException {
         int startup = 0;
         if (args.length != 1) {
             System.err.println("Usage: java io.Server <port number>");
@@ -22,7 +27,7 @@ public class Server {
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
         ) {
-        
+
             String inputLine, outputLine;
             // Initiate conversation with client
             Protocol kkp = new Protocol();
@@ -57,5 +62,19 @@ public class Server {
                 + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public void run() {
+        try {
+            main(new String[]{"9999"});
+        }
+        catch (Exception e) {
+
+        }
+    }
+
+    public int getPortNumber() {
+        return this.portNumber;
     }
 }

@@ -10,7 +10,7 @@ import thread.message.Message;
 
 import java.util.concurrent.BlockingQueue;
 
-public class GameThread extends Thread {
+public class GameThread extends MyThread {
     public static final int MILLISECONDS_PER_SECOND = 1000;
     public static final double TIME_TO_TAKE_ACTION_SAFETY_BUFFER = 0.8;
 
@@ -34,12 +34,12 @@ public class GameThread extends Thread {
 
         this.myPlayerId = myPlayerId;
 
-        opponentPlayerIdHasNotBeenSet = false;
+        opponentPlayerIdHasNotBeenSet = true;
     }
 
     @Override
     public void run()  {
-        while(true) {
+        while(!stop) {
             Message message = null;
             try {
                 message = gameMessageQueue.take();
@@ -68,10 +68,11 @@ public class GameThread extends Thread {
 
         gameResponseQueue.add(response);
 
-
     }
 
     private Message processCommand(GameCommandMessage message) {
+        String gameId = message.getGameId();
+
         double secondsToTakeAction = message.getMoveTime();
 
         int moveNumber = message.getMoveNumber();
@@ -86,12 +87,12 @@ public class GameThread extends Thread {
 
         }
 
-        Message response = new GameActionMessage("PlaterID", moveNumber, myPlayerId, message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.BUILT_TIGER_PLAYGROUND, new Location(3,0,0), null);
+        Message mockResponse = new GameActionMessage(gameId, moveNumber, myPlayerId, message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.BUILT_TIGER_PLAYGROUND, new Location(3,0,0), null);
 
-        return response;
+        return mockResponse;
     }
 
-    private boolean opponentPlayerIdHasNotBeenSet() {
+    public boolean opponentPlayerIdHasNotBeenSet() {
         return opponentPlayerIdHasNotBeenSet;
     }
 
