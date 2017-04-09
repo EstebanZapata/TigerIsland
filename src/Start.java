@@ -19,6 +19,8 @@ public class Start {
     private static HashMap<String, GameThread> getGameFromGameId;
     private static HashMap<String, GameThreadCommunication> getGameThreadCommunicationFromId;
 
+    private static Client client;
+
     public static void main(String[] args) throws Exception {
         stringsFromServerQueue = new LinkedBlockingQueue<>();
         stringsToServerQueue = new LinkedBlockingQueue<>();
@@ -26,7 +28,7 @@ public class Start {
         getGameFromGameId = new HashMap<>();
         getGameThreadCommunicationFromId = new HashMap<>();
 
-        Client client = new Client("DESKTOP-6EG7I90", 9999, stringsFromServerQueue, stringsToServerQueue);
+        client = new Client("DESKTOP-6EG7I90", 9999, stringsFromServerQueue, stringsToServerQueue);
         client.start();
 
         while(true) {
@@ -37,7 +39,7 @@ public class Start {
 
     private static void runTournamentLoop() {
         String stringFromServer = waitForMessageFromServer();
-        Message actionToTake = ServerToClientParser.parseServerInputAndComposeAction(stringFromServer);
+        Message actionToTake = ServerToClientParser.parseServerInputAndComposeMessage(stringFromServer);
     }
 
     private static String waitForMessageFromServer() {
@@ -51,7 +53,7 @@ public class Start {
             }
 
             if (stringFromServer != null) {
-                Message actionToTake = ServerToClientParser.parseServerInputAndComposeAction(stringFromServer);
+                Message actionToTake = ServerToClientParser.parseServerInputAndComposeMessage(stringFromServer);
                 handleActionToTake(actionToTake);
             }
         }
@@ -96,6 +98,10 @@ public class Start {
 
             stringsToServerQueue.add(stringToServer);
 
+        }
+
+        if (actionToTake instanceof DisconnectMessage) {
+            client.disconnect();
         }
 
     }

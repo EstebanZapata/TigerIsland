@@ -10,6 +10,8 @@ public class Client extends Thread {
     private BlockingQueue<String> stringsFromServerQueue;
     private BlockingQueue<String> stringsToServerQueue;
 
+    private volatile boolean disconnect = false;
+
     public Client(String hostName, int portNumber,
                   BlockingQueue<String> stringsFromServerQueue, BlockingQueue<String> stringsToServerQueue)  {
         this.hostName = hostName;
@@ -26,7 +28,7 @@ public class Client extends Thread {
                 BufferedReader in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
         ) {
             String stringFromServer;
-            while ((stringFromServer = in.readLine()) != null) {
+            while (((stringFromServer = in.readLine()) != null) && !disconnect) {
                 System.out.println("Server: " + stringFromServer);
 
                 stringsFromServerQueue.add(stringFromServer);
@@ -65,6 +67,10 @@ public class Client extends Thread {
         }
 
 
+    }
+
+    public void disconnect() {
+        this.disconnect = true;
     }
 
 

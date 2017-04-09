@@ -14,7 +14,7 @@ public class ServerToClientParser {
     private static String userName = "<userName>";
     private static String userPassword = "<password>";
 
-    public static Message parseServerInputAndComposeAction(String serverInput){
+    public static Message parseServerInputAndComposeMessage(String serverInput){
         String parts[] = serverInput.split(" ");
 
         Message actionToTake = null;
@@ -55,8 +55,8 @@ public class ServerToClientParser {
             actionToTake = new GameCommandMessage(gameId, moveTime, moveNumber, tileToPlace);
         }
 
-        else if (parts[0].equals("GAME") && parts[2].equals("MOVE")){
-            if(parts[6].equals("FORFEITED") || parts[6].equals("LOST")) {
+        else if (parts[0].contains("GAME") && parts[2].contains("MOVE")){
+            if(parts[6].contains("FORFEITED") || parts[6].contains("LOST")) {
                 String gameId = parts[1];
 
                 actionToTake = new GameEndMessage(gameId);
@@ -66,10 +66,14 @@ public class ServerToClientParser {
             }
 
         }
-        else if (parts[0].equals("GAME") && parts[2].equals("OVER")){
+        else if (parts[0].contains("GAME") && parts[2].contains("OVER")){
             String gameIdToEnd = parts[1];
 
             actionToTake = new GameEndMessage(gameIdToEnd);
+        }
+        else if (serverInput.contains(ServerStrings.THANK_YOU_FOR_PLAYING)) {
+            actionToTake = new DisconnectMessage();
+
         }
         else {
             actionToTake = Message.NO_ACTION;
@@ -106,20 +110,20 @@ public class ServerToClientParser {
 
         BuildAction buildAction = null;
 
-        String serverBuildX = null;
-        String serverBuildY = null;
-        String serverBuildZ = null;
+        String serverBuildX = "0";
+        String serverBuildY = "0";
+        String serverBuildZ = "0";
 
         Terrain terrainToExpandOnto = null;
 
-        if (parts[13].equals("FOUND")) {
+        if (parts[13].contains("FOUND")) {
             buildAction = BuildAction.FOUNDED_SETTLEMENT;
 
             serverBuildX = parts[16];
             serverBuildY = parts[17];
             serverBuildZ = parts[18];
         }
-        else if(parts[13].equals("EXPAND")) {
+        else if(parts[13].contains("EXPAND")) {
             buildAction = BuildAction.EXPANDED_SETTLEMENT;
 
             serverBuildX = parts[16];
@@ -128,21 +132,21 @@ public class ServerToClientParser {
 
             terrainToExpandOnto = stringToTerrain(parts[19]);
         }
-        else if(parts[13].equals("BUILD") && parts[14].equals("TOTORO")) {
+        else if(parts[13].contains("BUILD") && parts[14].contains("TOTORO")) {
             buildAction = BuildAction.BUILT_TOTORO_SANCTUARY;
 
             serverBuildX = parts[17];
             serverBuildY = parts[18];
             serverBuildZ = parts[19];
         }
-        else if(parts[13].equals("BUILD") && parts[14].equals("TIGER")) {
+        else if(parts[13].contains("BUILD") && parts[14].contains("TIGER")) {
             buildAction = BuildAction.BUILT_TIGER_PLAYGROUND;
 
             serverBuildX = parts[17];
             serverBuildY = parts[18];
             serverBuildZ = parts[19];
         }
-        else if(parts[13].equals("UNABLE")) {
+        else if(parts[13].contains("UNABLE")) {
             buildAction = BuildAction.UNABLE_TO_BUILD;
         }
 
@@ -157,11 +161,11 @@ public class ServerToClientParser {
     }
 
     private static Terrain stringToTerrain(String type) {
-        if(type.equals("JUNGLE"))
+        if(type.contains("JUNGLE"))
             return JUNGLE;
-        if(type.equals("LAKE"))
+        if(type.contains("LAKE"))
             return LAKE;
-        if(type.equals("GRASS"))
+        if(type.contains("GRASS"))
             return GRASSLANDS;
         else
             return ROCKY;
