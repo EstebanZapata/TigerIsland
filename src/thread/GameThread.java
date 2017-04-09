@@ -88,10 +88,12 @@ public class GameThread extends MyThread {
             Message aiResponse = null;
             try {
                 aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
+                return aiResponse;
+
             } catch (IllegalTilePlacementException e) {
                 e.printStackTrace();
+                return aiResponse;
             }
-            return aiResponse;
         }
         catch (InterruptedException e) {
             Message mockResponse = new GameActionMessage(gameId, moveNumber, myPlayerId, message.getTileToPlace(), new Location(1,0,0), TileOrientation.EAST_NORTHEAST, BuildAction.FOUNDED_SETTLEMENT, new Location(3,0,0), null);

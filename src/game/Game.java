@@ -25,6 +25,7 @@ public class Game {
         this.world = new World();
         this.player1 = new Player();
         this.player2 = new Player();
+        this.ai = new Ai(this.world);
     }
 
     public Tile drawTile() {

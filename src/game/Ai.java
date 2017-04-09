@@ -12,13 +12,12 @@ import static game.tile.Terrain.GRASSLANDS;
 import static game.tile.orientation.TileOrientation.NORTHWEST_WEST;
 
 public class Ai {
-    private World world;
+    public World world;
     public Ai(World world){
         this.world = world;
     }
         public GameActionMessage chooseMove(String gameID, int moveNumber, String playerID, Tile tileToBePlaced) throws IllegalTilePlacementException {
             Hex hexToBePlacedNextTo = world.getLeftMostHex();
-
             int newTileXCoordinate = hexToBePlacedNextTo.getLocation().getxCoordinate() - 1;
             int newTileYCoordinate = hexToBePlacedNextTo.getLocation().getyCoordinate();
             Location locationOfNewTile = new Location(newTileXCoordinate, newTileYCoordinate, 0);
