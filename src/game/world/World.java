@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 public class World {
-    private TileManager tileManager;
+    public TileManager tileManager;
     public TileRulesManager tileRulesManager;
 
     public World() {

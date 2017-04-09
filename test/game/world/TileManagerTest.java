@@ -89,15 +89,15 @@ public class TileManagerTest {
 
         int volcanoX = locationsOnBottomLayerAdjacentToFirstTile[0].getxCoordinate();
         int volcanoY = locationsOnBottomLayerAdjacentToFirstTile[0].getyCoordinate();
-        int volcanoZ = locationsOnBottomLayerAdjacentToFirstTile[0].getzCoordinate();
+        int volcanoZ = locationsOnBottomLayerAdjacentToFirstTile[0].getHeight();
 
         int leftX = locationsOnBottomLayerAdjacentToFirstTile[1].getxCoordinate();
         int leftY = locationsOnBottomLayerAdjacentToFirstTile[1].getyCoordinate();
-        int leftZ = locationsOnBottomLayerAdjacentToFirstTile[1].getzCoordinate();
+        int leftZ = locationsOnBottomLayerAdjacentToFirstTile[1].getHeight();
 
         int rightX = locationsOnBottomLayerAdjacentToFirstTile[2].getxCoordinate();
         int rightY = locationsOnBottomLayerAdjacentToFirstTile[2].getyCoordinate();
-        int rightZ = locationsOnBottomLayerAdjacentToFirstTile[2].getzCoordinate();
+        int rightZ = locationsOnBottomLayerAdjacentToFirstTile[2].getHeight();
 
 
         Assert.assertEquals(tileZero.getVolcanoHex(), tileManager.getHexByCoordinate(volcanoX,volcanoY,volcanoZ));
