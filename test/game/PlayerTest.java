@@ -1,5 +1,6 @@
 package game;
 
+import game.world.*;
 import game.player.Player;
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,9 +8,12 @@ import org.junit.Test;
 
 public class PlayerTest {
     Player myPlayer;
+    World myWorld;
+
     @Before
     public void setupPlayer(){
-        myPlayer = new Player();
+        this.myWorld = new World();
+        this.myPlayer = new Player(this.myWorld);
     }
 
     @Test

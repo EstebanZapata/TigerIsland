@@ -15,8 +15,8 @@ public class Game {
 
     public Game() {
         this.world = new World();
-        this.player1 = new Player();
-        this.player2 = new Player();
+        this.player1 = new Player(this.world);
+        this.player2 = new Player(this.world);
     }
 
     public Tile drawTile() {
@@ -94,7 +94,7 @@ public class Game {
             NoHexesToExpandToException
     {
         try {
-            currentlyActivePlayer.expandSettlement(world, existingSettlement);
+            currentlyActivePlayer.expandSettlement(existingSettlement);
         }
         catch (NotEnoughPiecesException e) {
             throw new NotEnoughPiecesException(e.getMessage());
@@ -109,7 +109,7 @@ public class Game {
             BuildConditionsNotMetException
     {
         try {
-            currentlyActivePlayer.buildTotoroSanctuary(world);
+            currentlyActivePlayer.buildTotoroSanctuary();
         }
         catch (NotEnoughPiecesException e) {
             System.out.println(e.getMessage());
@@ -119,12 +119,12 @@ public class Game {
         }
     }
 
-    public void buildTigerPlayground(Player currentlyActivePlayer) throws
+    public void buildTigerPlayground(Player currentlyActivePlayer, Hex hexToBuildOn) throws
             NotEnoughPiecesException,
             BuildConditionsNotMetException
     {
         try {
-            currentlyActivePlayer.buildTigerPlayground(world);
+            currentlyActivePlayer.buildTigerPlayground(hexToBuildOn);
         }
         catch (NotEnoughPiecesException e) {
             System.out.println(e.getMessage());

@@ -21,7 +21,7 @@ public class SettlementManagerTest {
     @Before
     public void setUpSettlements() {
         this.world = new World();
-        this.settlementManager = new SettlementManager();
+        this.settlementManager = new SettlementManager(this.world);
         try {
             this.world.placeFirstTile();
             expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
@@ -66,6 +66,47 @@ public class SettlementManagerTest {
     }
 
     @Test
+    public void testBuildTigerPlayground() throws
+            IllegalTilePlacementException,
+            SettlementAlreadyExistsOnHexException,
+            NoSettlementOnAdjacentHexesException
+    {
+        Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile4 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile5 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile6 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile7 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile8 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile9 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+
+        // 1st level
+        Location volcanoLocation3 = new Location(0, 2, 0);
+        Location volcanoLocation4 = new Location(2, 1, 0);
+        Location volcanoLocation5 = new Location(1, 0, 0);
+
+        // 2nd level
+        Location volcanoLocation6 = new Location(0, 2, 1);
+        Location volcanoLocation7 = new Location(0, 0, 1);
+        Location volcanoLocation8 = new Location(2, 1, 1);
+
+        // 3rd level
+        Location volcanoLocation9 = new Location(0, 0, 2);
+
+        world.insertTileIntoTileManager(expansionTile3, volcanoLocation3, TileOrientation.NORTHEAST_NORTHWEST);
+        world.insertTileIntoTileManager(expansionTile4, volcanoLocation4, TileOrientation.EAST_NORTHEAST);
+        world.insertTileIntoTileManager(expansionTile5, volcanoLocation5, TileOrientation.SOUTHEAST_EAST);
+
+        world.insertTileIntoTileManager(expansionTile6, volcanoLocation6, TileOrientation.SOUTHEAST_EAST);
+        world.insertTileIntoTileManager(expansionTile7, volcanoLocation7, TileOrientation.EAST_NORTHEAST);
+        world.insertTileIntoTileManager(expansionTile8, volcanoLocation8, TileOrientation.NORTHEAST_NORTHWEST);
+
+        world.insertTileIntoTileManager(expansionTile9, volcanoLocation9, TileOrientation.NORTHEAST_NORTHWEST);
+
+        Settlement expansion2Settlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
+        this.settlementManager.buildTigerPlayground(expansionTile9.getRightHexRelativeToVolcano());
+    }
+
+    @Test
     public void testExpandSettlement() {
         try {
             Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile2.getLeftHexRelativeToVolcano());
@@ -78,7 +119,7 @@ public class SettlementManagerTest {
             world.insertTileIntoTileManager(expansionTile4, volcanoLocation4, TileOrientation.NORTHEAST_NORTHWEST);
 
             newSettlement.addHexToSettlement(expansionTile3.getLeftHexRelativeToVolcano());
-            this.settlementManager.expandSettlement(world, newSettlement, Terrain.JUNGLE);
+            this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
             ArrayList<Hex> test = newSettlement.getHexesFromSettlement();
             for (Hex testing : test ) {
                 System.out.println(testing.getLocation());
