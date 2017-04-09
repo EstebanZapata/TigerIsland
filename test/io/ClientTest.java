@@ -56,7 +56,6 @@ public class ClientTest {
 
     }
 
-    
 
     @After
     public void teardown() throws Exception{
