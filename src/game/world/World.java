@@ -16,6 +16,8 @@ public class World {
         tileManager = new TileManager();
         tileRulesManager = new TileRulesManager(tileManager);
 
+        tileManager.placeFirstTile();
+
     }
 
     public void insertTileIntoTileManager(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) throws IllegalTilePlacementException {

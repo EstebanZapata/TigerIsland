@@ -1,5 +1,6 @@
 package game.world;
 
+import game.tile.FirstTile;
 import game.world.rules.exceptions.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,10 +38,11 @@ public class WorldTest {
 
     }
 
-    @Test(expected = SpecialFirstTileHasNotBeenPlacedException.class)
-    public void testMustPlaceSpecialFirstTileFirst() throws IllegalTilePlacementException {
-        world.insertTileIntoTileManager(tileOne, new Location(1,0,0), TileOrientation.SOUTHWEST_SOUTHEAST);
+    @Test
+    public void testWorldContainsSpecialStartingTileUponCreation() throws NoHexAtLocationException {
+        Assert.assertTrue(world.getHexByCoordinate(0,0,0).getOwner() instanceof FirstTile);
     }
+
 
     @Test(expected = SpecialFirstTileHasAlreadyBeenPlacedExeption.class)
     public void testSpecialFirstTileCannotBePlacedAgain() throws IllegalTilePlacementException {
@@ -50,8 +52,6 @@ public class WorldTest {
 
     @Test
     public void testGetHexByCoordinate() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByCoordinate(1,0,0));
@@ -61,8 +61,6 @@ public class WorldTest {
 
     @Test
     public void testGetHexByLocation() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(0,2,0), TileOrientation.NORTHWEST_WEST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByLocation(tileOne.getVolcanoHex().getLocation()));
@@ -72,8 +70,6 @@ public class WorldTest {
 
     @Test
     public void testGetHexByNewLocationObject() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(-2,-2,0), TileOrientation.WEST_SOUTHWEST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByLocation(new Location(-2,-2,0)));
@@ -83,22 +79,16 @@ public class WorldTest {
 
     @Test(expected = NoHexAtLocationException.class)
     public void testGetEmptyHexLocationByCoordinatesThrowsException() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.getHexByCoordinate(1,-1,0);
     }
 
     @Test(expected = NoHexAtLocationException.class)
     public void testGetEmptyHexLocationByLocationThrowsException() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.getHexByLocation(new Location(1,-2,0));
     }
 
     @Test
     public void testPlaceTileWithSouthwestSoutheastOrientation() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(2,1,0), TileOrientation.SOUTHWEST_SOUTHEAST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByCoordinate(2,1,0));
@@ -108,8 +98,6 @@ public class WorldTest {
 
     @Test
     public void testPlaceTileWithWestSouthwestOrientation() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(-2,-2,0), TileOrientation.WEST_SOUTHWEST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByCoordinate(-2,-2,0));
@@ -119,8 +107,6 @@ public class WorldTest {
 
     @Test
     public void testPlaceTileWithNorthwestWestOrientation() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(1,2,0), TileOrientation.NORTHWEST_WEST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByCoordinate(1,2,0));
@@ -130,8 +116,6 @@ public class WorldTest {
 
     @Test
     public void testPlaceTileWithNortheastNorthwestOrientation() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(2,0,0), TileOrientation.NORTHEAST_NORTHWEST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByCoordinate(2,0,0));
@@ -141,8 +125,6 @@ public class WorldTest {
 
     @Test
     public void testPlaceTileWithEastNortheastOrientation() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(2,2,0), TileOrientation.EAST_NORTHEAST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByCoordinate(2,2,0));
@@ -152,8 +134,6 @@ public class WorldTest {
 
     @Test
     public void testPlaceTileWithSoutheastEastOrientation() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(-2,1,0), TileOrientation.SOUTHEAST_EAST);
 
         Assert.assertEquals(tileOne.getVolcanoHex(), world.getHexByCoordinate(-2,1,0));
@@ -163,8 +143,6 @@ public class WorldTest {
 
     @Test
     public void testSuccessfullyPlaceTileOnAHigherLayer() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         setupBaseForHigherTiles();
 
         world.insertTileIntoTileManager(tileThree, new Location(0,0,1), TileOrientation.EAST_NORTHEAST);
@@ -176,8 +154,6 @@ public class WorldTest {
 
     @Test
     public void testSuccessfullyPlaceTileOnAnEvenHigherLayer() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         setupBaseForHigherTiles();
 
         world.insertTileIntoTileManager(tileThree, new Location(2,-1,0), TileOrientation.EAST_NORTHEAST);
@@ -193,22 +169,14 @@ public class WorldTest {
 
     }
 
-    @Test
-    public void testListOfAllHexesIsEmptyUponCreationOfWorld() {
-        Assert.assertTrue(world.getAllHexesInWorld().isEmpty());
-    }
 
     @Test
     public void testListOfAllHexesGainsHexesWhenInsertingFirstTile() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         Assert.assertEquals(5, world.getAllHexesInWorld().size());
     }
 
     @Test
     public void testListOfAllHexesGainsHexesWhenInsertingAnotherTile() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(1,2,0), TileOrientation.NORTHEAST_NORTHWEST);
 
         Assert.assertTrue(world.getAllHexesInWorld().contains(tileOne.getVolcanoHex()));
@@ -221,16 +189,12 @@ public class WorldTest {
 
     @Test(expected = TileNotAdjacentToAnotherException.class)
     public void testFailToPlaceTileOnBaseLevelDueToNotAdjacentToExistingTile() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileOne, new Location(2,0,0) , TileOrientation.EAST_NORTHEAST);
 
     }
 
     @Test(expected = AirBelowTileException.class)
     public void testFailToPlaceTileOnHigherLevelDueToAirBelowTile() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         setupBaseForHigherTiles();
 
         world.insertTileIntoTileManager(tileThree, new Location(1,-1,1), TileOrientation.SOUTHEAST_EAST);
@@ -238,8 +202,6 @@ public class WorldTest {
 
     @Test(expected = HexAlreadyAtLocationException.class)
     public void testFailToPlaceTileOnHigherLevelDueToOverlappingExistingTile() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         setupBaseForHigherTiles();
 
         world.insertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.WEST_SOUTHWEST);
@@ -249,8 +211,6 @@ public class WorldTest {
 
     @Test(expected = TileCompletelyOverlapsAnotherException.class)
     public void testFailToPlaceTileOnHigherLevelDueToCompleteCoverageOfTileBelow() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         setupBaseForHigherTiles();
 
         world.insertTileIntoTileManager(tileThree, new Location(1,0,1), TileOrientation.EAST_NORTHEAST);
@@ -258,8 +218,6 @@ public class WorldTest {
 
     @Test(expected = TopVolcanoDoesNotCoverBottomVolcanoException.class)
     public void testFailToPlaceTileOnHigherLevelDueToNotCoveringLowerVolcano() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         setupBaseForHigherTiles();
 
         world.insertTileIntoTileManager(tileThree, new Location(2,1,1), TileOrientation.WEST_SOUTHWEST);
@@ -267,8 +225,6 @@ public class WorldTest {
 
     @Test(expected = AirBelowTileException.class)
     public void testFailToPlaceTileOverInlet() throws IllegalTilePlacementException {
-        world.placeFirstTile();
-
         world.insertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.EAST_NORTHEAST);
         world.insertTileIntoTileManager(tileThree, new Location(0,-2,0), TileOrientation.SOUTHEAST_EAST);
 
