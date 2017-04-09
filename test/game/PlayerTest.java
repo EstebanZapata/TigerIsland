@@ -1,22 +1,24 @@
 package game;
 
-import game.player.Player;
 import game.world.*;
+import game.player.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class PlayerTest {
-    Player player;
+    Player myPlayer;
+    World myWorld;
 
     @Before
     public void setupPlayer(){
-        World world = new World();
-        player = new Player(world);
+        this.myWorld = new World();
+        this.myPlayer = new Player(this.myWorld);
     }
 
     @Test
     public void startUpScore(){
-        Assert.assertEquals(0, player.getScore());
+        Assert.assertEquals(0, myPlayer.getScore());
     }
+
 }

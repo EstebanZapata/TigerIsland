@@ -6,19 +6,17 @@ import game.settlements.*;
 import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.*;
-import game.tile.*;
+import tile.*;
 
 public class Game {
     public World world;
     public Player player1;
     public Player player2;
-    public Ai ai;
 
     public Game() {
         this.world = new World();
         this.player1 = new Player(this.world);
         this.player2 = new Player(this.world);
-        this.ai = new Ai(this.world);
     }
 
     public Tile drawTile() {
@@ -121,12 +119,12 @@ public class Game {
         }
     }
 
-    public void buildTigerPlayground(Player currentlyActivePlayer, Hex playgroundHex) throws
+    public void buildTigerPlayground(Player currentlyActivePlayer, Hex hexToBuildOn) throws
             NotEnoughPiecesException,
             BuildConditionsNotMetException
     {
         try {
-            currentlyActivePlayer.buildTigerPlayground(playgroundHex);
+            currentlyActivePlayer.buildTigerPlayground(hexToBuildOn);
         }
         catch (NotEnoughPiecesException e) {
             System.out.println(e.getMessage());

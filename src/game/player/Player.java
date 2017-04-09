@@ -5,7 +5,7 @@ import game.player.exceptions.*;
 import game.settlements.*;
 import game.settlements.exceptions.*;
 import game.world.*;
-import game.tile.*;
+import tile.*;
 
 public class Player {
     private int score;
@@ -95,7 +95,7 @@ public class Player {
         }
     }
 
-    public void mergeSettlements() {
+    public void mergeSettlements(World existingWorld) {
         this.settlementManager.mergeSettlements();
     }
 
@@ -117,19 +117,19 @@ public class Player {
         }
     }
 
-    public void buildTigerPlayground(Hex playgroundHex) throws
+    public void buildTigerPlayground(Hex hexToBuildOn) throws
             NotEnoughPiecesException,
             BuildConditionsNotMetException
     {
         try {
             this.useTiger();
-            this.settlementManager.buildTigerPlayground(playgroundHex);
+            this.settlementManager.buildTigerPlayground(hexToBuildOn);
             this.score += Settings.BUILD_TIGER_PLAYGROUND_POINTS;
         }
         catch (NotEnoughPiecesException e) {
             throw new NotEnoughPiecesException(e.getMessage());
         }
-        catch (NoPlayableHexException e) {
+        catch (NoSettlementOnAdjacentHexesException e) {
             this.tigerCount += 1;
             throw new BuildConditionsNotMetException(e.getMessage());
         }
