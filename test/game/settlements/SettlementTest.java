@@ -64,10 +64,13 @@ public class SettlementTest {
 
     @Test
     public void testRemovingAHexFromASettlement() {
-        Assert.assertTrue(settlement1.containsHex(hex2));
         try {
+            settlement1.addHexToSettlement(hex2);
+            Assert.assertTrue(settlement1.containsHex(hex2));
             settlement1.removeHexFromSettlement(hex2);
             Assert.assertTrue(!settlement1.containsHex(hex2));
+        } catch (SettlementAlreadyExistsOnHexException e) {
+            System.out.println(e.getMessage());
         } catch (SettlementCannotBeCompletelyWipedOutException e) {
             System.out.println(e.getMessage());
         }
@@ -100,11 +103,17 @@ public class SettlementTest {
 
     @Test
     public void testGettingHexesFromSettlement() {
-        ArrayList<Hex> hexes = settlement2.getHexesFromSettlement();
-        Assert.assertTrue(hexes.contains(hex1));
-        Assert.assertTrue(hexes.contains(hex2));
-        Assert.assertTrue(!hexes.contains(hex3));
-        Assert.assertTrue(!hexes.contains(hex4));
+        try {
+            settlement2.addHexToSettlement(hex1);
+            ArrayList<Hex> hexes = settlement2.getHexesFromSettlement();
+            Assert.assertTrue(hexes.contains(hex1));
+            Assert.assertTrue(hexes.contains(hex2));
+            Assert.assertTrue(!hexes.contains(hex3));
+            Assert.assertTrue(!hexes.contains(hex4));
+        }
+        catch (SettlementAlreadyExistsOnHexException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test

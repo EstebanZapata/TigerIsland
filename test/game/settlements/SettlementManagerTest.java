@@ -11,10 +11,6 @@ import tile.orientation.TileOrientation;
 
 import java.util.ArrayList;
 
-/**
- * Created by thomasbaldwin on 4/8/17.
- */
-
 public class SettlementManagerTest {
     private World world;
     private SettlementManager settlementManager;
@@ -32,7 +28,25 @@ public class SettlementManagerTest {
     }
 
     @Test
-    public void expandSettlementTest() {
+    public void testFoundSettlement() {
+        Tile expansionTile = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
+        Location volcanoLocation = new Location(-2, 0, 0);
+        try {
+            this.world.insertTileIntoTileManager(expansionTile, volcanoLocation, TileOrientation.EAST_NORTHEAST);
+            Assert.assertEquals(this.settlementManager.settlements.size(), 0);
+            this.settlementManager.foundSettlement(expansionTile.getRightHexRelativeToVolcano());
+            Assert.assertEquals(this.settlementManager.settlements.size(), 1);
+        }
+        catch (IllegalTilePlacementException e) {
+            Assert.assertTrue(false);
+        }
+        catch (SettlementAlreadyExistsOnHexException e) {
+            Assert.assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testExpandSettlement() {
         Tile expansionTile = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
         Location volcanoLocation = new Location(-2, 0, 0);
         try {
@@ -56,19 +70,25 @@ public class SettlementManagerTest {
     }
 
     @Test
-    public void testFoundSettlement() {
+    public void testExpansionRecursion() {
         Tile expansionTile = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
         Location volcanoLocation = new Location(-2, 0, 0);
         try {
             this.world.insertTileIntoTileManager(expansionTile, volcanoLocation, TileOrientation.EAST_NORTHEAST);
-            Assert.assertEquals(this.settlementManager.settlements.size(), 0);
-            this.settlementManager.foundSettlement(expansionTile.getRightHexRelativeToVolcano());
-            Assert.assertEquals(this.settlementManager.settlements.size(), 1);
-        }
-        catch (IllegalTilePlacementException e) {
-            Assert.assertTrue(false);
+            Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile.getRightHexRelativeToVolcano());
+            this.settlementManager.expandSettlement(world, newSettlement, Terrain.JUNGLE);
+            Assert.assertEquals(newSettlement.getSettlementSize(), 2);
         }
         catch (SettlementAlreadyExistsOnHexException e) {
+            Assert.assertTrue(false);
+        }
+        catch (NoHexesToExpandToException e) {
+            Assert.assertTrue(false);
+        }
+        catch (SettlementCannotBeBuiltOnVolcanoException e) {
+            Assert.assertTrue(false);
+        }
+        catch (IllegalTilePlacementException e) {
             Assert.assertTrue(false);
         }
     }
