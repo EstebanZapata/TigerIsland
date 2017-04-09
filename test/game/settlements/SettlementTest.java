@@ -11,7 +11,6 @@ import tile.Tile;
 import java.util.ArrayList;
 
 public class SettlementTest {
-    /*
     private Settlement settlement1, settlement2, settlement3, settlement4;
     private Hex hex1, hex2, hex3, hex4;
 
@@ -55,7 +54,11 @@ public class SettlementTest {
     @Test
     public void testAddingAHexToASettlement() {
         Assert.assertTrue(!settlement1.containsHex(hex2));
-        settlement1.addHexToSettlement(hex2);
+        try {
+            settlement1.addHexToSettlement(hex2);
+        } catch (SettlementAlreadyExistsOnHexException e) {
+            System.out.println(e.getMessage());
+        }
         Assert.assertTrue((settlement1.containsHex(hex2)));
     }
 
@@ -80,15 +83,17 @@ public class SettlementTest {
     @Test
     public void testGettingSettlementSize() {
         Assert.assertEquals(settlement2.getSettlementSize(), 1);
-        settlement2.addHexToSettlement(hex1);
-        settlement2.addHexToSettlement(hex3);
-        settlement2.addHexToSettlement(hex4);
-        Assert.assertEquals(settlement2.getSettlementSize(), 4);
         try {
+            settlement2.addHexToSettlement(hex1);
+            settlement2.addHexToSettlement(hex3);
+            settlement2.addHexToSettlement(hex4);
+            Assert.assertEquals(settlement2.getSettlementSize(), 4);
             settlement2.removeHexFromSettlement(hex3);
             settlement2.removeHexFromSettlement(hex4);
             Assert.assertEquals(settlement2.getSettlementSize(), 2);
         } catch (SettlementCannotBeCompletelyWipedOutException e) {
+            System.out.println(e.getMessage());
+        } catch (SettlementAlreadyExistsOnHexException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -102,7 +107,6 @@ public class SettlementTest {
         Assert.assertTrue(!hexes.contains(hex4));
     }
 
-    /*
     @Test
     public void testCheckingForTotoro() {
         Assert.assertTrue(!settlement3.hasTotoroSanctuary());
@@ -116,5 +120,4 @@ public class SettlementTest {
         settlement4.setHasTigerPlayground();
         Assert.assertTrue(settlement4.hasTigerPlayground());
     }
-    */
 }
