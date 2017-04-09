@@ -63,9 +63,6 @@ public class Player {
             this.settlementManager.foundSettlement(settlementHex);
             this.score += Settings.FOUND_SETTLEMENT_POINTS;
         }
-        catch (NotEnoughPiecesException e) {
-            throw new NotEnoughPiecesException(e.getMessage());
-        }
         catch (SettlementAlreadyExistsOnHexException e) {
             this.villagerCount += 1;
             throw new SettlementAlreadyExistsOnHexException(e.getMessage());
