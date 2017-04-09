@@ -5,7 +5,9 @@ import thread.GameThread;
 import thread.GameThreadCommunication;
 import thread.message.*;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -131,10 +133,18 @@ public class Start {
 
         else if (actionToTake instanceof DisconnectMessage) {
             client.disconnect();
+            addEmptyStringToServerQueue();
+
+            Collection gameThreads = getGameFromGameId.values();
+
+            for (Object gameThreadObject:gameThreads) {
+                GameThread gamethread = (GameThread) gameThreadObject;
+                gamethread.stopThread();
+            }
+
             getGameFromGameId.clear();
             getGameThreadCommunicationFromId.clear();
 
-            addEmptyStringToServerQueue();
 
             System.exit(0);
         }
@@ -163,7 +173,7 @@ public class Start {
 
         GameThreadCommunication gameThreadCommunication = new GameThreadCommunication(gameMessageQueue, gameResponseQueue);
 
-        GameThread game = new GameThread(gameThreadCommunication,  myPlayerId, currentOpponentPlayerId);
+        GameThread game = new GameThread(gameThreadCommunication,  myPlayerId, currentOpponentPlayerId, gameId);
 
         getGameFromGameId.put(gameId, game);
         getGameThreadCommunicationFromId.put(gameId, gameThreadCommunication);

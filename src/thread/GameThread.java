@@ -22,7 +22,9 @@ public class GameThread extends MyThread {
     private String myPlayerId;
     private String opponentPlayerId;
 
-    public GameThread(GameThreadCommunication communication, String myPlayerId, String opponentPlayerId) {
+    private String gameId;
+
+    public GameThread(GameThreadCommunication communication, String myPlayerId, String opponentPlayerId, String gameId) {
         super();
 
         this.gameMessageQueue = communication.getGameMessageQueue();
@@ -32,6 +34,8 @@ public class GameThread extends MyThread {
 
         this.myPlayerId = myPlayerId;
         this.opponentPlayerId = opponentPlayerId;
+
+        this.gameId = gameId;
     }
 
     @Override
@@ -54,14 +58,14 @@ public class GameThread extends MyThread {
     private void processMessage(Message message) {
         Message response = null;
         if (message instanceof GameCommandMessage) {
-            System.out.println("Game received command");
+            System.out.println("Game " + gameId + " received command");
             response = processCommand((GameCommandMessage) message);
 
             gameResponseQueue.add(response);
         }
 
         if (message instanceof GameActionMessage) {
-            System.out.println("Game received opponent action");
+            System.out.println("Game " + gameId + " received opponent action");
             processOpponentAction((GameActionMessage) message);
         }
 
@@ -94,4 +98,5 @@ public class GameThread extends MyThread {
 
 
     }
+
 }

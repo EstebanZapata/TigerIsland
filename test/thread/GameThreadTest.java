@@ -45,7 +45,7 @@ public class GameThreadTest {
 
         GameThreadCommunication gameThreadCommunication = new GameThreadCommunication(gameMessageQueue, gameResponseQueue);
 
-        gameThread = new GameThread(gameThreadCommunication, myPlayerId, opponentPlayerId);
+        gameThread = new GameThread(gameThreadCommunication, myPlayerId, opponentPlayerId, gameId);
 
         moveTimeInSeconds = 0.05;
 
