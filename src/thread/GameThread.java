@@ -4,6 +4,7 @@ import game.Game;
 import game.settlements.BuildAction;
 import game.tile.Location;
 import game.tile.orientation.TileOrientation;
+import game.world.rules.exceptions.IllegalTilePlacementException;
 import thread.message.GameActionMessage;
 import thread.message.GameCommandMessage;
 import thread.message.Message;
@@ -84,7 +85,12 @@ public class GameThread extends MyThread {
 
         try {
             Thread.sleep(safeMillisecondsToTakeAction);
-            Message aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
+            Message aiResponse = null;
+            try {
+                aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
+            } catch (IllegalTilePlacementException e) {
+                e.printStackTrace();
+            }
             return aiResponse;
         }
         catch (InterruptedException e) {
