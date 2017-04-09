@@ -132,6 +132,8 @@ public class Start {
 
         getGameFromGameId.put(gameId, game);
         getGameThreadCommunicationFromId.put(gameId, gameThreadCommunication);
+
+        game.start();
     }
 
     private static boolean gameHasNotBeenCreated(String gameId) {

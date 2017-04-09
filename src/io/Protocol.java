@@ -13,7 +13,7 @@ public class Protocol {
     String rounds = "<rounds>";
     String rid = "<rid>";
     String gid = "<gid>";
-    String timeMove = "1500";
+    String timeMove = "5";
     String moveNum = "0";
     String tile = "LAKE+JUNGLE";
     private String[] startup = {"WELCOME TO ANOTHER EDITION OF THUNDERDOME!",
