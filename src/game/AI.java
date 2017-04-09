@@ -24,7 +24,7 @@ public class AI {
         int buildYCoordinate = newTileYCoordinate;
         Location locationOnWhichToBuild = new Location(buildXCoordinate, buildYCoordinate, 0);
 
-        return "new GameCommandMessage('gameID', 'moveNumber', 'playerID', 'TilePlaced', locationOfNewTile, TileOrientation.NORTHWEST_WEST, BuildAction.FOUNDED_SETTLEMENT, locationOnWhichToBuild, Terrain.GRASSLANDS)";
+        return "new GameActionMessage('gameID', 'moveNumber', 'playerID', 'TilePlaced', locationOfNewTile, TileOrientation.NORTHWEST_WEST, BuildAction.FOUNDED_SETTLEMENT, locationOnWhichToBuild, Terrain.GRASSLANDS)";
 
     }
 
