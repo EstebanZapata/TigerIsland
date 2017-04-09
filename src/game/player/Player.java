@@ -95,8 +95,8 @@ public class Player {
         }
     }
 
-    public void mergeSettlements() {
-        this.settlementManager.mergeSettlements();
+    public void mergeSettlements(World existingWorld) {
+        this.settlementManager.mergeSettlements(existingWorld);
     }
 
     public void buildTotoroSanctuary(World existingWorld) throws
