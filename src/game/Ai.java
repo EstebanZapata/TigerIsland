@@ -4,6 +4,7 @@ import game.tile.Hex;
 import game.tile.Location;
 import game.tile.Tile;
 import game.world.World;
+import game.world.rules.exceptions.IllegalTilePlacementException;
 import thread.message.GameActionMessage;
 
 import static game.settlements.BuildAction.FOUNDED_SETTLEMENT;
@@ -15,7 +16,7 @@ public class Ai {
     public Ai(World world){
         this.world = world;
     }
-        public GameActionMessage chooseMove(String gameID, int moveNumber, String playerID, Tile tileToBePlaced) {
+        public GameActionMessage chooseMove(String gameID, int moveNumber, String playerID, Tile tileToBePlaced) throws IllegalTilePlacementException {
             Hex hexToBePlacedNextTo = world.getLeftMostHex();
 
             int newTileXCoordinate = hexToBePlacedNextTo.getLocation().getxCoordinate() - 1;
@@ -25,7 +26,7 @@ public class Ai {
             int buildXCoordinate = newTileXCoordinate - 1;
             int buildYCoordinate = newTileYCoordinate;
             Location locationOnWhichToBuild = new Location(buildXCoordinate, buildYCoordinate, 0);
-
+            world.insertTileIntoTileManager(tileToBePlaced,locationOfNewTile,NORTHWEST_WEST);
             return new GameActionMessage(gameID, moveNumber, playerID, tileToBePlaced, locationOfNewTile, NORTHWEST_WEST, FOUNDED_SETTLEMENT, locationOnWhichToBuild, GRASSLANDS);
 
         }
