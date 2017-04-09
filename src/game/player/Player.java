@@ -51,7 +51,7 @@ public class Player {
             throw new NotEnoughPiecesException(errorMessage);
         }
 
-        this.totoroCount += 1;
+        this.tigerCount -= 1;
     }
 
     public void foundSettlement(Hex settlementHex) throws

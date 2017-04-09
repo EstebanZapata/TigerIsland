@@ -43,7 +43,7 @@ public class Hex {
         this.settlement = settlement;
     }
 
-    public boolean checkSettlementConditions() {
+    public boolean checkFoundingConditions() {
         if (this.terrain == Terrain.VOLCANO) {
             return false;
         }
@@ -87,7 +87,7 @@ public class Hex {
         return true;
     }
 
-    public boolean checkSanctuaryConditons() {
+    public boolean checkSanctuaryConditions() {
         if (this.terrain == Terrain.VOLCANO) {
             return false;
         }

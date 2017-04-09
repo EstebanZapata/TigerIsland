@@ -14,6 +14,7 @@ public class Settlement {
     public Settlement(Hex foundingHex) {
         settlementHexes = new ArrayList<Hex>();
         settlementHexes.add(foundingHex);
+        foundingHex.setSettlement(this);
     }
 
     public boolean containsHex(Hex hexToSearchFor) {
@@ -41,6 +42,7 @@ public class Settlement {
     public void removeHexFromSettlement(Hex hexToBeRemoved) throws SettlementCannotBeCompletelyWipedOutException {
         if (settlementHexes.size() > 1) {
             settlementHexes.remove(hexToBeRemoved);
+            hexToBeRemoved.setSettlement(null);
         }
 
         else {
@@ -57,11 +59,19 @@ public class Settlement {
         hasTiger = true;
     }
 
-    public boolean checkPlaygroundConditions() {
+    public Boolean hasTotoroSanctuary() {
+        return this.hasTotoro;
+    }
+
+    public Boolean hasTigerPlayground() {
+        return this.hasTiger;
+    }
+
+    public boolean checkPlaygroundSettlementConditions() {
         return (this.hasTiger == false);
     }
 
-    public boolean checkSanctuaryConditions() {
+    public boolean checkSanctuarySettlementConditions() {
         if (this.settlementHexes.size() < 5) {
             return false;
         }
@@ -77,42 +87,42 @@ public class Settlement {
             SettlementCannotBeBuiltOnVolcanoException,
             NoHexesToExpandToException
     {
+        ArrayList<Hex> potentialSettlementHexes = new ArrayList<>();
+
         if (terrainType == Terrain.VOLCANO) {
             String errorMessage = String.format("You cannot build a hex on a volcano.");
             throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
         }
 
-        ArrayList<Hex> potentialSettlementHexes = new ArrayList<Hex>();
-        for (Hex hex : this.settlementHexes) {
-            Location hexLocation = hex.getLocation();
-            Location[] hexLocationsAdjacentToCenter = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
-            for (Location adjacentHexLocation : hexLocationsAdjacentToCenter) {
-                try {
-                    Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                    if (!settlementHexes.contains(adjacentHex) && adjacentHex.checkExpansionConditions(terrainType))
-                    {
-                        potentialSettlementHexes.add(adjacentHex);
-                    }
-                }
-                catch (NoHexAtLocationException e) {
-                    System.out.println(e.getMessage());
-                }
+        for (Hex settlementHex : this.settlementHexes) {
+            try {
+                potentialSettlementHexes = getPotentialSettlementHexes(settlementHex, world, terrainType, potentialSettlementHexes);
             }
-        }
-
-        if (potentialSettlementHexes.isEmpty()) {
-            String errorMessage = String.format("There are no playable hexes for the player to expand to.");
-            throw new NoHexesToExpandToException(errorMessage);
+            catch (NullPointerException e) {
+                String errorMessage = String.format("There are no playable hexes for the player to expand to.");
+                throw new NoHexesToExpandToException(errorMessage);
+            }
         }
 
         return potentialSettlementHexes;
     }
 
-    public Boolean hasTotoroSanctuary() {
-        return this.hasTotoro;
-    }
-
-    public Boolean hasTigerPlayground() {
-        return this.hasTiger;
+    public ArrayList<Hex> getPotentialSettlementHexes(Hex settlementHex, World world, Terrain terrainType, ArrayList<Hex> potentialSettlementHexes) {
+        Location hexLocation = settlementHex.getLocation();
+        Location[] hexLocationsAdjacentToCenter = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
+        for (Location adjacentHexLocation : hexLocationsAdjacentToCenter) {
+            try {
+                Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
+                if (!settlementHexes.contains(adjacentHex) && (!potentialSettlementHexes.contains(adjacentHex)) && adjacentHex.checkExpansionConditions(terrainType))
+                {
+                    potentialSettlementHexes.add(adjacentHex);
+                    return getPotentialSettlementHexes(adjacentHex, world, terrainType, potentialSettlementHexes);
+                }
+            }
+            catch (NoHexAtLocationException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return potentialSettlementHexes;
     }
 }
