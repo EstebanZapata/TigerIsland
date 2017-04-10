@@ -21,7 +21,6 @@ public class IllegallyPlacingAnotherTileOnTheFirstLayerViaOverlappingAnExistingT
     public void a_board_with_at_least_one_tile_on_it() throws Throwable {
         world = new World();
         tileOne = new Tile(Terrain.LAKE, Terrain.JUNGLE);
-        world.placeFirstTile();
 
     }
 

@@ -3,16 +3,10 @@ Feature: Placing tiles on the first layer
   I want to place tiles on the first layer
   So that I can expand the island
 
-  Scenario: Placing the first tile
-    Given No other tiles have been placed
-    When I place the first tile
-    Then The tile should be placed on the board with the volcano at the origin
-
-  Scenario: Placing a first tile that is not the special first tile
-    Given No tiles have been placed
-    When I place the first tile on the board
-      And it is not the special first tile
-    Then that tile cannot be placed on the board
+  Scenario: First tile is already placed
+    Given A new board
+    When I check that the fist tile exists
+    Then Then the special tile should exist with the volcano at the center
 
   Scenario: Placing the special first tile again
     Given The special first tile has been placed

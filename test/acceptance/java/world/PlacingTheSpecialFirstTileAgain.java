@@ -15,7 +15,6 @@ public class PlacingTheSpecialFirstTileAgain {
     @Given("^The special first tile has been placed$")
     public void the_special_first_tile_has_been_placed() throws Throwable {
         world = new World();
-        world.placeFirstTile();
         tileWasNotPlaced = false;
 
         Assert.assertTrue(world.getHexByCoordinate(0,0,0).getOwner() instanceof FirstTile);

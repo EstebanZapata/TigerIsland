@@ -25,7 +25,6 @@ public class IllegallyPlacingATileOnAHigherLayerDueToCompleteOverlap {
         tileOne = new Tile(Terrain.JUNGLE, Terrain.ROCKY);
         tileTwo = new Tile(Terrain.LAKE, Terrain.GRASSLANDS);
 
-        world.placeFirstTile();
         world.insertTileIntoTileManager(tileTwo, new Location(1,0,0), TileOrientation.SOUTHEAST_EAST);
     }
 
