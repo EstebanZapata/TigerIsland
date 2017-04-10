@@ -30,7 +30,7 @@ public class Start {
         getGameFromGameId = new HashMap<>();
         getGameThreadCommunicationFromId = new HashMap<>();
 
-        client = new Client("Alix", 9999, stringsFromServerQueue, stringsToServerQueue);
+        client = new Client(args[0], Integer.parseInt(args[1]), stringsFromServerQueue, stringsToServerQueue);
         client.start();
 
         while(true) {
