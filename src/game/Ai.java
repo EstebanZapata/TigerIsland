@@ -15,9 +15,9 @@ import static game.settlements.BuildAction.FOUNDED_SETTLEMENT;
 import static game.tile.Terrain.GRASSLANDS;
 import static game.tile.orientation.TileOrientation.NORTHWEST_WEST;
 
-public class AI {
+public class Ai {
     public World world;
-    public AI(World world){
+    public Ai(World world){
         this.world = world;
     }
 
