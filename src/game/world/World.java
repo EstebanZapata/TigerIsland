@@ -65,4 +65,25 @@ public class World {
     public Hex getHexRegardlessOfHeight(int x, int y) throws NoHexAtLocationException {
         return tileManager.getHexRegardlessOfHeight(x, y);
     }
+
+    public boolean ableToInsertTileIntoTileManager(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) {
+        Location locationOfLeftHex = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
+        Location locationOfRightHex = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
+
+        Location[] locationOfTileHexes = new Location[Tile.MAX_HEXES_PER_TILE];
+        locationOfTileHexes[0] = locationOfVolcano;
+        locationOfTileHexes[1] = locationOfLeftHex;
+        locationOfTileHexes[2] = locationOfRightHex;
+
+        boolean ableToPlaceTile;
+
+        try {
+            ableToPlaceTile = tileRulesManager.ableToPlaceTileAtLocation(tile, locationOfTileHexes);
+        }
+        catch (IllegalTilePlacementException e) {
+            ableToPlaceTile = false;
+        }
+
+        return ableToPlaceTile;
+    }
 }
