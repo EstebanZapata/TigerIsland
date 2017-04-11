@@ -1,5 +1,9 @@
+/**
+ * Created by thomasbaldwin on 4/11/17.
+ */
+
 package game;
-import game.Game;
+
 import game.tile.Hex;
 import game.tile.Location;
 import game.tile.Tile;
@@ -11,9 +15,9 @@ import static game.settlements.BuildAction.FOUNDED_SETTLEMENT;
 import static game.tile.Terrain.GRASSLANDS;
 import static game.tile.orientation.TileOrientation.NORTHWEST_WEST;
 
-public class AI {
+public class Ai {
     public World world;
-    public AI(World world){
+    public Ai(World world){
         this.world = world;
     }
 
@@ -30,5 +34,4 @@ public class AI {
         return new GameActionMessage(gameID, moveNumber, playerID, tileToBePlaced, locationOfNewTile, NORTHWEST_WEST, FOUNDED_SETTLEMENT, locationOnWhichToBuild, GRASSLANDS);
 
     }
-
 }
