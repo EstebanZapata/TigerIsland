@@ -84,17 +84,18 @@ public class SettlementManager {
         }
     }
 
-    public void buildTotoroSanctuary(Hex sanctuaryHex) throws NoPlayableHexException {
+    public void buildTotoroSanctuary(Hex sanctuaryHex) throws BuildConditionsNotMetException {
+        sanctuaryHex.checkSanctuaryConditions();
+
         Location sanctuaryHexLocation = sanctuaryHex.getLocation();
         Location[] adjacentHexLocationsToSanctuaryHex = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(sanctuaryHexLocation);
         for (Location adjacentHexLocation : adjacentHexLocationsToSanctuaryHex) {
             try {
                 Hex adjacentHex = this.world.getHexByLocation(adjacentHexLocation);
-                adjacentHex.checkSanctuaryConditions();
-                Settlement settlement = getSettlementFromHex(adjacentHex);
-                settlement.checkSanctuarySettlementConditions();
-                settlement.setHasTotoroSanctuary();
-                settlement.addHexToSettlement(sanctuaryHex);
+                Settlement adjacentSettlement = getSettlementFromHex(adjacentHex);
+                adjacentSettlement.checkSanctuaryConditions();
+                adjacentSettlement.setHasTotoroSanctuary();
+                adjacentSettlement.addHexToSettlement(sanctuaryHex);
                 return;
             }
             catch (NoHexAtLocationException e) {
@@ -103,25 +104,18 @@ public class SettlementManager {
             catch (NoSettlementOnHexException e) {
                 System.out.println(e.getMessage());
             }
-            catch (SettlementDoesNotSizeRequirementsException e) {
-                System.out.println(e.getMessage());
-            }
-            catch (SettlementAlreadyHasTotoroSanctuaryException e) {
-                System.out.println(e.getMessage());
-            }
-            catch (SettlementAlreadyExistsOnHexException e) {
-                System.out.println(e.getMessage());
-            }
-            catch (SettlementCannotBeBuiltOnVolcanoException e) {
+            catch (BuildConditionsNotMetException e) {
                 System.out.println(e.getMessage());
             }
         }
+
+        String errorMessage = String.format("There are no adjacent settlements that meet the sanctuary conditions.");
+        throw new BuildConditionsNotMetException(errorMessage);
     }
 
-    public void buildTigerPlayground(Hex playgroundHex) throws
-            SettlementAlreadyHasTigerPlaygroundException,
-            NoSettlementOnAdjacentHexesException
-    {
+    public void buildTigerPlayground(Hex playgroundHex) throws BuildConditionsNotMetException {
+        playgroundHex.checkPlaygroundConditions();
+
         Location playgroundHexLocation = playgroundHex.getLocation();
         Location[] adjacentHexLocationsToPlaygroundHex = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(playgroundHexLocation);
         for (Location adjacentHexLocation : adjacentHexLocationsToPlaygroundHex) {
@@ -129,7 +123,6 @@ public class SettlementManager {
                 int xCoordinate = adjacentHexLocation.getxCoordinate();
                 int yCoordinate = adjacentHexLocation.getyCoordinate();
                 Hex adjacentHex = this.world.getHexRegardlessOfHeight(xCoordinate, yCoordinate);
-                playgroundHex.checkPlaygroundConditions();
                 Settlement settlement = getSettlementFromHex(adjacentHex);
                 settlement.checkPlaygroundSettlementConditions();
                 settlement.setHasTigerPlayground();
@@ -139,25 +132,16 @@ public class SettlementManager {
             catch (NoHexAtLocationException e) {
                 System.out.println(e.getMessage());
             }
-            catch (SettlementAlreadyHasTigerPlaygroundException e) {
-                System.out.println(e.getMessage());
-            }
             catch (NoSettlementOnHexException e) {
                 System.out.println(e.getMessage());
             }
-            catch (SettlementAlreadyExistsOnHexException e) {
-                System.out.println(e.getMessage());
-            }
-            catch (SettlementCannotBeBuiltOnVolcanoException e) {
-                System.out.println(e.getMessage());
-            }
-            catch (SettlementHeightRequirementException e) {
+            catch (BuildConditionsNotMetException e) {
                 System.out.println(e.getMessage());
             }
         }
 
-        String errorMessage = String.format("There are no settlements on any adjacent hexes.");
-        throw new NoSettlementOnAdjacentHexesException(errorMessage);
+        String errorMessage = String.format("There are no adjacent settlements that meet the playground conditions.");
+        throw new BuildConditionsNotMetException(errorMessage);
     }
 
     /*

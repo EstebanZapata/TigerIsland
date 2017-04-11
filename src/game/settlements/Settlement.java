@@ -77,7 +77,7 @@ public class Settlement {
         }
     }
 
-    public void checkSanctuarySettlementConditions() throws
+    public void checkSanctuaryConditions() throws
             SettlementDoesNotSizeRequirementsException,
             SettlementAlreadyHasTotoroSanctuaryException
     {
@@ -86,8 +86,8 @@ public class Settlement {
             throw new SettlementDoesNotSizeRequirementsException(errorMessage);
         }
 
-        if (this.hasTotoro == true) {
-            String errorMessage = "A tiger already exists on the settlement.";
+        if (this.hasTotoro) {
+            String errorMessage = "A totoro already exists on the settlement.";
             throw new SettlementAlreadyHasTotoroSanctuaryException(errorMessage);
         }
     }

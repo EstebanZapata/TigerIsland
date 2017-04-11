@@ -98,7 +98,7 @@ public class Player {
             this.settlementManager.buildTotoroSanctuary(sanctuaryHex);
             this.score += Settings.BUILD_TOTORO_SANCTUARY_POINTS;
         }
-        catch (NoPlayableHexException e) {
+        catch (BuildConditionsNotMetException e) {
             this.totoroCount += 1;
             throw new BuildConditionsNotMetException(e.getMessage());
         }
@@ -113,11 +113,7 @@ public class Player {
             this.settlementManager.buildTigerPlayground(playgroundHex);
             this.score += Settings.BUILD_TIGER_PLAYGROUND_POINTS;
         }
-        catch (SettlementAlreadyHasTigerPlaygroundException e) {
-            this.tigerCount += 1;
-            throw new BuildConditionsNotMetException(e.getMessage());
-        }
-        catch (NoSettlementOnAdjacentHexesException e) {
+        catch (BuildConditionsNotMetException e) {
             this.tigerCount += 1;
             throw new BuildConditionsNotMetException(e.getMessage());
         }

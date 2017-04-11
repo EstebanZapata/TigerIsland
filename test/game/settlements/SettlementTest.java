@@ -131,7 +131,7 @@ public class SettlementTest {
         Assert.assertEquals(settlement3.getSettlementSize(), 1);
 
         try {
-            settlement3.checkSanctuarySettlementConditions();
+            settlement3.checkSanctuaryConditions();
         }
         catch (SettlementDoesNotSizeRequirementsException e) {
             settlement3.addHexToSettlement(hex1);
@@ -140,9 +140,9 @@ public class SettlementTest {
             settlement3.addHexToSettlement(hex5);
 
             Assert.assertEquals(settlement3.getSettlementSize(), 5);
-            settlement3.checkSanctuarySettlementConditions();
+            settlement3.checkSanctuaryConditions();
             settlement3.setHasTotoroSanctuary();
-            settlement3.checkSanctuarySettlementConditions();
+            settlement3.checkSanctuaryConditions();
         }
 
         Assert.assertTrue(false);

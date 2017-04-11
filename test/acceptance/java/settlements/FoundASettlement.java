@@ -27,7 +27,15 @@ public class FoundASettlement {
     }
 
     @Then("^the settlement is founded$")
-    public void the_settlement_is_founded() throws SettlementAlreadyExistsOnHexException, NoSettlementOnHexException, SettlementCannotBeBuiltOnVolcanoException, NoHexesToExpandToException, NoPlayableHexException, NoSettlementOnAdjacentHexesException, SettlementAlreadyHasTigerPlaygroundException, SettlementAlreadyHasTotoroSanctuaryException, SettlementDoesNotSizeRequirementsException {
+    public void the_settlement_is_founded() throws
+            NoSettlementOnHexException,
+            NoHexesToExpandToException,
+            NoPlayableHexException,
+            SettlementAlreadyHasTigerPlaygroundException,
+            SettlementAlreadyHasTotoroSanctuaryException,
+            SettlementDoesNotSizeRequirementsException,
+            BuildConditionsNotMetException
+    {
         SettlementManager manager = new SettlementManager(myGame.world);
         Hex target = myGame.world.getAllHexesInWorld().get(0);
         manager.foundSettlement(target);
@@ -39,6 +47,5 @@ public class FoundASettlement {
         manager.buildTigerPlayground(nextTarget);
         manager.buildTotoroSanctuary(nextTarget);
         Assert.assertEquals(target,mysettle.getHexesFromSettlement().get(0));
-
     }
 }

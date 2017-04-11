@@ -1,6 +1,6 @@
 package game.settlements.exceptions;
 
-public class SettlementCannotBeBuiltOnVolcanoException extends Exception {
+public class SettlementCannotBeBuiltOnVolcanoException extends BuildConditionsNotMetException {
     public SettlementCannotBeBuiltOnVolcanoException(String errorMessage) {
         super(errorMessage);
     }

@@ -32,6 +32,5 @@ public class AI {
         Location locationOnWhichToBuild = new Location(buildXCoordinate, buildYCoordinate, 0);
         world.insertTileIntoTileManager(tileToBePlaced,locationOfNewTile,NORTHWEST_WEST);
         return new GameActionMessage(gameID, moveNumber, playerID, tileToBePlaced, locationOfNewTile, NORTHWEST_WEST, FOUNDED_SETTLEMENT, locationOnWhichToBuild, GRASSLANDS);
-
     }
 }

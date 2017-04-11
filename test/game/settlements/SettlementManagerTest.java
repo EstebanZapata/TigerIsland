@@ -84,9 +84,7 @@ public class SettlementManagerTest {
     @Test
     public void testBuildTigerPlayground() throws
             IllegalTilePlacementException,
-            SettlementAlreadyExistsOnHexException,
-            NoSettlementOnAdjacentHexesException,
-            SettlementAlreadyHasTigerPlaygroundException
+            BuildConditionsNotMetException
     {
         Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile expansionTile4 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
@@ -124,12 +122,11 @@ public class SettlementManagerTest {
     }
 
     @Test
-    public void testBuildTotoroPlayground() throws
-            SettlementAlreadyExistsOnHexException,
-            SettlementCannotBeBuiltOnVolcanoException,
+    public void testBuildTotoroSanctuary() throws
             NoHexesToExpandToException,
             NoHexAtLocationException,
-            NoPlayableHexException
+            NoPlayableHexException,
+            BuildConditionsNotMetException
     {
         Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
         this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
@@ -140,12 +137,27 @@ public class SettlementManagerTest {
         this.settlementManager.buildTotoroSanctuary(sanctuaryHex);
     }
 
-    @Test (expected = NoSettlementOnAdjacentHexesException.class)
-    public void testBuildTigerPlaygroundThrowsExceptionWhenTryingToBuildOnAnotherPlayground() throws
+    @Test (expected = BuildConditionsNotMetException.class)
+    public void testBuildTotoroSanctuaryThrowsExceptionWhenTryingToBuildOnExistingTotoroSanctuary() throws
+            NoHexesToExpandToException,
+            NoHexAtLocationException,
+            NoPlayableHexException,
+            BuildConditionsNotMetException
+    {
+        Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
+        this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
+        this.settlementManager.expandSettlement(newSettlement, Terrain.GRASSLANDS);
+
+        FirstTile sanctuaryTile = (FirstTile) this.world.getHexByCoordinate(0,0,0).getOwner();
+        Hex sanctuaryHex = sanctuaryTile.getLakeHex();
+        this.settlementManager.buildTotoroSanctuary(sanctuaryHex);
+        this.settlementManager.buildTotoroSanctuary(sanctuaryHex);
+    }
+
+    @Test (expected = BuildConditionsNotMetException.class)
+    public void testBuildTigerPlaygroundThrowsExceptionWhenTryingToBuildOnExistingTigerPlayground() throws
             IllegalTilePlacementException,
-            SettlementAlreadyExistsOnHexException,
-            NoSettlementOnAdjacentHexesException,
-            SettlementAlreadyHasTigerPlaygroundException
+            BuildConditionsNotMetException
     {
         Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile expansionTile4 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
@@ -183,12 +195,10 @@ public class SettlementManagerTest {
         this.settlementManager.buildTigerPlayground(expansionTile9.getRightHexRelativeToVolcano());
     }
 
-    @Test (expected = NoSettlementOnAdjacentHexesException.class)
+    @Test (expected = BuildConditionsNotMetException.class)
     public void testBuildTigerPlaygroundThrowsNoSettlementOnAdjacentHexesException() throws
             IllegalTilePlacementException,
-            SettlementAlreadyExistsOnHexException,
-            NoSettlementOnAdjacentHexesException,
-            SettlementAlreadyHasTigerPlaygroundException
+            BuildConditionsNotMetException
     {
         Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile expansionTile4 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
