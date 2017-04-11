@@ -90,6 +90,7 @@ public class SettlementManager {
         for (Location adjacentHexLocation : adjacentHexLocationsToSanctuaryHex) {
             try {
                 Hex adjacentHex = this.world.getHexByLocation(adjacentHexLocation);
+                adjacentHex.checkSanctuaryConditions();
                 Settlement settlement = getSettlementFromHex(adjacentHex);
                 settlement.checkSanctuarySettlementConditions();
                 settlement.setHasTotoroSanctuary();
@@ -111,6 +112,9 @@ public class SettlementManager {
             catch (SettlementAlreadyExistsOnHexException e) {
                 System.out.println(e.getMessage());
             }
+            catch (SettlementCannotBeBuiltOnVolcanoException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -125,6 +129,7 @@ public class SettlementManager {
                 int xCoordinate = adjacentHexLocation.getxCoordinate();
                 int yCoordinate = adjacentHexLocation.getyCoordinate();
                 Hex adjacentHex = this.world.getHexRegardlessOfHeight(xCoordinate, yCoordinate);
+                adjacentHex.checkPlaygroundConditions();
                 Settlement settlement = getSettlementFromHex(adjacentHex);
                 settlement.checkPlaygroundSettlementConditions();
                 settlement.setHasTigerPlayground();
@@ -141,6 +146,12 @@ public class SettlementManager {
                 System.out.println(e.getMessage());
             }
             catch (SettlementAlreadyExistsOnHexException e) {
+                System.out.println(e.getMessage());
+            }
+            catch (SettlementCannotBeBuiltOnVolcanoException e) {
+                System.out.println(e.getMessage());
+            }
+            catch (SettlementHeightRequirementException e) {
                 System.out.println(e.getMessage());
             }
         }

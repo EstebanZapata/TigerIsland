@@ -172,12 +172,9 @@ public class SettlementTest {
         Settlement newSettlement = new Settlement(foundingHex);
         world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
         world.insertTileIntoTileManager(expansionTile3, volcanoLocation3, TileOrientation.SOUTHEAST_EAST);
-        ArrayList<Hex> potentialSettlementHexes = new ArrayList<>();
-        potentialSettlementHexes = newSettlement.getPotentialSettlementHexes(foundingHex, world, foundingHex.getTerrain(), potentialSettlementHexes);
-        //  System.out.println(potentialSettlementHexes.get(0).getLocation());
-        //  System.out.println(potentialSettlementHexes.get(1).getLocation());
-        //  System.out.println(potentialSettlementHexes.get(2).getLocation());
-        Assert.assertEquals(potentialSettlementHexes.size(), 3);
+        ArrayList<Hex> potentialSettlementHexes = newSettlement.getPotentialSettlementHexes(foundingHex, world, foundingHex.getTerrain());
+        System.out.println(potentialSettlementHexes.get(0).getLocation());
+        Assert.assertEquals(potentialSettlementHexes.size(), 1);
     }
 
     @Test
@@ -197,16 +194,16 @@ public class SettlementTest {
         Location volcanoLocation4 = new Location(-2, 1, 0);
         world.insertTileIntoTileManager(expansionTile1, volcanoLocation1, TileOrientation.EAST_NORTHEAST);
         world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
-        Hex foundingHex = expansionTile2.getLeftHexRelativeToVolcano();
+        Hex foundingHex = expansionTile1.getLeftHexRelativeToVolcano();
         Settlement newSettlement = new Settlement(foundingHex);
         world.insertTileIntoTileManager(expansionTile3, volcanoLocation3, TileOrientation.SOUTHEAST_EAST);
         world.insertTileIntoTileManager(expansionTile4, volcanoLocation4, TileOrientation.NORTHEAST_NORTHWEST);
-        newSettlement.addHexToSettlement(expansionTile3.getLeftHexRelativeToVolcano());
         ArrayList<Hex> potentialSettlementHexes = newSettlement.getHexesToExpandTo(world, foundingHex.getTerrain());
         System.out.println(potentialSettlementHexes.get(0).getLocation());
         System.out.println(potentialSettlementHexes.get(1).getLocation());
         System.out.println(potentialSettlementHexes.get(2).getLocation());
-        Assert.assertEquals(potentialSettlementHexes.size(), 3);
+        System.out.println(potentialSettlementHexes.get(3).getLocation());
+        Assert.assertEquals(potentialSettlementHexes.size(), 4);
     }
 
     @Test (expected = SettlementCannotBeBuiltOnVolcanoException.class)
