@@ -124,7 +124,7 @@ public class SettlementManager {
                 int yCoordinate = adjacentHexLocation.getyCoordinate();
                 Hex adjacentHex = this.world.getHexRegardlessOfHeight(xCoordinate, yCoordinate);
                 Settlement settlement = getSettlementFromHex(adjacentHex);
-                settlement.checkPlaygroundSettlementConditions();
+                settlement.checkPlaygroundConditions();
                 settlement.setHasTigerPlayground();
                 settlement.addHexToSettlement(playgroundHex);
                 return;

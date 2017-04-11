@@ -151,9 +151,9 @@ public class SettlementTest {
     @Test (expected = SettlementAlreadyHasTigerPlaygroundException.class)
     public void testCheckingPlaygroundSettlementConditions() throws SettlementAlreadyHasTigerPlaygroundException {
         Assert.assertTrue(!settlement3.hasTigerPlayground());
-        settlement3.checkPlaygroundSettlementConditions();
+        settlement3.checkPlaygroundConditions();
         settlement3.setHasTigerPlayground();
-        settlement3.checkPlaygroundSettlementConditions();
+        settlement3.checkPlaygroundConditions();
     }
 
     @Test

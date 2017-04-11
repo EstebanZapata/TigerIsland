@@ -155,6 +155,21 @@ public class SettlementManagerTest {
     }
 
     @Test (expected = BuildConditionsNotMetException.class)
+    public void testBuildTotoroSanctuaryThrowsExceptionWhenSizeIsntEnough() throws
+            NoHexesToExpandToException,
+            NoHexAtLocationException,
+            NoPlayableHexException,
+            BuildConditionsNotMetException
+    {
+        Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
+        this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
+
+        FirstTile sanctuaryTile = (FirstTile) this.world.getHexByCoordinate(0,0,0).getOwner();
+        Hex sanctuaryHex = sanctuaryTile.getLakeHex();
+        this.settlementManager.buildTotoroSanctuary(sanctuaryHex);
+    }
+
+    @Test (expected = BuildConditionsNotMetException.class)
     public void testBuildTigerPlaygroundThrowsExceptionWhenTryingToBuildOnExistingTigerPlayground() throws
             IllegalTilePlacementException,
             BuildConditionsNotMetException

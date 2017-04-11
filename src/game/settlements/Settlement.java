@@ -70,7 +70,7 @@ public class Settlement {
         return this.hasTiger;
     }
 
-    public void checkPlaygroundSettlementConditions() throws SettlementAlreadyHasTigerPlaygroundException {
+    public void checkPlaygroundConditions() throws SettlementAlreadyHasTigerPlaygroundException {
         if (this.hasTiger == true) {
             String errorMessage = "A tiger already exists on the settlement.";
             throw new SettlementAlreadyHasTigerPlaygroundException(errorMessage);
