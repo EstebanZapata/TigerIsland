@@ -1,21 +1,24 @@
 package game;
+import game.Game;
+import game.tile.Hex;
+import game.tile.Location;
+import game.tile.Tile;
+import game.world.World;
+import game.world.rules.exceptions.IllegalTilePlacementException;
+import thread.message.GameActionMessage;
 
-import tile.*;
-import tile.orientation.TileOrientation;
+import static game.settlements.BuildAction.FOUNDED_SETTLEMENT;
+import static game.tile.Terrain.GRASSLANDS;
+import static game.tile.orientation.TileOrientation.NORTHWEST_WEST;
 
-/**
- * Created by Liam on 4/8/2017.
- */
 public class AI {
-    Game game;
-
-    public AI(Game game) {
-        this.game = game;
+    public World world;
+    public AI(World world){
+        this.world = world;
     }
 
-    public String chooseMove() {
-        Hex hexToBePlacedNextTo = game.world.tileManager.getLeftmostHexOnBoard();
-
+    public GameActionMessage chooseMove(String gameID, int moveNumber, String playerID, Tile tileToBePlaced) throws IllegalTilePlacementException {
+        Hex hexToBePlacedNextTo = world.getLeftMostHex();
         int newTileXCoordinate = hexToBePlacedNextTo.getLocation().getxCoordinate() - 1;
         int newTileYCoordinate = hexToBePlacedNextTo.getLocation().getyCoordinate();
         Location locationOfNewTile = new Location(newTileXCoordinate, newTileYCoordinate, 0);
@@ -23,8 +26,8 @@ public class AI {
         int buildXCoordinate = newTileXCoordinate - 1;
         int buildYCoordinate = newTileYCoordinate;
         Location locationOnWhichToBuild = new Location(buildXCoordinate, buildYCoordinate, 0);
-
-        return "new GameActionMessage('gameID', 'moveNumber', 'playerID', 'TilePlaced', locationOfNewTile, TileOrientation.NORTHWEST_WEST, BuildAction.FOUNDED_SETTLEMENT, locationOnWhichToBuild, Terrain.GRASSLANDS)";
+        world.insertTileIntoTileManager(tileToBePlaced,locationOfNewTile,NORTHWEST_WEST);
+        return new GameActionMessage(gameID, moveNumber, playerID, tileToBePlaced, locationOfNewTile, NORTHWEST_WEST, FOUNDED_SETTLEMENT, locationOnWhichToBuild, GRASSLANDS);
 
     }
 

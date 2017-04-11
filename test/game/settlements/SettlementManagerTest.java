@@ -81,7 +81,7 @@ public class SettlementManagerTest {
         Assert.assertEquals(newSettlement, jungleHex3SettlementReturned);
     }
 
-/*    @Test
+    @Test
     public void testBuildTigerPlayground() throws
             IllegalTilePlacementException,
             SettlementAlreadyExistsOnHexException,
@@ -121,7 +121,7 @@ public class SettlementManagerTest {
 
         Settlement expansion2Settlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
         this.settlementManager.buildTigerPlayground(expansionTile9.getRightHexRelativeToVolcano());
-    }*/
+    }
 
     @Test (expected = NoSettlementOnAdjacentHexesException.class)
     public void testBuildTigerPlaygroundThrowsExceptionWhenTryingToBuildOnAnotherPlayground() throws
