@@ -21,7 +21,7 @@ public class SettlementManager {
         return newSettlement;
     }
 
-    // AI
+    // Ai
     public Hex chooseHexForSettlement() throws NoPlayableHexException {
         ArrayList<Hex> hexes = world.getAllHexesInWorld();
 
