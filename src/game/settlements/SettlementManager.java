@@ -144,6 +144,26 @@ public class SettlementManager {
         throw new BuildConditionsNotMetException(errorMessage);
     }
 
+    public int sizeOfLargestContainedSettlement() {
+        int sizeOfLargestSettlement = 0;
+        for (Settlement settlement : settlements) {
+            sizeOfLargestSettlement = Math.max(settlement.getSettlementSize(), sizeOfLargestSettlement);
+        }
+        return sizeOfLargestSettlement;
+    }
+
+    public Settlement getLargestContainedSettlement() {
+        int sizeOfLargestSettlement = 0;
+        Settlement largestSettlement = null;
+        for(Settlement settlement : settlements) {
+            if(settlement.getSettlementSize() > sizeOfLargestSettlement) {
+                sizeOfLargestSettlement = settlement.getSettlementSize();
+                largestSettlement = settlement;
+            }
+        }
+        return largestSettlement;
+    }
+
     /*
     public void mergeSettlements() {
         for (Settlement settlement : settlements) {
