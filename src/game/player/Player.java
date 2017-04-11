@@ -118,4 +118,14 @@ public class Player {
             throw new BuildConditionsNotMetException(e.getMessage());
         }
     }
+
+    public int getSizeOfLargestSettlement() {
+        int sizeOfLargestSettlement = settlementManager.sizeOfLargestContainedSettlement();
+        return sizeOfLargestSettlement;
+    }
+
+    public Settlement getLargestSettlement() {
+        Settlement largestSettlement = settlementManager.getLargestContainedSettlement();
+        return largestSettlement;
+    }
 }
