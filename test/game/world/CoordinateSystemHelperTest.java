@@ -1,6 +1,5 @@
-package UnitTests.game.world;
+package game.world;
 
-import game.world.CoordinateSystemHelper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

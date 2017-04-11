@@ -1,6 +1,5 @@
-package UnitTests.game.world;
+package game.world;
 
-import game.world.TileManager;
 import game.world.rules.exceptions.NoHexAtLocationException;
 import org.junit.Assert;
 import org.junit.Before;

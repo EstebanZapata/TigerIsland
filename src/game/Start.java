@@ -12,7 +12,7 @@ public class Start {
     }
 
 
-    static public String convertClientCoordinatesToServerCoordinates(Location locationToConvert) {
+    static String convertClientCoordinatesToServerCoordinates(Location locationToConvert) {
         int serverXCoordinate = locationToConvert.getXCoordinate();
         int serverZCoordinate = locationToConvert.getYCoordinate();
         int serverYCoordinate = -(serverXCoordinate + serverZCoordinate);
