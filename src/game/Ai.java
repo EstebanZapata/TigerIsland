@@ -1,5 +1,9 @@
+/**
+ * Created by thomasbaldwin on 4/11/17.
+ */
+
 package game;
-import game.Game;
+
 import game.tile.Hex;
 import game.tile.Location;
 import game.tile.Tile;
@@ -30,5 +34,4 @@ public class AI {
         return new GameActionMessage(gameID, moveNumber, playerID, tileToBePlaced, locationOfNewTile, NORTHWEST_WEST, FOUNDED_SETTLEMENT, locationOnWhichToBuild, GRASSLANDS);
 
     }
-
 }
