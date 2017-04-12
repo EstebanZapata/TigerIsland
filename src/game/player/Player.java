@@ -69,15 +69,15 @@ public class Player {
         }
     }
 
-    public void expandSettlement(Settlement existingSettlement) throws
+    public void expandSettlement(Settlement existingSettlement, Terrain terrainToExpandOnto) throws
             SettlementCannotBeBuiltOnVolcanoException,
             NotEnoughPiecesException,
             NoHexesToExpandToException
     {
-        int numberOfVillagersRequiredToExpand = this.settlementManager.getNumberOfVillagersRequiredToExpand(existingSettlement, Terrain.GRASSLANDS);
+        int numberOfVillagersRequiredToExpand = this.settlementManager.getNumberOfVillagersRequiredToExpand(existingSettlement, terrainToExpandOnto);
         try {
             this.useVillagers(numberOfVillagersRequiredToExpand);
-            this.settlementManager.expandSettlement(existingSettlement, Terrain.GRASSLANDS);
+            this.settlementManager.expandSettlement(existingSettlement, terrainToExpandOnto);
         }
         catch (NoHexesToExpandToException e) {
             this.villagerCount += numberOfVillagersRequiredToExpand;

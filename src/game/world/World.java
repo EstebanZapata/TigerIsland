@@ -66,6 +66,10 @@ public class World {
         return tileManager.getHexRegardlessOfHeight(x, y);
     }
 
+    public int getHeightOfHexByCoordinates(int x, int y) throws NoHexAtLocationException {
+        return tileManager.getHeightOfHexByCoordinates(x, y);
+    }
+
     public boolean ableToInsertTileIntoTileManager(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) {
         Location locationOfLeftHex = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
         Location locationOfRightHex = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
