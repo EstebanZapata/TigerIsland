@@ -5,75 +5,23 @@ import game.player.exceptions.*;
 import game.settlements.*;
 import game.settlements.exceptions.*;
 import game.world.*;
-import game.world.rules.exceptions.*;
 import game.tile.*;
 
 public class Game {
     public World world;
-    public Player player1;
-    public Player player2;
-    public Ai ai;
+    public Player opponent;
+    public Player theAI;
+    public AiVersion3 ai;
 
     public Game() {
         this.world = new World();
-        this.player1 = new Player(this.world);
-        this.player2 = new Player(this.world);
-        this.ai = new Ai(this.world);
+        this.opponent = new Player(this.world);
+        this.theAI = new Player(this.world);
+        this.ai = new AiVersion3(this.world, this.opponent, this.theAI);
     }
 
     public Tile drawTile() {
         return new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
-    }
-
-    public void play() {
-        boolean player1Turn = false;
-        boolean tilePlaced = false;
-
-        while (true) {
-            Tile tile = drawTile(); // need to add first tile condition
-
-            if (player1Turn) {
-                while (!tilePlaced) {
-                    try {
-                        world.placeFirstTile(); //****** see above
-                        tilePlaced = true;
-                    } catch (IllegalTilePlacementException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-
-                tilePlaced = false;
-
-                // player 1 chooses a build action
-                //if cannot do any, break from while loop and set flag
-
-                // found settlement code
-
-            }
-            else {
-                while (!tilePlaced) {
-                    try {
-                        world.placeFirstTile(); //******
-                        tilePlaced = true;
-                    } catch (IllegalTilePlacementException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-
-                tilePlaced = false;
-
-                // player 2 chooses a build action
-                    //if cannot do any, break from while loop and set flag
-            }
-
-            // merge settlements
-
-            // check end of game conditions
-
-            player1Turn = !player1Turn;
-        }
-
-        // check failed build action flag --> determine winner from turn
     }
 
     public void foundSettlement(Player currentlyActivePlayer, Hex settlementHex) throws
@@ -83,12 +31,12 @@ public class Game {
         currentlyActivePlayer.foundSettlement(settlementHex);
     }
 
-    public void expandSettlement(Player currentlyActivePlayer, Settlement existingSettlement) throws
+    public void expandSettlement(Player currentlyActivePlayer, Settlement existingSettlement, Terrain terrainBeingExpandedOnto) throws
             SettlementCannotBeBuiltOnVolcanoException,
             NotEnoughPiecesException,
             NoHexesToExpandToException
     {
-        currentlyActivePlayer.expandSettlement(existingSettlement);
+        currentlyActivePlayer.expandSettlement(existingSettlement, terrainBeingExpandedOnto);
     }
 
     public void buildTotoroSanctuary(Player currentlyActivePlayer, Hex sanctuaryHex) throws

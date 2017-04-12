@@ -1,9 +1,16 @@
 package thread;
 
 import game.Game;
+import game.player.Player;
 import game.settlements.BuildAction;
+import game.settlements.Settlement;
+import game.tile.Hex;
 import game.tile.Location;
+import game.tile.Terrain;
+import game.tile.Tile;
 import game.tile.orientation.TileOrientation;
+import game.world.CoordinateSystemHelper;
+import game.world.World;
 import game.world.rules.exceptions.IllegalTilePlacementException;
 import thread.message.GameActionMessage;
 import thread.message.GameCommandMessage;
@@ -83,20 +90,55 @@ public class GameThread extends MyThread {
         int moveNumber = message.getMoveNumber();
 
             Message aiResponse = null;
-            try {
+           // try {
                 aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
                 return aiResponse;
 
-            } catch (IllegalTilePlacementException e) {
+            /*} catch (IllegalTilePlacementException e) {
                 e.printStackTrace();
                 return aiResponse;
-            }
+            }*/
 
 
     }
 
     private void processOpponentAction(GameActionMessage message) throws IllegalTilePlacementException {
-        game.world.insertTileIntoTileManager(message.getTilePlaced(),message.getLocationOfVolcano(),message.getTileOrientationPlaced());
+        World world = game.world;
+        Player playerMakingMove = game.opponent;
+
+        Tile tilePlaced = message.getTilePlaced();
+        Location locationOfVolcano = message.getLocationOfVolcano();
+        TileOrientation orientationOfTilePlaced = message.getTileOrientationPlaced();
+        world.insertTileIntoTileManager(tilePlaced, locationOfVolcano, orientationOfTilePlaced);
+
+        Location fakeLocationOfBuildAction = message.getLocationOfBuildAction();
+
+        int xCoordinateOfBuild = fakeLocationOfBuildAction.getxCoordinate();
+        int yCoordinateOfBuild = fakeLocationOfBuildAction.getyCoordinate();
+
+        Hex hexBeingBuiltOn = world.getHexRegardlessOfHeight(xCoordinateOfBuild, yCoordinateOfBuild);
+        try {
+            switch (message.getBuildActionPerformed()) {
+                case FOUNDED_SETTLEMENT:
+                    game.foundSettlement(playerMakingMove, hexBeingBuiltOn);
+                    break;
+                case EXPANDED_SETTLEMENT:
+                    Settlement settlementBeingExpanded = playerMakingMove.settlementManager.getSettlementFromHex(hexBeingBuiltOn);
+                    Terrain terrainExpandedOnto = message.getTerrainExpandedOnto();
+                    game.expandSettlement(playerMakingMove, settlementBeingExpanded, terrainExpandedOnto);
+                    break;
+                case BUILT_TIGER_PLAYGROUND:
+                    game.buildTigerPlayground(playerMakingMove, hexBeingBuiltOn);
+                    break;
+                case BUILT_TOTORO_SANCTUARY:
+                    game.buildTotoroSanctuary(playerMakingMove, hexBeingBuiltOn);
+                    break;
+                case UNABLE_TO_BUILD:
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 
