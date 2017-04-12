@@ -25,7 +25,11 @@ public class Tile {
         return hexes[LEFT_HEX];
     }
 
+    public Terrain getLeftHexTerrain() { return hexes[LEFT_HEX].getTerrain(); }
+
     public Hex getRightHexRelativeToVolcano() {
         return hexes[RIGHT_HEX];
     }
+
+    public Terrain getRightHexTerrain() { return hexes[RIGHT_HEX].getTerrain(); }
 }
