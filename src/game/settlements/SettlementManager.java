@@ -164,6 +164,18 @@ public class SettlementManager {
         return largestSettlement;
     }
 
+    public Settlement getLargestSettlementNotContainingATotoro() {
+        int sizeOfLargestSettlement = 0;
+        Settlement largestSettlement = null;
+        for(Settlement settlement : settlements) {
+            if(settlement.getSettlementSize() > sizeOfLargestSettlement && !settlement.hasTotoroSanctuary()) {
+                sizeOfLargestSettlement = settlement.getSettlementSize();
+                largestSettlement = settlement;
+            }
+        }
+        return largestSettlement;
+    }
+
     /*
     public void mergeSettlements() {
         for (Settlement settlement : settlements) {

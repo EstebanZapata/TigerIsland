@@ -4,8 +4,8 @@ import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.NoHexAtLocationException;
 import game.tile.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
+
+import java.util.*;
 
 public class Settlement {
     private ArrayList<Hex> settlementHexes;
@@ -179,4 +179,16 @@ public class Settlement {
 
         return potentialSettlementHexes;
     }
+
+    public Location[] getAllHexLocationsAdjacentToSettlement() {
+        Set<Location> setWithoutDuplicates = new HashSet<>();
+        for (Hex hex : settlementHexes) {
+            Location hexLocation = hex.getLocation();
+            Location[] locationsToAdd = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
+            setWithoutDuplicates.addAll(Arrays.asList(locationsToAdd));
+        }
+        return setWithoutDuplicates.toArray(new Location[0]);
+    }
+
 }
+
