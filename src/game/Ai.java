@@ -70,6 +70,7 @@ public class Ai {
                         try {
                             p1.settlementManager.buildTotoroSanctuary(world.getHexByLocation(locationOnWhichToBuild));
                             locationOnWhichToBuild = templocationOnWhichToBuild;
+                            previousBuildHex = null;
                         }
                         catch (NoPlayableHexException error) {
                             if (playerID == p2.playerID) {
@@ -77,6 +78,7 @@ public class Ai {
                                 try {
                                     p2.settlementManager.buildTotoroSanctuary(world.getHexByLocation(locationOnWhichToBuild));
                                     locationOnWhichToBuild = templocationOnWhichToBuild;
+                                    previousBuildHex = null;
                                 } catch (NoPlayableHexException error2) {
 
                                 }
