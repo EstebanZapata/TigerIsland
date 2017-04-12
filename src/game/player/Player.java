@@ -14,8 +14,10 @@ public class Player {
     private int villagerCount;
 
     public SettlementManager settlementManager;
+    public String playerID;
 
-    public Player(World existingWorld) {
+    public Player(World existingWorld, String playerID) {
+        this.playerID = playerID;
         this.score = Settings.STARTING_SCORE_COUNT;
         this.totoroCount = Settings.STARTING_TOTORO_COUNT;
         this.tigerCount = Settings.STARTING_TIGER_COUNT;

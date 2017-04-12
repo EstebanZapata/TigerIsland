@@ -13,7 +13,7 @@ public class PlayerTest {
     @Before
     public void setupPlayer(){
         this.myWorld = new World();
-        this.myPlayer = new Player(this.myWorld);
+        this.myPlayer = new Player(this.myWorld, "PLAYERID");
     }
 
     @Test

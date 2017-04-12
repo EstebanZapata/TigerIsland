@@ -19,7 +19,7 @@ import thread.message.Message;
 import static game.settlements.BuildAction.FOUNDED_SETTLEMENT;
 
 public class AiDecision {
-    private Game myGame = new Game();
+    private Game myGame = new Game("PLAYER1", "PLAYER2");
     private Tile myTile = new Tile(Terrain.JUNGLE,Terrain.ROCKY);
     private GameCommandMessage message = new GameCommandMessage("GAMEID",1.5,1,myTile);
     private GameActionMessage aiResponse;

@@ -14,11 +14,11 @@ public class Game {
     public Player player2;
     public Ai ai;
 
-    public Game() {
+    public Game(String playerID, String opponentID) {
         this.world = new World();
-        this.player1 = new Player(this.world);
-        this.player2 = new Player(this.world);
-        this.ai = new Ai(this.world);
+        this.player1 = new Player(this.world, playerID);
+        this.player2 = new Player(this.world, opponentID);
+        this.ai = new Ai(this.world,player1,player2);
     }
 
     public Tile drawTile() {

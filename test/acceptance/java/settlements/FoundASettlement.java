@@ -17,7 +17,7 @@ public class FoundASettlement {
 
     @Given("^a tile is on the board$")
     public void a_tile_is_on_the_board()  {
-    myGame = new Game();
+    myGame = new Game("PLAYER1", "PLAYER2");
         Assert.assertEquals(false, myGame.world.getAllHexesInWorld().isEmpty());
     }
 

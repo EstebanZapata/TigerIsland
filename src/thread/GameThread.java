@@ -31,10 +31,10 @@ public class GameThread extends MyThread {
         this.gameMessageQueue = communication.getGameMessageQueue();
         this.gameResponseQueue = communication.getGameResponseQueue();
 
-        this.game = new Game();
 
         this.myPlayerId = myPlayerId;
         this.opponentPlayerId = opponentPlayerId;
+        this.game = new Game(myPlayerId, opponentPlayerId);
 
         this.gameId = gameId;
     }
