@@ -172,9 +172,14 @@ public class SettlementTest {
         Settlement newSettlement = new Settlement(foundingHex);
         world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
         world.insertTileIntoTileManager(expansionTile3, volcanoLocation3, TileOrientation.SOUTHEAST_EAST);
-        ArrayList<Hex> potentialSettlementHexes = newSettlement.getPotentialSettlementHexes(foundingHex, world, foundingHex.getTerrain());
-        System.out.println(potentialSettlementHexes.get(0).getLocation());
-        Assert.assertEquals(potentialSettlementHexes.size(), 1);
+        try {
+            ArrayList<Hex> potentialSettlementHexes = newSettlement.getPotentialSettlementHexes(foundingHex, world, foundingHex.getTerrain());
+            System.out.println(potentialSettlementHexes.get(0).getLocation());
+            Assert.assertEquals(potentialSettlementHexes.size(), 1);
+        }
+        catch (SettlementHeightRequirementException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test

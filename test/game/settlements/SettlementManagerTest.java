@@ -292,6 +292,6 @@ public class SettlementManagerTest {
             System.out.println(testing.getLocation());
         }
 
-        Assert.assertEquals(newSettlement.getSettlementSize(), 6);
+        Assert.assertEquals(newSettlement.getSettlementSize(), 5);
     }
 }

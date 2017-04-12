@@ -125,28 +125,73 @@ public class Settlement {
                     String errorMessage = String.format("There are no playable hexes for the player to expand to.");
                     throw new NoHexesToExpandToException(errorMessage);
                 }
+                catch (SettlementHeightRequirementException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
 
         return allPotentialSettlementHexes;
     }
 
-    public ArrayList<Hex> getPotentialSettlementHexes(Hex settlementHex, World world, Terrain terrainType) {
+    public ArrayList<Hex> getPotentialSettlementHexes(Hex settlementHex, World world, Terrain terrainType) throws SettlementHeightRequirementException {
         ArrayList<Hex> potentialSettlementHexes = new ArrayList<>();
-        Location hexLocation = settlementHex.getLocation();
-        Location[] hexLocationsAdjacentToCenter = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
-        for (Location adjacentHexLocation : hexLocationsAdjacentToCenter) {
-            try {
-                Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                adjacentHex.checkExpansionConditions(terrainType);
-                if (!expansionQueue.contains(adjacentHex))
-                {
-                    potentialSettlementHexes.add(adjacentHex);
-                    expansionQueue.add(adjacentHex);
+       // Location lowerHexLocation = settlementHex.getLocation();
+
+       // int x1 = lowerHexLocation.getxCoordinate();
+       // int y1 = lowerHexLocation.getyCoordinate();
+
+       // try {
+            //Hex topHex = world.getHexRegardlessOfHeight(x1, y1);
+            //Location highestHexLocation = topHex.getLocation();
+            Location hexLocation = settlementHex.getLocation();
+            Location[] hexLocationsAdjacentToCenter = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
+
+            for (Location adjacentHexLocation : hexLocationsAdjacentToCenter) {
+                try {
+                    int x = adjacentHexLocation.getxCoordinate();
+                    int y = adjacentHexLocation.getyCoordinate();
+                    Hex adjacentHex = world.getHexRegardlessOfHeight(x, y);
+                    //Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
+
+                    if (adjacentHex.getHeight() == settlementHex.getHeight()) {
+
+                        adjacentHex.checkExpansionConditions(terrainType);
+
+                        if (!expansionQueue.contains(adjacentHex)) {
+                            potentialSettlementHexes.add(adjacentHex);
+                            expansionQueue.add(adjacentHex);
+                        }
+                    }
+
+
+                } catch (NoHexAtLocationException e) {
+                    System.out.println(e.getMessage());
+                } catch (HexDoesNotMeetConditionsException e) {
+                    System.out.println(e.getMessage());
+                } catch (SettlementAlreadyExistsOnHexException e) {
+                    System.out.println(e.getMessage());
                 }
             }
-            catch (NoHexAtLocationException e) {
-                System.out.println(e.getMessage());
+       // }
+        /*catch (NoHexAtLocationException e) {
+            System.out.println(e.getMessage());
+        }*/
+
+
+        //}
+
+     /*   Hex nextLevelHex = getHexAbove(hexLocation, world);
+        if (nextLevelHex != null) {
+       // else {
+            try {
+                if (potentialSettlementHexes.contains(settlementHex))
+                {
+                    potentialSettlementHexes.remove(settlementHex);
+                }
+                nextLevelHex.checkExpansionConditions(terrainType);
+                potentialSettlementHexes.add(nextLevelHex);
+                expansionQueue.add(nextLevelHex);
             }
             catch (HexDoesNotMeetConditionsException e) {
                 System.out.println(e.getMessage());
@@ -154,9 +199,10 @@ public class Settlement {
             catch (SettlementAlreadyExistsOnHexException e) {
                 System.out.println(e.getMessage());
             }
-        }
+        }*/
 
-        try {
+
+        /*try {
             int x = hexLocation.getxCoordinate();
             int y = hexLocation.getyCoordinate();
             int height = hexLocation.getHeight();
@@ -175,8 +221,34 @@ public class Settlement {
         }
         catch (SettlementAlreadyExistsOnHexException e) {
             System.out.println(e.getMessage());
-        }
+        }*/
 
         return potentialSettlementHexes;
     }
+
+    /*public Hex getHexAbove(Location hexLocation, World world) {
+        try {
+            int x = hexLocation.getxCoordinate();
+            int y = hexLocation.getyCoordinate();
+            int height = hexLocation.getHeight();
+
+            Hex nextLevelHex = world.getHexByCoordinate(x, y, height+1);
+            *//*nextLevelHex.checkExpansionConditions(terrainType);
+            potentialSettlementHexes.add(nextLevelHex);
+            expansionQueue.add(nextLevelHex);*//*
+
+            return nextLevelHex;
+
+        }
+        catch (NoHexAtLocationException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+       *//* catch (HexDoesNotMeetConditionsException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (SettlementAlreadyExistsOnHexException e) {
+            System.out.println(e.getMessage());
+        }*//*
+    }*/
 }
