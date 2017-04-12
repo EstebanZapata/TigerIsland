@@ -132,4 +132,9 @@ public class Player {
         Settlement largestSettlement = settlementManager.getLargestContainedSettlement();
         return largestSettlement;
     }
+
+    public Settlement getLargestSettlementNotContainingATotoro() {
+        Settlement largestSettlementWithoutTotoro = settlementManager.getLargestSettlementNotContainingATotoro();
+        return largestSettlementWithoutTotoro;
+    }
 }
