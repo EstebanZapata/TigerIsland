@@ -284,7 +284,7 @@ public class SettlementManagerTest {
         world.insertTileIntoTileManager(expansionTile4, volcanoLocation4, TileOrientation.NORTHEAST_NORTHWEST);
         world.insertTileIntoTileManager(expansionTile5, volcanoLocation5, TileOrientation.EAST_NORTHEAST);
 
-        Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
+        Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile3.getRightHexRelativeToVolcano());
         this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
 
         ArrayList<Hex> test = newSettlement.getHexesFromSettlement();
@@ -292,6 +292,6 @@ public class SettlementManagerTest {
             System.out.println(testing.getLocation());
         }
 
-        Assert.assertEquals(newSettlement.getSettlementSize(), 5);
+        Assert.assertEquals(newSettlement.getSettlementSize(), 6);
     }
 }
