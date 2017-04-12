@@ -4,6 +4,8 @@ import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.*;
 import game.tile.*;
+import gherkin.lexer.Ar;
+
 import java.util.ArrayList;
 
 public class SettlementManager {
@@ -18,6 +20,7 @@ public class SettlementManager {
     public Settlement foundSettlement(Hex hex) throws SettlementAlreadyExistsOnHexException {
         Settlement newSettlement = new Settlement(hex);
         this.settlements.add(newSettlement);
+        newSettlement = tryToMerge(hex);
         return newSettlement;
     }
 
@@ -144,125 +147,45 @@ public class SettlementManager {
         throw new BuildConditionsNotMetException(errorMessage);
     }
 
-    /*
-    private Settlement chooseSettlementToExpandTo(World world, Terrain terrainType) {
-        int maxPossibleExpansionHexes = 0;
-        for (Settlement settlement : this.settlements) {
-            try {
-                ArrayList<Hex> jungleExpansionHexes = settlement.getHexesToExpandTo(world, Terrain.JUNGLE);
-                ArrayList<Hex> grasslandsExpansionHexes = settlement.getHexesToExpandTo(world, Terrain.GRASSLANDS);
-                ArrayList<Hex> lakeExpansionHexes = settlement.getHexesToExpandTo(world, Terrain.LAKE);
-                ArrayList<Hex> rockyExpansionHexes = settlement.getHexesToExpandTo(world, Terrain.ROCKY);
+    public Settlement tryToMerge(Hex foundingSettlementHex) {
+        Settlement initialSettlement = foundingSettlementHex.getSettlement();
+        ArrayList<Hex> adjacentHexesWithSettlement = new ArrayList<>();
+        int adjacentHexesWithSettlementCount = 0;
+        Location settlementHexLocation = foundingSettlementHex.getLocation();
+        Location[] adjacentHexLocations = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(settlementHexLocation);
 
-                int max1 = Math.max(jungleExpansionHexes.size(), grasslandsExpansionHexes.size());
-                int max2 = Math.max(lakeExpansionHexes.size(), rockyExpansionHexes.size());
-                int max = Math.max(max1, max2);
-                maxPossibleExpansionHexes = Math.max(max, maxPossibleExpansionHexes);
+        for (Location adjacentHexLocation : adjacentHexLocations) {
+            try {
+                Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
+
+                if (adjacentHex.getSettlement() != null) {
+                    adjacentHexesWithSettlement.add(adjacentHex);
+                }
             }
-            catch (SettlementCannotBeBuiltOnVolcanoException e) {
-                System.out.println(e.getMessage());
-            }
-            catch (NoHexesToExpandToException e) {
+            catch (NoHexAtLocationException e) {
                 System.out.println(e.getMessage());
             }
         }
 
-        return this.settlements.get(0);
-    }
+        adjacentHexesWithSettlementCount = adjacentHexesWithSettlement.size();
+        if (adjacentHexesWithSettlementCount > 0) {
+            Hex firstAdjacentHexWithSettlement = adjacentHexesWithSettlement.get(0);
+            Settlement firstAdjacentSettlement = firstAdjacentHexWithSettlement.getSettlement();
 
-    private Hex chooseNewSanctuaryHex(World world) throws NoPlayableHexException {
-        for (Settlement settlement : this.settlements) {
-            try {
-                settlement.checkSanctuarySettlementConditions();
-            }
-            catch (SettlementDoesNotSizeRequirementsException e) {
-                continue;
-            }
-            catch (SettlementAlreadyHasTotoroSanctuaryException e) {
-                continue;
-            }
-
-            ArrayList<Hex> settlementHexes = settlement.getHexesFromSettlement();
-            for (Hex settlementHex : settlementHexes) {
-                Location existingHexLocation = settlementHex.getLocation();
-                Location[] adjacentHexLocations = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(existingHexLocation);
-                for (Location adjacentHexLocation : adjacentHexLocations) {
-                    try {
-                        Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                        adjacentHex.checkSanctuaryConditions();
-                        return adjacentHex;
-                    }
-                    catch (NoHexAtLocationException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    catch (SettlementCannotBeBuiltOnVolcanoException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    catch (SettlementAlreadyExistsOnHexException e) {
-                        System.out.println(e.getMessage());
-                    }
+            for (Hex adjacentHexWithSettlement : adjacentHexesWithSettlement) {
+                Settlement nextAdjacentSettlement = adjacentHexWithSettlement.getSettlement();
+                if (adjacentHexWithSettlement != firstAdjacentHexWithSettlement) {
+                    nextAdjacentSettlement.removeHexFromSettlementForMerging(adjacentHexWithSettlement);
                 }
+                adjacentHexWithSettlement.setSettlement(firstAdjacentSettlement);
             }
+
+            foundingSettlementHex.setSettlement(firstAdjacentSettlement);
+            initialSettlement.removeHexFromSettlementForMerging(foundingSettlementHex);
+            return firstAdjacentSettlement;
         }
 
-        String errorMessage = String.format("There are no playable hexes for the player to build a sanctuary on.");
-        throw new NoPlayableHexException(errorMessage);
+        return initialSettlement;
     }
 
-    private Hex chooseNewPlaygroundHex(World world) throws NoPlayableHexException {
-        for (Settlement settlement : this.settlements) {
-            try {
-                settlement.checkPlaygroundSettlementConditions();
-            }
-            catch (SettlementAlreadyHasTigerPlaygroundException e) {
-                System.out.println(e.getMessage());
-            }
-
-            ArrayList<Hex> settlementHexes = settlement.getHexesFromSettlement();
-            for (Hex settlementHex : settlementHexes) {
-                Location existingHexLocation = settlementHex.getLocation();
-                Location[] adjacentHexLocations = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(existingHexLocation);
-                for (Location adjacentHexLocation : adjacentHexLocations) {
-                    try{
-                        Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                        adjacentHex.checkPlaygroundConditions();
-                        return adjacentHex;
-                    }
-                    catch (NoHexAtLocationException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    catch (SettlementCannotBeBuiltOnVolcanoException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    catch (SettlementHeightRequirementException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    catch (SettlementAlreadyExistsOnHexException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-            }
-        }
-
-        String errorMessage = String.format("There are no playable hexes for the player to build a playground on.");
-        throw new NoPlayableHexException(errorMessage);
-    }
-
-    public void mergeSettlements() {
-        for (Settlement settlement : settlements) {
-            for (Hex settlementHex : settlement.getHexesFromSettlement()) {
-                Location settlementHexLocation = settlementHex.getLocation();
-                Location[] adjacentHexLocations = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(settlementHexLocation);
-                for (Location adjacentHexLocation : adjacentHexLocations) {
-                    try {
-                        Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
-                    }
-                    catch (NoHexAtLocationException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-            }
-        }
-    }
-    */
 }

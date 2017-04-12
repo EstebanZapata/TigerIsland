@@ -54,6 +54,10 @@ public class Settlement {
         }
     }
 
+    public void removeHexFromSettlementForMerging(Hex hexToBeRemoved)  {
+        settlementHexes.remove(hexToBeRemoved);
+    }
+
     public void setHasTotoroSanctuary() {
         hasTotoro = true;
     }
@@ -165,5 +169,5 @@ public class Settlement {
         return potentialSettlementHexes;
     }
 
-    
+
 }

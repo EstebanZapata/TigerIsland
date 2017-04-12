@@ -294,4 +294,43 @@ public class SettlementManagerTest {
 
         Assert.assertEquals(newSettlement.getSettlementSize(), 6);
     }
+
+    @Test
+    public void testMergingFoundingSettlements() throws
+            IllegalTilePlacementException,
+            SettlementAlreadyExistsOnHexException,
+            SettlementCannotBeBuiltOnVolcanoException,
+            NoHexesToExpandToException
+    {
+        Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile4 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+
+        Location volcanoLocation3 = new Location(0, 3, 0);
+        Location volcanoLocation4 = new Location(-2, 1, 0);
+
+        this.world.insertTileIntoTileManager(expansionTile3, volcanoLocation3, TileOrientation.SOUTHEAST_EAST);
+        this.world.insertTileIntoTileManager(expansionTile4, volcanoLocation4, TileOrientation.NORTHEAST_NORTHWEST);
+
+        Settlement newSettlement3 = this.settlementManager.foundSettlement(expansionTile3.getLeftHexRelativeToVolcano());
+        Settlement newSettlement2 = this.settlementManager.foundSettlement(expansionTile2.getLeftHexRelativeToVolcano());
+
+        if (newSettlement2 == newSettlement3) {
+            Assert.assertTrue(true);
+        }
+
+        else {
+            Assert.assertTrue(false);
+        }
+
+        Settlement newSettlement4 = this.settlementManager.foundSettlement(expansionTile4.getLeftHexRelativeToVolcano());
+
+        if (newSettlement4 == newSettlement3) {
+            Assert.assertTrue(true);
+        }
+
+        else {
+            Assert.assertTrue(false);
+        }
+
+    }
 }
