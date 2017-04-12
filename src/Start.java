@@ -104,8 +104,8 @@ public class Start {
 
         else if (actionToTake instanceof GameEndMessage) {
             String gameToEnd = ((GameEndMessage) actionToTake).getGameId();
-            getGameFromGameId.get(gameToEnd).stopThread();
-            getGameThreadCommunicationFromId.get(gameToEnd).getGameMessageQueue().add(Message.NO_ACTION);
+            //getGameFromGameId.get(gameToEnd).stopThread();
+            //getGameThreadCommunicationFromId.get(gameToEnd).getGameMessageQueue().add(Message.NO_ACTION);
             getGameFromGameId.remove(gameToEnd);
             getGameThreadCommunicationFromId.remove(gameToEnd);
 

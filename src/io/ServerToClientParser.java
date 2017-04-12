@@ -10,9 +10,9 @@ import thread.message.*;
 import static game.tile.Terrain.*;
 
 public class ServerToClientParser {
-    private static String tournamentPassword = "<tournament_password>";
-    private static String userName = "<userName>";
-    private static String userPassword = "<password>";
+    private static String tournamentPassword = "TigersRule";
+    private static String userName = "Team_L";
+    private static String userPassword = "Pass_L";
 
     public static Message parseServerInputAndComposeMessage(String serverInput){
         String parts[] = serverInput.split(" ");

@@ -91,8 +91,12 @@ public class GameThread extends MyThread {
 
             Message aiResponse = null;
            // try {
-                aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
-                return aiResponse;
+        try {
+            aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
+        } catch (IllegalTilePlacementException e) {
+            e.printStackTrace();
+        }
+        return aiResponse;
 
             /*} catch (IllegalTilePlacementException e) {
                 e.printStackTrace();
