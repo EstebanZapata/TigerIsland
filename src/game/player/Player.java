@@ -9,22 +9,34 @@ import game.tile.*;
 
 public class Player {
     private int score;
+    private int villagerCount;
     private int totoroCount;
     private int tigerCount;
-    private int villagerCount;
 
     public SettlementManager settlementManager;
 
     public Player(World existingWorld) {
         this.score = Settings.STARTING_SCORE_COUNT;
+        this.villagerCount = Settings.STARTING_VILLAGER_COUNT;
         this.totoroCount = Settings.STARTING_TOTORO_COUNT;
         this.tigerCount = Settings.STARTING_TIGER_COUNT;
-        this.villagerCount = Settings.STARTING_VILLAGER_COUNT;
         this.settlementManager = new SettlementManager(existingWorld);
     }
 
     public int getScore() {
         return this.score;
+    }
+
+    public int getVillagerCount() {
+        return this.villagerCount;
+    }
+
+    public int getTotoroCount() {
+        return this.totoroCount;
+    }
+
+    public int getTigerCount() {
+        return this.tigerCount;
     }
 
     public void useVillagers(int count) throws NotEnoughPiecesException {
@@ -56,28 +68,28 @@ public class Player {
 
     public void foundSettlement(Hex settlementHex) throws
             NotEnoughPiecesException,
-            SettlementAlreadyExistsOnHexException
+            BuildConditionsNotMetException
     {
         try {
             this.useVillagers(1);
             this.settlementManager.foundSettlement(settlementHex);
             this.score += Settings.FOUND_SETTLEMENT_POINTS;
         }
-        catch (SettlementAlreadyExistsOnHexException e) {
+        catch (BuildConditionsNotMetException e) {
             this.villagerCount += 1;
             throw new SettlementAlreadyExistsOnHexException(e.getMessage());
         }
     }
 
-    public void expandSettlement(Settlement existingSettlement) throws
+    public void expandSettlement(Settlement existingSettlement, Terrain terrainToExpandOnto) throws
             SettlementCannotBeBuiltOnVolcanoException,
             NotEnoughPiecesException,
             NoHexesToExpandToException
     {
-        int numberOfVillagersRequiredToExpand = this.settlementManager.getNumberOfVillagersRequiredToExpand(existingSettlement, Terrain.GRASSLANDS);
+        int numberOfVillagersRequiredToExpand = this.settlementManager.getNumberOfVillagersRequiredToExpand(existingSettlement, terrainToExpandOnto);
         try {
             this.useVillagers(numberOfVillagersRequiredToExpand);
-            this.settlementManager.expandSettlement(existingSettlement, Terrain.GRASSLANDS);
+            this.settlementManager.expandSettlement(existingSettlement, terrainToExpandOnto);
         }
         catch (NoHexesToExpandToException e) {
             this.villagerCount += numberOfVillagersRequiredToExpand;
@@ -117,5 +129,20 @@ public class Player {
             this.tigerCount += 1;
             throw new BuildConditionsNotMetException(e.getMessage());
         }
+    }
+
+    public int getSizeOfLargestSettlement() {
+        int sizeOfLargestSettlement = settlementManager.sizeOfLargestContainedSettlement();
+        return sizeOfLargestSettlement;
+    }
+
+    public Settlement getLargestSettlement() {
+        Settlement largestSettlement = settlementManager.getLargestContainedSettlement();
+        return largestSettlement;
+    }
+
+    public Settlement getLargestSettlementNotContainingATotoro() {
+        Settlement largestSettlementWithoutTotoro = settlementManager.getLargestSettlementNotContainingATotoro();
+        return largestSettlementWithoutTotoro;
     }
 }

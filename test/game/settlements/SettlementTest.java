@@ -13,55 +13,79 @@ import java.util.ArrayList;
 
 public class SettlementTest {
     private Settlement settlement1, settlement2, settlement3, settlement4;
-    private Hex hex1, hex2, hex3, hex4, hex5;
+    private Hex hex1, hex2, hex3, hex4, hex5, hex6, hex7, hex8, hex9, hex10;
     private World world;
 
     @Before
-    public void setUpSettlements() {
-        Tile tile1, tile2, tile3, tile4, tile5;
-        world = new World();
+    public void setUpSettlements() throws
+            BuildConditionsNotMetException
+    {
+        this.world = new World();
 
-        tile1 = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
-        hex1 = new Hex(tile1, Terrain.JUNGLE);
-        settlement1 = new Settlement(hex1);
+        Tile tile1 = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
+        this.hex1 = new Hex(tile1, Terrain.JUNGLE);
+        this.settlement1 = new Settlement(hex1);
 
-        tile2 = new Tile(Terrain.LAKE, Terrain.ROCKY);
-        hex2 = new Hex(tile2, Terrain.ROCKY);
-        settlement2 = new Settlement(hex2);
+        Tile tile2 = new Tile(Terrain.LAKE, Terrain.ROCKY);
+        this.hex2 = new Hex(tile2, Terrain.ROCKY);
+        this.settlement2 = new Settlement(hex2);
 
-        tile3 = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
-        hex3 = new Hex(tile3, Terrain.GRASSLANDS);
-        settlement3 = new Settlement(hex3);
+        Tile tile3 = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
+        this.hex3 = new Hex(tile3, Terrain.GRASSLANDS);
+        this.settlement3 = new Settlement(hex3);
 
-        tile4 = new Tile(Terrain.JUNGLE, Terrain.LAKE);
-        hex4 = new Hex(tile4, Terrain.LAKE);
-        settlement4 = new Settlement(hex4);
+        Tile tile4 = new Tile(Terrain.JUNGLE, Terrain.LAKE);
+        this.hex4 = new Hex(tile4, Terrain.LAKE);
+        this.settlement4 = new Settlement(hex4);
 
-        tile5 = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
-        hex5 = new Hex(tile4, Terrain.LAKE);
+        Tile tile5 = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        this.hex5 = new Hex(tile4, Terrain.LAKE);
+
+        Tile tile6 = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
+        this.hex6 = new Hex(tile6, Terrain.JUNGLE);
+
+        Tile tile7 = new Tile(Terrain.LAKE, Terrain.ROCKY);
+        this.hex7 = new Hex(tile7, Terrain.ROCKY);
+
+        Tile tile8 = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
+        this.hex8 = new Hex(tile8, Terrain.GRASSLANDS);
+
+        Tile tile9 = new Tile(Terrain.JUNGLE, Terrain.LAKE);
+        this.hex9 = new Hex(tile9, Terrain.LAKE);
+
+        Tile tile10 = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        this.hex10 = new Hex(tile10, Terrain.LAKE);
     }
 
     @Test
     public void testFoundingHexIsInSettlement() {
-        Assert.assertTrue(settlement1.containsHex(hex1));
-        Assert.assertTrue(settlement2.containsHex(hex2));
-        Assert.assertTrue(settlement3.containsHex(hex3));
-        Assert.assertTrue(settlement4.containsHex(hex4));
+        Assert.assertTrue(this.settlement1.containsHex(hex1));
+        Assert.assertTrue(this.settlement2.containsHex(hex2));
+        Assert.assertTrue(this.settlement3.containsHex(hex3));
+        Assert.assertTrue(this.settlement4.containsHex(hex4));
     }
 
     @Test
     public void testForAHexNotInSettlement() {
-        Assert.assertTrue(!settlement1.containsHex(hex2));
-        Assert.assertTrue(!settlement2.containsHex(hex3));
-        Assert.assertTrue(!settlement3.containsHex(hex4));
-        Assert.assertTrue(!settlement4.containsHex(hex1));
+        Assert.assertFalse(this.settlement1.containsHex(hex2));
+        Assert.assertFalse(this.settlement2.containsHex(hex3));
+        Assert.assertFalse(this.settlement3.containsHex(hex4));
+        Assert.assertFalse(this.settlement4.containsHex(hex1));
     }
 
     @Test
     public void testAddingAHexToASettlement() throws SettlementAlreadyExistsOnHexException {
-        Assert.assertTrue(!settlement1.containsHex(hex2));
-        settlement1.addHexToSettlement(hex2);
-        Assert.assertTrue((settlement1.containsHex(hex2)));
+        Tile foundingTileInSettlement = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        Hex foundingHexInSettlement = new Hex(foundingTileInSettlement, Terrain.LAKE);
+
+        Tile tileToAddToSettlement = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        Hex hexToAddToSettlement = new Hex(tileToAddToSettlement, Terrain.LAKE);
+
+        Settlement newSettlement = new Settlement(foundingHexInSettlement);
+
+        Assert.assertFalse(newSettlement.containsHex(hexToAddToSettlement));
+        newSettlement.addHexToSettlement(hexToAddToSettlement);
+        Assert.assertTrue(newSettlement.containsHex(hexToAddToSettlement));
     }
 
     @Test
@@ -69,17 +93,37 @@ public class SettlementTest {
             SettlementAlreadyExistsOnHexException,
             SettlementCannotBeCompletelyWipedOutException
     {
-        settlement1.addHexToSettlement(hex2);
-        Assert.assertTrue(settlement1.containsHex(hex2));
-        settlement1.removeHexFromSettlement(hex2);
-        Assert.assertTrue(!settlement1.containsHex(hex2));
+        Tile foundingTileInSettlement = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        Hex foundingHexInSettlement = new Hex(foundingTileInSettlement, Terrain.LAKE);
+
+        Tile tileToTest = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        Hex hexToTest = new Hex(tileToTest, Terrain.LAKE);
+
+        Settlement newSettlement = new Settlement(foundingHexInSettlement);
+
+        // Adding the settlement
+        Assert.assertFalse(newSettlement.containsHex(hexToTest));
+        newSettlement.addHexToSettlement(hexToTest);
+        Assert.assertTrue(newSettlement.containsHex(hexToTest));
+
+        // Removing the settlement
+        newSettlement.removeHexFromSettlement(hexToTest);
+        Assert.assertFalse(newSettlement.containsHex(hexToTest));
     }
 
     @Test (expected = SettlementCannotBeCompletelyWipedOutException.class)
-    public void testTryingToWipeOutASettlement() throws SettlementCannotBeCompletelyWipedOutException {
-        Assert.assertTrue(settlement1.containsHex(hex1));
-        Assert.assertEquals(settlement1.getSettlementSize(), 1);
-        settlement1.removeHexFromSettlement(hex1);
+    public void testTryingToWipeOutASettlement() throws
+            BuildConditionsNotMetException,
+            SettlementCannotBeCompletelyWipedOutException
+    {
+        Tile foundingTileInSettlement = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        Hex foundingHexInSettlement = new Hex(foundingTileInSettlement, Terrain.LAKE);
+
+        Settlement newSettlement = new Settlement(foundingHexInSettlement);
+
+        Assert.assertTrue(newSettlement.containsHex(foundingHexInSettlement));
+        Assert.assertEquals(newSettlement.getSettlementSize(), 1);
+        newSettlement.removeHexFromSettlement(foundingHexInSettlement);
     }
 
     @Test
@@ -87,38 +131,67 @@ public class SettlementTest {
             SettlementCannotBeCompletelyWipedOutException,
             SettlementAlreadyExistsOnHexException
     {
-        Assert.assertEquals(settlement2.getSettlementSize(), 1);
-        settlement2.addHexToSettlement(hex1);
-        settlement2.addHexToSettlement(hex3);
-        settlement2.addHexToSettlement(hex4);
-        Assert.assertEquals(settlement2.getSettlementSize(), 4);
-        settlement2.removeHexFromSettlement(hex3);
-        settlement2.removeHexFromSettlement(hex4);
-        Assert.assertEquals(settlement2.getSettlementSize(), 2);
+        Tile tileToAdd1 = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        Hex hexToAdd1 = new Hex(tileToAdd1, Terrain.LAKE);
+
+        Tile tileToAdd2 = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
+        Hex hexToAdd2 = new Hex(tileToAdd2, Terrain.JUNGLE);
+
+        Tile tileToAdd3 = new Tile(Terrain.LAKE, Terrain.ROCKY);
+        Hex hexToAdd3 = new Hex(tileToAdd3, Terrain.ROCKY);
+
+        Tile tileToAdd4 = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
+        Hex hexToAdd4 = new Hex(tileToAdd4, Terrain.GRASSLANDS);
+
+        Tile tileToAdd5 = new Tile(Terrain.JUNGLE, Terrain.LAKE);
+        Hex hexToAdd5 = new Hex(tileToAdd5, Terrain.LAKE);
+
+        Settlement newSettlement = new Settlement(hexToAdd1);
+        newSettlement.addHexToSettlement(hexToAdd2);
+        newSettlement.addHexToSettlement(hexToAdd3);
+        newSettlement.addHexToSettlement(hexToAdd4);
+        newSettlement.addHexToSettlement(hexToAdd5);
+        Assert.assertEquals(newSettlement.getSettlementSize(), 5);
+
+        newSettlement.removeHexFromSettlement(hexToAdd4);
+        newSettlement.removeHexFromSettlement(hexToAdd5);
+
+        Assert.assertEquals(newSettlement.getSettlementSize(), 3);
     }
 
     @Test
     public void testGettingHexesFromSettlement() throws SettlementAlreadyExistsOnHexException {
-        settlement2.addHexToSettlement(hex1);
-        ArrayList<Hex> hexes = settlement2.getHexesFromSettlement();
-        Assert.assertTrue(hexes.contains(hex1));
-        Assert.assertTrue(hexes.contains(hex2));
-        Assert.assertTrue(!hexes.contains(hex3));
-        Assert.assertTrue(!hexes.contains(hex4));
+        Tile foundingTileInSettlement = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        Hex foundingHexInSettlement = new Hex(foundingTileInSettlement, Terrain.LAKE);
+
+        Tile tileInSettlement = new Tile(Terrain.GRASSLANDS, Terrain.LAKE);
+        Hex hexInSettlement = new Hex(tileInSettlement, Terrain.LAKE);
+
+        Tile tileNotInSettlement = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
+        Hex hexNotInSettlement = new Hex(tileNotInSettlement, Terrain.JUNGLE);
+
+        Settlement newSettlement = new Settlement(foundingHexInSettlement);
+        newSettlement.addHexToSettlement(hexInSettlement);
+
+        ArrayList<Hex> settlementHexes = newSettlement.getHexesFromSettlement();
+
+        Assert.assertTrue(settlementHexes.contains(foundingHexInSettlement));
+        Assert.assertTrue(settlementHexes.contains(hexInSettlement));
+        Assert.assertFalse(settlementHexes.contains(hexNotInSettlement));
     }
 
     @Test
     public void testCheckingForTotoro() {
-        Assert.assertTrue(!settlement3.hasTotoroSanctuary());
-        settlement3.setHasTotoroSanctuary();
-        Assert.assertTrue(settlement3.hasTotoroSanctuary());
+        Assert.assertFalse(this.settlement3.hasTotoroSanctuary());
+        this.settlement3.setHasTotoroSanctuary();
+        Assert.assertTrue(this.settlement3.hasTotoroSanctuary());
     }
 
     @Test
     public void testCheckingForTiger() {
-        Assert.assertTrue(!settlement4.hasTigerPlayground());
-        settlement4.setHasTigerPlayground();
-        Assert.assertTrue(settlement4.hasTigerPlayground());
+        Assert.assertFalse(this.settlement4.hasTigerPlayground());
+        this.settlement4.setHasTigerPlayground();
+        Assert.assertTrue(this.settlement4.hasTigerPlayground());
     }
 
     @Test (expected = SettlementAlreadyHasTotoroSanctuaryException.class)
@@ -131,18 +204,18 @@ public class SettlementTest {
         Assert.assertEquals(settlement3.getSettlementSize(), 1);
 
         try {
-            settlement3.checkSanctuaryConditions();
+            this.settlement3.checkSanctuaryConditions();
         }
         catch (SettlementDoesNotSizeRequirementsException e) {
-            settlement3.addHexToSettlement(hex1);
-            settlement3.addHexToSettlement(hex2);
-            settlement3.addHexToSettlement(hex4);
-            settlement3.addHexToSettlement(hex5);
+            this.settlement3.addHexToSettlement(this.hex6);
+            this.settlement3.addHexToSettlement(this.hex7);
+            this.settlement3.addHexToSettlement(this.hex8);
+            this.settlement3.addHexToSettlement(this.hex9);
 
-            Assert.assertEquals(settlement3.getSettlementSize(), 5);
-            settlement3.checkSanctuaryConditions();
-            settlement3.setHasTotoroSanctuary();
-            settlement3.checkSanctuaryConditions();
+            Assert.assertEquals(this.settlement3.getSettlementSize(), 5);
+            this.settlement3.checkSanctuaryConditions();
+            this.settlement3.setHasTotoroSanctuary();
+            this.settlement3.checkSanctuaryConditions();
         }
 
         Assert.assertTrue(false);
@@ -150,15 +223,16 @@ public class SettlementTest {
 
     @Test (expected = SettlementAlreadyHasTigerPlaygroundException.class)
     public void testCheckingPlaygroundSettlementConditions() throws SettlementAlreadyHasTigerPlaygroundException {
-        Assert.assertTrue(!settlement3.hasTigerPlayground());
-        settlement3.checkPlaygroundSettlementConditions();
-        settlement3.setHasTigerPlayground();
-        settlement3.checkPlaygroundSettlementConditions();
+        Assert.assertTrue(!this.settlement3.hasTigerPlayground());
+        this.settlement3.checkPlaygroundConditions();
+        this.settlement3.setHasTigerPlayground();
+        this.settlement3.checkPlaygroundConditions();
     }
 
     @Test
     public void testGetPotentialSettlementHexes() throws
-            IllegalTilePlacementException
+            IllegalTilePlacementException,
+            BuildConditionsNotMetException
     {
         World world = new World();
         Tile expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
@@ -219,22 +293,22 @@ public class SettlementTest {
     @Test (expected = NoHexesToExpandToException.class)
     public void testForNoExpansionHexes() throws
             IllegalTilePlacementException,
-            SettlementCannotBeBuiltOnVolcanoException,
-            NoHexesToExpandToException
+            NoHexesToExpandToException,
+            BuildConditionsNotMetException
     {
-        settlement1.getHexesToExpandTo(world, Terrain.LAKE);
-        world.placeFirstTile();
+        this.settlement1.getHexesToExpandTo(this.world, Terrain.LAKE);
+
         Tile expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile expansionTile2 = new Tile(Terrain.GRASSLANDS, Terrain.JUNGLE);
 
         Location volcanoLocation1 = new Location(-2, 0, 0);
         Location volcanoLocation2 = new Location(2, 3, 0);
 
-        world.insertTileIntoTileManager(expansionTile1, volcanoLocation1, TileOrientation.EAST_NORTHEAST);
-        world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
+        this.world.insertTileIntoTileManager(expansionTile1, volcanoLocation1, TileOrientation.EAST_NORTHEAST);
+        this.world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
 
         Hex foundingHex = expansionTile2.getLeftHexRelativeToVolcano();
         Settlement newSettlement = new Settlement(foundingHex);
-        newSettlement.getHexesToExpandTo(world, foundingHex.getTerrain());
+        newSettlement.getHexesToExpandTo(this.world, foundingHex.getTerrain());
     }
 }

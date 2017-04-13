@@ -37,6 +37,10 @@ public class Location {
         this.height = height;
     }
 
+    public static Location incrementZ(Location locationToIncrement) {
+        return new Location(locationToIncrement.xCoordinate, locationToIncrement.yCoordinate, locationToIncrement.height + 1);
+    }
+
     @Override
     public String toString() {
         return String.format("(%d,%d,%d)", xCoordinate,yCoordinate, height);

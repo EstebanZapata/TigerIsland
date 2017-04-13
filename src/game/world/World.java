@@ -65,4 +65,55 @@ public class World {
     public Hex getHexRegardlessOfHeight(int x, int y) throws NoHexAtLocationException {
         return tileManager.getHexRegardlessOfHeight(x, y);
     }
+
+    public int getHeightOfHexByCoordinates(int x, int y) throws NoHexAtLocationException {
+        return tileManager.getHeightOfHexByCoordinates(x, y);
+    }
+
+    public boolean ableToInsertTileIntoTileManager(Tile tile, Location locationOfVolcano, TileOrientation tileOrientation) {
+        Location locationOfLeftHex = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
+        Location locationOfRightHex = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
+
+        Location[] locationOfTileHexes = new Location[Tile.MAX_HEXES_PER_TILE];
+        locationOfTileHexes[0] = locationOfVolcano;
+        locationOfTileHexes[1] = locationOfLeftHex;
+        locationOfTileHexes[2] = locationOfRightHex;
+
+        boolean ableToPlaceTile;
+
+        try {
+            ableToPlaceTile = tileRulesManager.ableToPlaceTileAtLocation(tile, locationOfTileHexes);
+        }
+        catch (IllegalTilePlacementException e) {
+            ableToPlaceTile = false;
+        }
+
+        return ableToPlaceTile;
+    }
+
+    public TileOrientation calculateTileOrientationToCoverVolcanoLocationAndAdjacentLocation(Location locationOfVolcano, Location locationOfAdjacent)
+            throws NoValidTileOrientationException {
+        Location locationOfUpperVolcano = Location.incrementZ(locationOfVolcano);
+
+        Tile mockTile = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
+
+        for (TileOrientation tileOrientation:TileOrientation.values()) {
+            if (ableToInsertTileIntoTileManager(mockTile, locationOfUpperVolcano, tileOrientation)) {
+                Location mockLeftAdjacentLocation = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
+                Location mockRightAdjacentLocation = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
+
+                if (mockLeftAdjacentLocation.equals(locationOfAdjacent) || mockRightAdjacentLocation.equals(locationOfAdjacent)) {
+                    return tileOrientation;
+                }
+                else {
+                    continue;
+                }
+            }
+
+        }
+
+        String errorMessage = "No valid way to place a tile on " + locationOfVolcano + " " + locationOfAdjacent;
+        throw new NoValidTileOrientationException(errorMessage);
+
+    }
 }
