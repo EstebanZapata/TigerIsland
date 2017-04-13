@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class Start {
     private static BlockingQueue<String> stringsFromServerQueue;
@@ -96,7 +97,24 @@ public class Start {
 
             Message gameResponseMessage = waitForMessageFromGame(gameId);
 
-            String stringToServer = ClientToServerParser.getStringFromGameActionMessage((GameActionMessage) gameResponseMessage);
+            String stringToServer;
+
+            if (gameResponseMessage instanceof GameFailureMessage) {
+                String gameToEnd = ((GameCommandMessage) actionToTake).getGameId();
+
+                System.out.println(gameToEnd + " failed!");
+                stringToServer = "";
+
+                endGame(gameToEnd);
+
+            }
+
+            else if (gameResponseMessage != null) {
+                stringToServer = ClientToServerParser.getStringFromGameActionMessage((GameActionMessage) gameResponseMessage);
+            }
+            else {
+                stringToServer = "";
+            }
 
             stringsToServerQueue.add(stringToServer);
 
@@ -104,10 +122,7 @@ public class Start {
 
         else if (actionToTake instanceof GameEndMessage) {
             String gameToEnd = ((GameEndMessage) actionToTake).getGameId();
-            getGameFromGameId.get(gameToEnd).stopThread();
-            getGameThreadCommunicationFromId.get(gameToEnd).getGameMessageQueue().add(Message.NO_ACTION);
-            getGameFromGameId.remove(gameToEnd);
-            getGameThreadCommunicationFromId.remove(gameToEnd);
+            endGame(gameToEnd);
 
             addEmptyStringToServerQueue();
         }
@@ -157,12 +172,16 @@ public class Start {
             Message messageFromGame = null;
 
             try {
-                messageFromGame = getGameThreadCommunicationFromId.get(gameId).getGameResponseQueue().take();
+                messageFromGame = getGameThreadCommunicationFromId.get(gameId).getGameResponseQueue().poll(2, TimeUnit.SECONDS);
             }
             catch (InterruptedException e) {
             }
 
             if (messageFromGame != null) {
+                return messageFromGame;
+            }
+            else {
+                messageFromGame = new GameFailureMessage();
                 return messageFromGame;
             }
         }
@@ -194,5 +213,10 @@ public class Start {
         return message == Message.NO_ACTION;
     }
 
-
+    private static void endGame(String gameToEnd) {
+        getGameFromGameId.get(gameToEnd).stopThread();
+        getGameThreadCommunicationFromId.get(gameToEnd).getGameMessageQueue().add(Message.NO_ACTION);
+        getGameFromGameId.remove(gameToEnd);
+        getGameThreadCommunicationFromId.remove(gameToEnd);
+    }
 }
