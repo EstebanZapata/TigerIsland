@@ -247,6 +247,44 @@ public class WorldTest {
 
     }
 
+    @Test
+    public void testGetValidTileOrientationToPlaceTileOnTopOfVolcanoAndAdjacentInSameHex() throws IllegalTilePlacementException {
+        setupBaseForHigherTiles();
+
+        Location locationOfVolcanoToCover = new Location(1,0,0);
+        Location locationAdjacentToVolcanoAndOnSameHex = new Location(2,0,0);
+
+        Assert.assertEquals(TileOrientation.SOUTHEAST_EAST, world.calculateTileOrientationToCoverVolcanoLocationAndAdjacentLocation(locationOfVolcanoToCover, locationAdjacentToVolcanoAndOnSameHex));
+    }
+
+    @Test
+    public void testGetValidTileOrientationToPlaceTileOnTopOfVolcanoAndAdjacentInDifferentHex() throws IllegalTilePlacementException {
+        setupBaseForHigherTiles();
+
+        Location locationOfVolcanoToCover = new Location(1,0,0);
+        Location locationAdjacentToVolcanoAndOnDifferentHex = new Location(1,-1,0);
+
+        TileOrientation possibleOrientation = world.calculateTileOrientationToCoverVolcanoLocationAndAdjacentLocation(locationOfVolcanoToCover, locationAdjacentToVolcanoAndOnDifferentHex);
+
+        boolean wasExpectedOrientation = false;
+
+        if (possibleOrientation == TileOrientation.SOUTHEAST_EAST || possibleOrientation == TileOrientation.SOUTHWEST_SOUTHEAST) {
+            wasExpectedOrientation = true;
+        }
+
+        Assert.assertTrue(wasExpectedOrientation);
+
+    }
+
+    @Test(expected = NoValidTileOrientationException.class)
+    public void testGetValidTileOrientationThrowsExceptionIfNoValidOrientation() throws IllegalTilePlacementException{
+        setupBaseForHigherTiles();
+
+        Location locationOfVolcanoToCover = new Location(1,-1,0);
+        Location locationOfAdjacent = new Location(1,-2,0);
+
+        world.calculateTileOrientationToCoverVolcanoLocationAndAdjacentLocation(locationOfVolcanoToCover, locationOfAdjacent);
+    }
 
 
 

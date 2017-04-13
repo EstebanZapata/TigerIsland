@@ -38,6 +38,13 @@ public class LocationTest {
         Assert.assertTrue(firstLocationDoesNotEqualThird);
     }
 
+    @Test
+    public void testIncrementZ() {
+        Assert.assertEquals(new Location(3,4,6), Location.incrementZ(firstLocation));
+        Assert.assertEquals(new Location(3,4,7), Location.incrementZ(thirdLocation));
+
+    }
+
 
 
 }

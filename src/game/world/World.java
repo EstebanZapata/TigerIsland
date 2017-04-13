@@ -90,4 +90,30 @@ public class World {
 
         return ableToPlaceTile;
     }
+
+    public TileOrientation calculateTileOrientationToCoverVolcanoLocationAndAdjacentLocation(Location locationOfVolcano, Location locationOfAdjacent)
+            throws NoValidTileOrientationException {
+        Location locationOfUpperVolcano = Location.incrementZ(locationOfVolcano);
+
+        Tile mockTile = new Tile(Terrain.GRASSLANDS, Terrain.ROCKY);
+
+        for (TileOrientation tileOrientation:TileOrientation.values()) {
+            if (ableToInsertTileIntoTileManager(mockTile, locationOfUpperVolcano, tileOrientation)) {
+                Location mockLeftAdjacentLocation = CoordinateSystemHelper.getTentativeLeftHexLocation(locationOfVolcano, tileOrientation);
+                Location mockRightAdjacentLocation = CoordinateSystemHelper.getTentativeRightHexLocation(locationOfVolcano, tileOrientation);
+
+                if (mockLeftAdjacentLocation.equals(locationOfAdjacent) || mockRightAdjacentLocation.equals(locationOfAdjacent)) {
+                    return tileOrientation;
+                }
+                else {
+                    continue;
+                }
+            }
+
+        }
+
+        String errorMessage = "No valid way to place a tile on " + locationOfVolcano + " " + locationOfAdjacent;
+        throw new NoValidTileOrientationException(errorMessage);
+
+    }
 }
