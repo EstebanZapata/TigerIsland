@@ -43,6 +43,7 @@ public class Start {
     private static void runTournamentLoop() {
         String stringFromServer = waitForMessageFromServer();
         Message actionToTake = ServerToClientParser.parseServerInputAndComposeMessage(stringFromServer);
+        handleActionToTake(actionToTake);
     }
 
     private static String waitForMessageFromServer() {
@@ -56,8 +57,7 @@ public class Start {
             }
 
             if (stringFromServer != null) {
-                Message actionToTake = ServerToClientParser.parseServerInputAndComposeMessage(stringFromServer);
-                handleActionToTake(actionToTake);
+                return stringFromServer;
             }
         }
     }
@@ -155,7 +155,10 @@ public class Start {
 
             for (Object gameThreadObject:gameThreads) {
                 GameThread gamethread = (GameThread) gameThreadObject;
-                gamethread.stopThread();
+
+                String gameId = gamethread.getGameId();
+                endGame(gameId);
+
             }
 
             getGameFromGameId.clear();

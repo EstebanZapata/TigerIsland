@@ -142,4 +142,8 @@ public class GameThread extends MyThread {
 
     }
 
+    public String getGameId() {
+        return this.gameId;
+    }
+
 }
