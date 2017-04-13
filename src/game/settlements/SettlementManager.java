@@ -15,8 +15,8 @@ public class SettlementManager {
         this.settlements = new ArrayList<Settlement>();
     }
 
-    public Settlement foundSettlement(Hex hex) throws SettlementAlreadyExistsOnHexException {
-        Settlement newSettlement = new Settlement(hex);
+    public Settlement foundSettlement(Hex foundingHex) throws BuildConditionsNotMetException {
+        Settlement newSettlement = new Settlement(foundingHex);
         this.settlements.add(newSettlement);
         return newSettlement;
     }

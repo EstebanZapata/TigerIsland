@@ -37,14 +37,14 @@ public class SettlementManagerTest {
     }
 
     @Test
-    public void testFoundSettlement() throws SettlementAlreadyExistsOnHexException {
+    public void testFoundSettlement() throws BuildConditionsNotMetException {
         Assert.assertEquals(this.settlementManager.settlements.size(), 0);
         this.settlementManager.foundSettlement(expansionTile1.getLeftHexRelativeToVolcano());
         Assert.assertEquals(this.settlementManager.settlements.size(), 1);
     }
 
     @Test
-    public void testGetSettlementFromHex() {
+    public void testGetSettlementFromHex() throws BuildConditionsNotMetException {
         try {
             Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile1.getLeftHexRelativeToVolcano());
             Settlement testing = settlementManager.getSettlementFromHex(hex1);
@@ -60,10 +60,9 @@ public class SettlementManagerTest {
 
     @Test
     public void testAdvanceExpansion() throws
-            SettlementAlreadyExistsOnHexException,
-            SettlementCannotBeBuiltOnVolcanoException,
             NoHexesToExpandToException,
-            NoHexAtLocationException
+            NoHexAtLocationException,
+            BuildConditionsNotMetException
     {
         Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
         this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
@@ -252,10 +251,9 @@ public class SettlementManagerTest {
 
     @Test
     public void testExpandSettlement() throws
-            SettlementAlreadyExistsOnHexException,
             NoHexesToExpandToException,
-            SettlementCannotBeBuiltOnVolcanoException,
-            IllegalTilePlacementException
+            IllegalTilePlacementException,
+            BuildConditionsNotMetException
     {
         Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile2.getLeftHexRelativeToVolcano());
         Assert.assertEquals(newSettlement.getSettlementSize(), 1);
@@ -283,9 +281,8 @@ public class SettlementManagerTest {
     @Test
     public void testMultipleLevelExpansion() throws
             IllegalTilePlacementException,
-            SettlementAlreadyExistsOnHexException,
-            SettlementCannotBeBuiltOnVolcanoException,
-            NoHexesToExpandToException
+            NoHexesToExpandToException,
+            BuildConditionsNotMetException
     {
         Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
         Tile expansionTile4 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
