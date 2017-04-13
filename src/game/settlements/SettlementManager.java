@@ -127,7 +127,7 @@ public class SettlementManager {
                 int yCoordinate = adjacentHexLocation.getyCoordinate();
                 Hex adjacentHex = this.world.getHexRegardlessOfHeight(xCoordinate, yCoordinate);
                 Settlement settlement = getSettlementFromHex(adjacentHex);
-                settlement.checkPlaygroundSettlementConditions();
+                settlement.checkPlaygroundConditions();
                 settlement.setHasTigerPlayground();
                 settlement.addHexToSettlement(playgroundHex);
                 return;
@@ -186,6 +186,38 @@ public class SettlementManager {
         }
 
         return initialSettlement;
+    }
+
+    public int sizeOfLargestContainedSettlement() {
+        int sizeOfLargestSettlement = 0;
+        for (Settlement settlement : settlements) {
+            sizeOfLargestSettlement = Math.max(settlement.getSettlementSize(), sizeOfLargestSettlement);
+        }
+        return sizeOfLargestSettlement;
+    }
+
+    public Settlement getLargestContainedSettlement() {
+        int sizeOfLargestSettlement = 0;
+        Settlement largestSettlement = null;
+        for(Settlement settlement : settlements) {
+            if(settlement.getSettlementSize() > sizeOfLargestSettlement) {
+                sizeOfLargestSettlement = settlement.getSettlementSize();
+                largestSettlement = settlement;
+            }
+        }
+        return largestSettlement;
+    }
+
+    public Settlement getLargestSettlementNotContainingATotoro() {
+        int sizeOfLargestSettlement = 0;
+        Settlement largestSettlement = null;
+        for(Settlement settlement : settlements) {
+            if(settlement.getSettlementSize() > sizeOfLargestSettlement && !settlement.hasTotoroSanctuary()) {
+                sizeOfLargestSettlement = settlement.getSettlementSize();
+                largestSettlement = settlement;
+            }
+        }
+        return largestSettlement;
     }
 
 }

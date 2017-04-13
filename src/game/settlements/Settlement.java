@@ -4,8 +4,8 @@ import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.NoHexAtLocationException;
 import game.tile.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
+
+import java.util.*;
 
 public class Settlement {
     private ArrayList<Hex> settlementHexes;
@@ -13,11 +13,10 @@ public class Settlement {
     private boolean hasTiger = false;
     private LinkedList<Hex> expansionQueue;
 
-    public Settlement(Hex foundingHex) {
+    public Settlement(Hex foundingHex) throws SettlementAlreadyExistsOnHexException {
         settlementHexes = new ArrayList<Hex>();
-        settlementHexes.add(foundingHex);
-        foundingHex.setSettlement(this);
         expansionQueue = new LinkedList<Hex>();
+        this.addHexToSettlement(foundingHex);
     }
 
     public boolean containsHex(Hex hexToSearchFor) {
@@ -33,7 +32,7 @@ public class Settlement {
     }
 
     public void addHexToSettlement(Hex newHex) throws SettlementAlreadyExistsOnHexException {
-        if (this.settlementHexes.contains(newHex)) {
+        if (newHex.getSettlement() != null) {
             String errorMessage = "A settlement already exists on the hex.";
             throw new SettlementAlreadyExistsOnHexException(errorMessage);
         }
@@ -74,7 +73,7 @@ public class Settlement {
         return this.hasTiger;
     }
 
-    public void checkPlaygroundSettlementConditions() throws SettlementAlreadyHasTigerPlaygroundException {
+    public void checkPlaygroundConditions() throws SettlementAlreadyHasTigerPlaygroundException {
         if (this.hasTiger == true) {
             String errorMessage = "A tiger already exists on the settlement.";
             throw new SettlementAlreadyHasTigerPlaygroundException(errorMessage);
@@ -169,5 +168,15 @@ public class Settlement {
         return potentialSettlementHexes;
     }
 
+
+    public Location[] getAllHexLocationsAdjacentToSettlement() {
+        Set<Location> setWithoutDuplicates = new HashSet<>();
+        for (Hex hex : this.settlementHexes) {
+            Location hexLocation = hex.getLocation();
+            Location[] locationsToAdd = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
+            setWithoutDuplicates.addAll(Arrays.asList(locationsToAdd));
+        }
+        return setWithoutDuplicates.toArray(new Location[0]);
+    }
 
 }
