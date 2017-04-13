@@ -13,38 +13,39 @@ public class Settlement {
     private boolean hasTiger = false;
     private LinkedList<Hex> expansionQueue;
 
-    public Settlement(Hex foundingHex) {
-        settlementHexes = new ArrayList<Hex>();
-        settlementHexes.add(foundingHex);
-        foundingHex.setSettlement(this);
-        expansionQueue = new LinkedList<Hex>();
+    public Settlement(Hex foundingHex) throws
+            SettlementAlreadyExistsOnHexException
+    {
+        this.settlementHexes = new ArrayList<Hex>();
+        this.expansionQueue = new LinkedList<Hex>();
+        this.addHexToSettlement(foundingHex);
     }
 
     public boolean containsHex(Hex hexToSearchFor) {
-        return settlementHexes.contains(hexToSearchFor);
+        return this.settlementHexes.contains(hexToSearchFor);
     }
 
     public int getSettlementSize(){
-        return settlementHexes.size();
+        return this.settlementHexes.size();
     }
 
     public ArrayList<Hex> getHexesFromSettlement() {
-        return settlementHexes;
+        return this.settlementHexes;
     }
 
     public void addHexToSettlement(Hex newHex) throws SettlementAlreadyExistsOnHexException {
-        if (this.settlementHexes.contains(newHex)) {
+        if (newHex.getSettlement() != null) {
             String errorMessage = "A settlement already exists on the hex.";
             throw new SettlementAlreadyExistsOnHexException(errorMessage);
         }
 
+        this.settlementHexes.add(newHex);
         newHex.setSettlement(this);
-        settlementHexes.add(newHex);
     }
 
     public void removeHexFromSettlement(Hex hexToBeRemoved) throws SettlementCannotBeCompletelyWipedOutException {
-        if (settlementHexes.size() > 1) {
-            settlementHexes.remove(hexToBeRemoved);
+        if (this.settlementHexes.size() > 1) {
+            this.settlementHexes.remove(hexToBeRemoved);
             hexToBeRemoved.setSettlement(null);
         }
 
@@ -55,11 +56,11 @@ public class Settlement {
     }
 
     public void setHasTotoroSanctuary() {
-        hasTotoro = true;
+        this.hasTotoro = true;
     }
 
     public void setHasTigerPlayground() {
-        hasTiger = true;
+        this.hasTiger = true;
     }
 
     public Boolean hasTotoroSanctuary() {
@@ -105,10 +106,10 @@ public class Settlement {
             throw new SettlementCannotBeBuiltOnVolcanoException(errorMessage);
         }
 
-        expansionQueue.addAll(settlementHexes);
+        this.expansionQueue.addAll(settlementHexes);
 
-        while (expansionQueue.size() != 0) {
-            Hex hex = expansionQueue.poll();
+        while (this.expansionQueue.size() != 0) {
+            Hex hex = this.expansionQueue.poll();
             if (!visited.contains(hex))
             {
                 try {
@@ -139,10 +140,10 @@ public class Settlement {
             try {
                 Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
                 adjacentHex.checkExpansionConditions(terrainType);
-                if (!expansionQueue.contains(adjacentHex))
+                if (!this.expansionQueue.contains(adjacentHex))
                 {
                     potentialSettlementHexes.add(adjacentHex);
-                    expansionQueue.add(adjacentHex);
+                    this.expansionQueue.add(adjacentHex);
                 }
             }
             catch (NoHexAtLocationException e) {
@@ -164,8 +165,7 @@ public class Settlement {
             Hex nextLevelHex = world.getHexByCoordinate(x, y, height+1);
             nextLevelHex.checkExpansionConditions(terrainType);
             potentialSettlementHexes.add(nextLevelHex);
-            expansionQueue.add(nextLevelHex);
-
+            this.expansionQueue.add(nextLevelHex);
         }
         catch (NoHexAtLocationException e) {
             System.out.println(e.getMessage());
@@ -182,13 +182,12 @@ public class Settlement {
 
     public Location[] getAllHexLocationsAdjacentToSettlement() {
         Set<Location> setWithoutDuplicates = new HashSet<>();
-        for (Hex hex : settlementHexes) {
+        for (Hex hex : this.settlementHexes) {
             Location hexLocation = hex.getLocation();
             Location[] locationsToAdd = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
             setWithoutDuplicates.addAll(Arrays.asList(locationsToAdd));
         }
         return setWithoutDuplicates.toArray(new Location[0]);
     }
-
 }
 

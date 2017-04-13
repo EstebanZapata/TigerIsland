@@ -9,22 +9,34 @@ import game.tile.*;
 
 public class Player {
     private int score;
+    private int villagerCount;
     private int totoroCount;
     private int tigerCount;
-    private int villagerCount;
 
     public SettlementManager settlementManager;
 
     public Player(World existingWorld) {
         this.score = Settings.STARTING_SCORE_COUNT;
+        this.villagerCount = Settings.STARTING_VILLAGER_COUNT;
         this.totoroCount = Settings.STARTING_TOTORO_COUNT;
         this.tigerCount = Settings.STARTING_TIGER_COUNT;
-        this.villagerCount = Settings.STARTING_VILLAGER_COUNT;
         this.settlementManager = new SettlementManager(existingWorld);
     }
 
     public int getScore() {
         return this.score;
+    }
+
+    public int getVillagerCount() {
+        return this.villagerCount;
+    }
+
+    public int getTotoroCount() {
+        return this.totoroCount;
+    }
+
+    public int getTigerCount() {
+        return this.tigerCount;
     }
 
     public void useVillagers(int count) throws NotEnoughPiecesException {
@@ -56,14 +68,14 @@ public class Player {
 
     public void foundSettlement(Hex settlementHex) throws
             NotEnoughPiecesException,
-            SettlementAlreadyExistsOnHexException
+            BuildConditionsNotMetException
     {
         try {
             this.useVillagers(1);
             this.settlementManager.foundSettlement(settlementHex);
             this.score += Settings.FOUND_SETTLEMENT_POINTS;
         }
-        catch (SettlementAlreadyExistsOnHexException e) {
+        catch (BuildConditionsNotMetException e) {
             this.villagerCount += 1;
             throw new SettlementAlreadyExistsOnHexException(e.getMessage());
         }
