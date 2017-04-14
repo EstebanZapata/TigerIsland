@@ -62,6 +62,7 @@ public class AiVersion3 {
             final boolean volcanoesICanBuildOnExist = volcanoesToTryToBuildOn.length != 0;
             if(volcanoesICanBuildOnExist) {
                 for (Hex volcanoToBuildOn : volcanoesToTryToBuildOn) {
+                    //TODO: Get new function from Esteban.
 
                 }
 

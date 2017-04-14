@@ -13,7 +13,7 @@ public class Settlement {
     private boolean hasTiger = false;
     private LinkedList<Hex> expansionQueue;
 
-    public Settlement(Hex foundingHex) {
+    public Settlement(Hex foundingHex) throws SettlementAlreadyExistsOnHexException {
         settlementHexes = new ArrayList<Hex>();
         settlementHexes.add(foundingHex);
         foundingHex.setSettlement(this);
@@ -143,7 +143,7 @@ public class Settlement {
         return allPotentialSettlementHexes;
     }
 
-    public ArrayList<Hex> getPotentialSettlementHexes(Hex settlementHex, World world, Terrain terrainType) {
+    public ArrayList<Hex> getPotentialSettlementHexes(Hex settlementHex, World world, Terrain terrainType) throws SettlementHeightRequirementException {
         ArrayList<Hex> potentialSettlementHexes = new ArrayList<>();
         Location hexLocation = settlementHex.getLocation();
         Location[] hexLocationsAdjacentToCenter = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);

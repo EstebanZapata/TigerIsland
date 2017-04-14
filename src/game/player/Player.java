@@ -69,16 +69,16 @@ public class Player {
 
     public void foundSettlement(Hex settlementHex) throws
             NotEnoughPiecesException,
-            SettlementAlreadyExistsOnHexException
+            BuildConditionsNotMetException
     {
         try {
             this.useVillagers(1);
             this.settlementManager.foundSettlement(settlementHex);
             this.score += Settings.FOUND_SETTLEMENT_POINTS;
         }
-        catch (SettlementAlreadyExistsOnHexException e) {
+        catch (BuildConditionsNotMetException e) {
             this.villagerCount += 1;
-            throw new SettlementAlreadyExistsOnHexException(e.getMessage());
+            throw new BuildConditionsNotMetException(e.getMessage());
         }
     }
 
