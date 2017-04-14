@@ -140,4 +140,22 @@ public class World {
         throw new NoValidTileOrientationException(errorMessage);
 
     }
+
+    public ArrayList<Hex> getHexesAdjacentToLocation(Location location) {
+        ArrayList<Hex> adjacentHexes = new ArrayList<>();
+
+        Location[] adjacentLocations = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(location);
+
+        for (Location adjacentLocation:adjacentLocations) {
+            try {
+                Hex adjacentHex = tileManager.getHexByLocation(adjacentLocation);
+                adjacentHexes.add(adjacentHex);
+            }
+            catch (NoHexAtLocationException e) {
+                continue;
+            }
+        }
+
+        return adjacentHexes;
+    }
 }
