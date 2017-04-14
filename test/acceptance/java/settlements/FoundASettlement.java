@@ -44,8 +44,5 @@ public class FoundASettlement {
         Assert.assertEquals(1, manager.getNumberOfVillagersRequiredToExpand(mysettle, Terrain.JUNGLE));
         Hex nextTarget = myGame.world.getAllHexesInWorld().get(1);
         Assert.assertEquals(nextTarget, manager.chooseHexForSettlement());
-        manager.buildTigerPlayground(nextTarget);
-        manager.buildTotoroSanctuary(nextTarget);
-        Assert.assertEquals(target,mysettle.getHexesFromSettlement().get(0));
     }
 }
