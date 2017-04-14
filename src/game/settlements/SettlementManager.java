@@ -6,20 +6,25 @@ import game.world.rules.exceptions.*;
 import game.tile.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class SettlementManager {
     public World world;
     public ArrayList<Settlement> settlements;
+    private LinkedList<Hex> expansionQueue;
 
     public SettlementManager(World existingWorld) {
         this.world = existingWorld;
         this.settlements = new ArrayList<Settlement>();
+        this.expansionQueue = new LinkedList<Hex>();
     }
 
     public Settlement foundSettlement(Hex hex) throws SettlementAlreadyExistsOnHexException {
         Settlement newSettlement = new Settlement(hex);
         this.settlements.add(newSettlement);
-        newSettlement = tryToMerge(hex);
+        newSettlement = tryToMergeAfterFounding(hex);
+        settlementListPostMergeCleaner();
         return newSettlement;
     }
 
@@ -82,6 +87,9 @@ public class SettlementManager {
                 System.out.println(e.getMessage());
             }
         }
+
+        tryToMergeAfterExpanding(existingSettlement);
+        settlementListPostMergeCleaner();
     }
 
     public void buildTotoroSanctuary(Hex sanctuaryHex) throws BuildConditionsNotMetException {
@@ -96,6 +104,7 @@ public class SettlementManager {
                 adjacentSettlement.checkSanctuaryConditions();
                 adjacentSettlement.setHasTotoroSanctuary();
                 adjacentSettlement.addHexToSettlement(sanctuaryHex);
+                adjacentSettlement.setTotoroLocation(sanctuaryHexLocation);
                 return;
             }
             catch (NoHexAtLocationException e) {
@@ -123,10 +132,11 @@ public class SettlementManager {
                 int xCoordinate = adjacentHexLocation.getxCoordinate();
                 int yCoordinate = adjacentHexLocation.getyCoordinate();
                 Hex adjacentHex = this.world.getHexRegardlessOfHeight(xCoordinate, yCoordinate);
-                Settlement settlement = getSettlementFromHex(adjacentHex);
-                settlement.checkPlaygroundConditions();
-                settlement.setHasTigerPlayground();
-                settlement.addHexToSettlement(playgroundHex);
+                Settlement adjacentSettlement = getSettlementFromHex(adjacentHex);
+                adjacentSettlement.checkPlaygroundConditions();
+                adjacentSettlement.setHasTigerPlayground();
+                adjacentSettlement.addHexToSettlement(playgroundHex);
+                adjacentSettlement.setTigerLocation(playgroundHexLocation);
                 return;
             }
             catch (NoHexAtLocationException e) {
@@ -144,7 +154,7 @@ public class SettlementManager {
         throw new BuildConditionsNotMetException(errorMessage);
     }
 
-    public Settlement tryToMerge(Hex foundingSettlementHex) {
+    public Settlement tryToMergeAfterFounding(Hex foundingSettlementHex) {
         Settlement initialSettlement = foundingSettlementHex.getSettlement();
         ArrayList<Hex> adjacentHexesWithSettlement = new ArrayList<>();
         int adjacentHexesWithSettlementCount = 0;
@@ -169,20 +179,119 @@ public class SettlementManager {
             Hex firstAdjacentHexWithSettlement = adjacentHexesWithSettlement.get(0);
             Settlement firstAdjacentSettlement = firstAdjacentHexWithSettlement.getSettlement();
 
-            for (Hex adjacentHexWithSettlement : adjacentHexesWithSettlement) {
+            for (int i=0; i<adjacentHexesWithSettlementCount; i++) {
+                Hex adjacentHexWithSettlement = adjacentHexesWithSettlement.get(i);
                 Settlement nextAdjacentSettlement = adjacentHexWithSettlement.getSettlement();
                 if (adjacentHexWithSettlement != firstAdjacentHexWithSettlement) {
                     nextAdjacentSettlement.removeHexFromSettlementForMerging(adjacentHexWithSettlement);
                 }
-                adjacentHexWithSettlement.setSettlement(firstAdjacentSettlement);
+
+                firstAdjacentSettlement.addHexToSettlementForMerging(adjacentHexWithSettlement);
             }
 
-            foundingSettlementHex.setSettlement(firstAdjacentSettlement);
+            firstAdjacentSettlement.addHexToSettlementForMerging(foundingSettlementHex);
             initialSettlement.removeHexFromSettlementForMerging(foundingSettlementHex);
             return firstAdjacentSettlement;
         }
 
         return initialSettlement;
+    }
+
+    public void tryToMergeAfterExpanding(Settlement expandedSettlement) {
+        ArrayList<Settlement> adjacentSettlements = new ArrayList<>();
+        ArrayList<Integer> adjacentSettlementSizes = new ArrayList<>();
+        ArrayList<Settlement> allAdjacentSettlements = new ArrayList<>();
+        ArrayList<Hex> visited = new ArrayList<>();
+
+        ArrayList<Hex> settlementHexes = expandedSettlement.getHexesFromSettlement();
+
+        expansionQueue.addAll(settlementHexes);
+
+        while (expansionQueue.size() != 0) {
+            Hex hex = expansionQueue.poll();
+
+            if (!visited.contains(hex)) {
+                adjacentSettlements = getAdjacentSettlements(hex);
+                visited.add(hex);
+
+                for (Settlement adjacentSettlement : adjacentSettlements) {
+                    if (!allAdjacentSettlements.contains(adjacentSettlement)) {
+                        allAdjacentSettlements.add(adjacentSettlement);
+                        adjacentSettlementSizes.add(adjacentSettlement.getSettlementSize());
+                    }
+                }
+            }
+        }
+
+        if (allAdjacentSettlements.size() > 0) {
+            int largestSettlementSize = Collections.max(adjacentSettlementSizes);
+            int index = adjacentSettlementSizes.indexOf(largestSettlementSize);
+            Settlement largestAdjacentSettlement = allAdjacentSettlements.get(index);
+
+            if (expandedSettlement.getSettlementSize() < largestSettlementSize ) {
+                ArrayList<Hex> expandedSettlementHexes = expandedSettlement.getHexesFromSettlement();
+                for (Hex expandedSettlementHex : expandedSettlementHexes) {
+                    expandedSettlement.removeHexFromSettlementForMerging(expandedSettlementHex);
+                    largestAdjacentSettlement.addHexToSettlementForMerging(expandedSettlementHex);
+                }
+                for (Settlement adjacentSettlement : allAdjacentSettlements) {
+                    if (adjacentSettlement != largestAdjacentSettlement) {
+                        ArrayList<Hex> adjacentSettlementHexes = adjacentSettlement.getHexesFromSettlement();
+                        for (int i=0; i<adjacentSettlementHexes.size(); i++) {
+                            Hex adjacentSettlementHex = adjacentSettlementHexes.get(i);
+                            adjacentSettlement.removeHexFromSettlementForMerging(adjacentSettlementHex);
+                            largestAdjacentSettlement.addHexToSettlementForMerging(adjacentSettlementHex);
+                        }
+                    }
+                }
+            }
+
+            else {  // expanded settlement is largest settlement
+                for (Settlement adjacentSettlement : allAdjacentSettlements) {
+                    ArrayList<Hex> adjacentSettlementHexes = adjacentSettlement.getHexesFromSettlement();
+                    for (int i=0; i<adjacentSettlementHexes.size(); i++) {
+                        Hex adjacentSettlementHex = adjacentSettlementHexes.get(i);
+                        adjacentSettlement.removeHexFromSettlementForMerging(adjacentSettlementHex);
+                        expandedSettlement.addHexToSettlementForMerging(adjacentSettlementHex);
+                    }
+                }
+            }
+        }
+    }
+
+    public ArrayList<Settlement> getAdjacentSettlements(Hex hexFromExpandingSettlement) {
+        ArrayList<Settlement> adjacentSettlements = new ArrayList<>();
+        Location settlementHexLocation = hexFromExpandingSettlement.getLocation();
+        Location[] adjacentHexLocations = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(settlementHexLocation);
+
+        for (Location adjacentHexLocation : adjacentHexLocations) {
+            try {
+                Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
+
+                if (adjacentHex.getSettlement() != null) {
+                    if (!expansionQueue.contains(adjacentHex)) {
+                        adjacentSettlements.add(adjacentHex.getSettlement());
+                        expansionQueue.add(adjacentHex);
+                    }
+                }
+            }
+            catch (NoHexAtLocationException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return adjacentSettlements;
+    }
+
+    public void settlementListPostMergeCleaner() {
+        if (settlements.size() > 1) {
+            for (int i=0; i<settlements.size(); i++) {
+                Settlement settlement = settlements.get(i);
+                if (settlement.getSettlementSize() == 0) {
+                    settlements.remove(settlement);
+                }
+            }
+        }
     }
 
     public int sizeOfLargestContainedSettlement() {
@@ -216,5 +325,9 @@ public class SettlementManager {
         }
         return largestSettlement;
     }
+
+  /*  public void splitSettlementsIfNuked() {
+
+    }*/
 
 }
