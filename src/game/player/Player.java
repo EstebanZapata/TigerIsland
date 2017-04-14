@@ -66,14 +66,15 @@ public class Player {
         this.tigerCount -= 1;
     }
 
-    public void foundSettlement(Hex settlementHex) throws
+    public Settlement foundSettlement(Hex settlementHex) throws
             NotEnoughPiecesException,
             BuildConditionsNotMetException
     {
         try {
             this.useVillagers(1);
-            this.settlementManager.foundSettlement(settlementHex);
+            Settlement newSettlement = this.settlementManager.foundSettlement(settlementHex);
             this.score += Settings.FOUND_SETTLEMENT_POINTS;
+            return newSettlement;
         }
         catch (BuildConditionsNotMetException e) {
             this.villagerCount += 1;
