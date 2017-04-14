@@ -1,16 +1,14 @@
-# TigerIsland Spring 2017
-
 # Game Functionality
 The only missing features is responding to being nuked
 
 # How to Start the Game
 Run main from the `Start` class
 Pass in the required command line arguments in the following order:
-    `Server IP`,
-    `Port #`,
-    `Tournament Password`,
-    `Username`,
-    `User Password`
+    - Server IP
+    - Port #
+    - Tournament Password
+    - Username
+    - User Password
 
 # AI
 Our AI currently does not: `Expand settlements`, `Place totoros`, `Place tigers`
