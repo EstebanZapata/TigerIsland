@@ -24,6 +24,10 @@ public class Start {
     private static Client client;
 
     public static void main(String[] args) throws Exception {
+        ServerToClientParser.setTournamentPassword(args[2]);
+        ServerToClientParser.setUsername(args[3]);
+        ServerToClientParser.setUserPassword(args[4]);
+
         stringsFromServerQueue = new LinkedBlockingQueue<>();
         stringsToServerQueue = new LinkedBlockingQueue<>();
 
