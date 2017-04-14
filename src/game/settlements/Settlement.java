@@ -12,6 +12,8 @@ public class Settlement {
     private boolean hasTotoro = false;
     private boolean hasTiger = false;
     private LinkedList<Hex> expansionQueue;
+    private Location totoroLocation;
+    private Location tigerLocation;
 
     public Settlement(Hex foundingHex) throws SettlementAlreadyExistsOnHexException {
         settlementHexes = new ArrayList<Hex>();
@@ -37,6 +39,11 @@ public class Settlement {
             throw new SettlementAlreadyExistsOnHexException(errorMessage);
         }
 
+        newHex.setSettlement(this);
+        settlementHexes.add(newHex);
+    }
+
+    public void addHexToSettlementForMerging(Hex newHex)  {
         newHex.setSettlement(this);
         settlementHexes.add(newHex);
     }
@@ -71,6 +78,22 @@ public class Settlement {
 
     public Boolean hasTigerPlayground() {
         return this.hasTiger;
+    }
+
+    public Location getTotoroLocation() {
+        return this.totoroLocation;
+    }
+
+    public void setTotoroLocation(Location totoroLocation) {
+        this.totoroLocation = totoroLocation;
+    }
+
+    public Location getTigerLocation() {
+        return this.tigerLocation;
+    }
+
+    public void setTigerLocation(Location tigerLocation) {
+        this.tigerLocation = tigerLocation;
     }
 
     public void checkPlaygroundConditions() throws SettlementAlreadyHasTigerPlaygroundException {
@@ -167,7 +190,6 @@ public class Settlement {
 
         return potentialSettlementHexes;
     }
-
 
     public Location[] getAllHexLocationsAdjacentToSettlement() {
         Set<Location> setWithoutDuplicates = new HashSet<>();
