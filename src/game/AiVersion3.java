@@ -11,6 +11,7 @@ import game.world.rules.exceptions.NoHexAtLocationException;
 import game.world.rules.exceptions.NoValidTileOrientationException;
 import thread.message.GameActionMessage;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import java.util.Set;
 public class AiVersion3 {
     private World world;
     private Player theAI, opponent;
+
 
     public AiVersion3(World world, Player opponent, Player theAI) {
         this.world = world;
@@ -41,15 +43,20 @@ public class AiVersion3 {
             Hex[] potentiallyNukableVolcanoes = getPotentiallyNukableVolcanoes(settlementToNuke);
             final boolean nukableVolcanoesExist = potentiallyNukableVolcanoes.length != 0;
             if (nukableVolcanoesExist) {
-                for (Hex volcanoToNuke : potentiallyNukableVolcanoes)
-                    try {
-                        tileOrientationToPlace = getNukeOrientation(settlementToNuke, volcanoToNuke);
-                        locationOnWhichToPlaceTile = volcanoToNuke.getLocation();
-                        tileDecisionHasNotBeenMade = false;
-                        break;
-                    } catch (NoValidTileOrientationException e) {
-                        continue;
+                for (Hex volcanoToNuke : potentiallyNukableVolcanoes) {
+                    for (Hex hexInSettlement : settlementToNuke.getHexesFromSettlement()) {
+                        try {
+                            tileOrientationToPlace = world.calculateTileOrientationToCoverVolcanoLocationAndAdjacentLocation(volcanoToNuke.getLocation(), hexInSettlement.getLocation());
+                            locationOnWhichToPlaceTile = volcanoToNuke.getLocation();
+                            tileDecisionHasNotBeenMade = false;
+                            break;
+                        } catch (NoValidTileOrientationException e) {
+                            continue;
+                        }
                     }
+                    if (!tileDecisionHasNotBeenMade)
+                        break;
+                }
             }
         }
         //if(tileDecisionHasNotBeenMade && iShouldPlaceATileInOrderToExpand(firstTerrainType, secondTerrainType)) {
@@ -58,25 +65,20 @@ public class AiVersion3 {
         if(tileDecisionHasNotBeenMade) {
             //Attempt to place a tile near one of my settlements w/o nuking it
             Settlement settlementToPlaceTileNear = theAI.getLargestSettlementNotContainingATotoro();
+            Location[] hexesAdjacentToSettlement = settlementToPlaceTileNear.getAllHexLocationsAdjacentToSettlement();
             Hex[] volcanoesToTryToBuildOn = getPotentiallyNukableVolcanoes(settlementToPlaceTileNear);
             final boolean volcanoesICanBuildOnExist = volcanoesToTryToBuildOn.length != 0;
-            if(volcanoesICanBuildOnExist) {
+            if (volcanoesICanBuildOnExist) {
                 for (Hex volcanoToBuildOn : volcanoesToTryToBuildOn) {
-                    //TODO: Get new function from Esteban.
+                    Location locationOfVolcanoToBuildOn = volcanoToBuildOn.getLocation();
+                    ArrayList<Hex> hexesAdjacentToVolcano = world.getHexesAdjacentToLocation(locationOfVolcanoToBuildOn);
 
                 }
-
             }
         }
 
         return null;
         // return new GameActionMessage(gameId, moveNumber, myPlayerId, tileToPlace, );
-
-    }
-
-    private TileOrientation getNukeOrientation(Settlement settlementToNuke, Hex potentiallyNukableVolcano) throws NoValidTileOrientationException {
-            for(Hex hexInSettlement : settlementToNuke.getHexesFromSettlement())
-                world.calculateTileOrientationToCoverVolcanoLocationAndAdjacentLocation(potentiallyNukableVolcano.getLocation(), hexInSettlement.getLocation());
 
     }
 

@@ -1,5 +1,6 @@
 package game.world;
 
+import game.settlements.Settlement;
 import game.world.rules.TileRulesManager;
 import game.world.rules.exceptions.*;
 import game.tile.*;
@@ -157,5 +158,20 @@ public class World {
         }
 
         return adjacentHexes;
+    }
+
+    public ArrayList<Hex> getAllHexesAdjacentToSettlement(Settlement settlementToCheck) {
+        Location[] locationsAdjacentToSettlement = settlementToCheck.getAllHexLocationsAdjacentToSettlement();
+        ArrayList<Hex> hexesAdjacentToSettlement = new ArrayList<>();
+        for(Location locationToCheck : locationsAdjacentToSettlement) {
+            int xCoordinateToCheck = locationToCheck.getxCoordinate();
+            int yCoordinateToCheck = locationToCheck.getyCoordinate();
+            try {
+                hexesAdjacentToSettlement.add(this.getHexRegardlessOfHeight(xCoordinateToCheck,yCoordinateToCheck));
+            } catch (NoHexAtLocationException e) {
+                continue;
+            }
+        }
+        return hexesAdjacentToSettlement;
     }
 }
