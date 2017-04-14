@@ -66,81 +66,6 @@ public class SettlementManagerTest {
     }
 
     @Test
-    public void testAdvanceExpansion() throws
-            IllegalTilePlacementException,
-            BuildConditionsNotMetException,
-            NoHexesToExpandToException
-    {
-        Tile expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile2 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Location volcanoLocation1 = new Location(-2, 0, 0);
-        Location volcanoLocation2 = new Location(2, 3, 0);
-        this.world.insertTileIntoTileManager(expansionTile1, volcanoLocation1, TileOrientation.EAST_NORTHEAST);
-        this.world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
-
-        Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
-        this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
-
-        Hex jungleHex1 = world.getHexByCoordinate(-1,0,0);
-        Hex jungleHex2 = world.getHexByCoordinate(0,1,0);
-        Hex jungleHex3 = world.getHexByCoordinate(1,2,0);
-
-        Settlement jungleHex1SettlementReturned = jungleHex1.getSettlement();
-        Settlement jungleHex2SettlementReturned = jungleHex2.getSettlement();
-        Settlement jungleHex3SettlementReturned = jungleHex3.getSettlement();
-
-        Assert.assertEquals(newSettlement, jungleHex1SettlementReturned);
-        Assert.assertEquals(newSettlement, jungleHex2SettlementReturned);
-        Assert.assertEquals(newSettlement, jungleHex3SettlementReturned);
-    }
-
-    @Test
-    public void testBuildTigerPlayground() throws
-            IllegalTilePlacementException,
-            BuildConditionsNotMetException
-    {
-        Tile expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile2 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile4 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile5 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile6 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile7 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile8 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-        Tile expansionTile9 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
-
-        // 1st level
-        Location volcanoLocation1 = new Location(-2, 0, 0);
-        Location volcanoLocation2 = new Location(2, 3, 0);
-        Location volcanoLocation3 = new Location(0, 2, 0);
-        Location volcanoLocation4 = new Location(2, 1, 0);
-        Location volcanoLocation5 = new Location(1, 0, 0);
-
-        // 2nd level
-        Location volcanoLocation6 = new Location(0, 2, 1);
-        Location volcanoLocation7 = new Location(0, 0, 1);
-        Location volcanoLocation8 = new Location(2, 1, 1);
-
-        // 3rd level
-        Location volcanoLocation9 = new Location(0, 0, 2);
-
-        this.world.insertTileIntoTileManager(expansionTile1, volcanoLocation1, TileOrientation.EAST_NORTHEAST);
-        this.world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
-        this.world.insertTileIntoTileManager(expansionTile3, volcanoLocation3, TileOrientation.NORTHEAST_NORTHWEST);
-        this.world.insertTileIntoTileManager(expansionTile4, volcanoLocation4, TileOrientation.EAST_NORTHEAST);
-        this.world.insertTileIntoTileManager(expansionTile5, volcanoLocation5, TileOrientation.SOUTHEAST_EAST);
-
-        this.world.insertTileIntoTileManager(expansionTile6, volcanoLocation6, TileOrientation.SOUTHEAST_EAST);
-        this.world.insertTileIntoTileManager(expansionTile7, volcanoLocation7, TileOrientation.EAST_NORTHEAST);
-        this.world.insertTileIntoTileManager(expansionTile8, volcanoLocation8, TileOrientation.NORTHEAST_NORTHWEST);
-
-        this.world.insertTileIntoTileManager(expansionTile9, volcanoLocation9, TileOrientation.NORTHEAST_NORTHWEST);
-
-        this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
-        this.settlementManager.buildTigerPlayground(expansionTile9.getRightHexRelativeToVolcano());
-    }
-
-    @Test
     public void testBuildTotoroSanctuary() throws
             IllegalTilePlacementException,
             BuildConditionsNotMetException,
@@ -201,6 +126,52 @@ public class SettlementManagerTest {
         FirstTile sanctuaryTile = (FirstTile) this.world.getHexByCoordinate(0,0,0).getOwner();
         Hex sanctuaryHex = sanctuaryTile.getLakeHex();
         this.settlementManager.buildTotoroSanctuary(sanctuaryHex);
+    }
+
+    @Test
+    public void testBuildTigerPlayground() throws
+            IllegalTilePlacementException,
+            BuildConditionsNotMetException
+    {
+        Tile expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile2 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile3 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile4 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile5 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile6 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile7 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile8 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile9 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+
+        // 1st level
+        Location volcanoLocation1 = new Location(-2, 0, 0);
+        Location volcanoLocation2 = new Location(2, 3, 0);
+        Location volcanoLocation3 = new Location(0, 2, 0);
+        Location volcanoLocation4 = new Location(2, 1, 0);
+        Location volcanoLocation5 = new Location(1, 0, 0);
+
+        // 2nd level
+        Location volcanoLocation6 = new Location(0, 2, 1);
+        Location volcanoLocation7 = new Location(0, 0, 1);
+        Location volcanoLocation8 = new Location(2, 1, 1);
+
+        // 3rd level
+        Location volcanoLocation9 = new Location(0, 0, 2);
+
+        this.world.insertTileIntoTileManager(expansionTile1, volcanoLocation1, TileOrientation.EAST_NORTHEAST);
+        this.world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
+        this.world.insertTileIntoTileManager(expansionTile3, volcanoLocation3, TileOrientation.NORTHEAST_NORTHWEST);
+        this.world.insertTileIntoTileManager(expansionTile4, volcanoLocation4, TileOrientation.EAST_NORTHEAST);
+        this.world.insertTileIntoTileManager(expansionTile5, volcanoLocation5, TileOrientation.SOUTHEAST_EAST);
+
+        this.world.insertTileIntoTileManager(expansionTile6, volcanoLocation6, TileOrientation.SOUTHEAST_EAST);
+        this.world.insertTileIntoTileManager(expansionTile7, volcanoLocation7, TileOrientation.EAST_NORTHEAST);
+        this.world.insertTileIntoTileManager(expansionTile8, volcanoLocation8, TileOrientation.NORTHEAST_NORTHWEST);
+
+        this.world.insertTileIntoTileManager(expansionTile9, volcanoLocation9, TileOrientation.NORTHEAST_NORTHWEST);
+
+        this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
+        this.settlementManager.buildTigerPlayground(expansionTile9.getRightHexRelativeToVolcano());
     }
 
     @Test (expected = BuildConditionsNotMetException.class)
@@ -328,6 +299,35 @@ public class SettlementManagerTest {
         }
 
         Assert.assertEquals(newSettlement.getSettlementSize(), 5);
+    }
+
+    @Test
+    public void testAdvanceExpansion() throws
+            IllegalTilePlacementException,
+            BuildConditionsNotMetException,
+            NoHexesToExpandToException
+    {
+        Tile expansionTile1 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Tile expansionTile2 = new Tile(Terrain.JUNGLE, Terrain.GRASSLANDS);
+        Location volcanoLocation1 = new Location(-2, 0, 0);
+        Location volcanoLocation2 = new Location(2, 3, 0);
+        this.world.insertTileIntoTileManager(expansionTile1, volcanoLocation1, TileOrientation.EAST_NORTHEAST);
+        this.world.insertTileIntoTileManager(expansionTile2, volcanoLocation2, TileOrientation.SOUTHWEST_SOUTHEAST);
+
+        Settlement newSettlement = this.settlementManager.foundSettlement(expansionTile1.getRightHexRelativeToVolcano());
+        this.settlementManager.expandSettlement(newSettlement, Terrain.JUNGLE);
+
+        Hex jungleHex1 = world.getHexByCoordinate(-1,0,0);
+        Hex jungleHex2 = world.getHexByCoordinate(0,1,0);
+        Hex jungleHex3 = world.getHexByCoordinate(1,2,0);
+
+        Settlement jungleHex1SettlementReturned = jungleHex1.getSettlement();
+        Settlement jungleHex2SettlementReturned = jungleHex2.getSettlement();
+        Settlement jungleHex3SettlementReturned = jungleHex3.getSettlement();
+
+        Assert.assertEquals(newSettlement, jungleHex1SettlementReturned);
+        Assert.assertEquals(newSettlement, jungleHex2SettlementReturned);
+        Assert.assertEquals(newSettlement, jungleHex3SettlementReturned);
     }
 
     @Test
