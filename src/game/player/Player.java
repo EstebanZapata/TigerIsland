@@ -9,6 +9,19 @@ import game.tile.*;
 
 public class Player {
     private int score;
+
+    public int getTotoroCount() {
+        return totoroCount;
+    }
+
+    public int getTigerCount() {
+        return tigerCount;
+    }
+
+    public int getVillagerCount() {
+        return villagerCount;
+    }
+
     private int totoroCount;
     private int tigerCount;
     private int villagerCount;

@@ -71,7 +71,7 @@ public class Settlement {
     }
 
     public void checkPlaygroundConditions() throws SettlementAlreadyHasTigerPlaygroundException {
-        if (this.hasTiger == true) {
+        if (this.hasTiger) {
             String errorMessage = "A tiger already exists on the settlement.";
             throw new SettlementAlreadyHasTigerPlaygroundException(errorMessage);
         }
@@ -90,6 +90,18 @@ public class Settlement {
             String errorMessage = "A totoro already exists on the settlement.";
             throw new SettlementAlreadyHasTotoroSanctuaryException(errorMessage);
         }
+    }
+
+    public int getNumberOfExpandableHexes(World world, Terrain terrainType) {
+        ArrayList<Hex> expandableHexes = new ArrayList<>();
+        try {
+            expandableHexes = this.getHexesToExpandTo(world, terrainType);
+        } catch (SettlementCannotBeBuiltOnVolcanoException e) {
+            return 0;
+        } catch (NoHexesToExpandToException e) {
+            return 0;
+        }
+        return expandableHexes.size();
     }
 
     public ArrayList<Hex> getHexesToExpandTo(World world, Terrain terrainType) throws
