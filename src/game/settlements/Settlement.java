@@ -12,8 +12,8 @@ public class Settlement {
     private boolean hasTotoro = false;
     private boolean hasTiger = false;
     private LinkedList<Hex> expansionQueue;
-    private Location totoroLocation;
-    private Location tigerLocation;
+    private Location totoroLocation = null;
+    private Location tigerLocation = null;
 
     public Settlement(Hex foundingHex) throws SettlementAlreadyExistsOnHexException {
         settlementHexes = new ArrayList<Hex>();
