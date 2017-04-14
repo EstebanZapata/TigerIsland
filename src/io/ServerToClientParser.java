@@ -10,9 +10,9 @@ import thread.message.*;
 import static game.tile.Terrain.*;
 
 public class ServerToClientParser {
-    private static String tournamentPassword = "<tournament_password>";
-    private static String userName = "<userName>";
-    private static String userPassword = "<password>";
+    private static String tournamentPassword;
+    private static String userName;
+    private static String userPassword;
 
     public static Message parseServerInputAndComposeMessage(String serverInput){
         String parts[] = serverInput.split(" ");
@@ -180,6 +180,20 @@ public class ServerToClientParser {
 
         return new Location(clientX, clientY, clientZ);
     }
+
+    public static void setTournamentPassword(String tournamentPasswordPassed) {
+        ServerToClientParser.tournamentPassword = tournamentPasswordPassed;
+    }
+
+    public static void setUsername(String usernamePassed) {
+        ServerToClientParser.userName = usernamePassed;
+    }
+
+    public static void setUserPassword(String userPasswordPassed) {
+        ServerToClientParser.userPassword = userPasswordPassed;
+    }
+
+
 
 
 }
