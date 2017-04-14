@@ -1,5 +1,6 @@
 package game.world.rules;
 
+import game.settlements.Settlement;
 import game.world.CoordinateSystemHelper;
 import game.world.TileManager;
 import game.world.rules.exceptions.*;
@@ -29,8 +30,45 @@ public class TileRulesManager {
     }
 
     private boolean ableToPlaceTileOnUpperLayer(Tile tile, Location[] locationsOfTileHexes) throws IllegalTilePlacementException {
-        return noAirBelowTile(locationsOfTileHexes) && topVolcanoCoversOneBelow(locationsOfTileHexes[0]) && tileDoesNotLieCompletelyOnAnother(locationsOfTileHexes);
+        return noAirBelowTile(locationsOfTileHexes) && topVolcanoCoversOneBelow(locationsOfTileHexes[0]) && tileDoesNotLieCompletelyOnAnother(locationsOfTileHexes) && doesNotCoverTigersOrTotoros(locationsOfTileHexes);
     }
+
+
+
+    private boolean doesNotCoverTigersOrTotoros(Location[] locationsOfTileHexes) throws IllegalTilePlacementException {
+        for (Location location:locationsOfTileHexes) {
+            Hex hex = tileManager.getHexRegardlessOfHeight(location.getxCoordinate(), location.getyCoordinate());
+
+            Settlement settlement = hex.getSettlement();
+
+            if (settlement == null) {
+                continue;
+            }
+
+            Location locationOfTiger = settlement.getTigerLocation();
+            Location locationOfTotoro = settlement.getTotoroLocation();
+
+            if (locationOfTiger == null && locationOfTotoro == null) {
+                continue;
+            }
+
+            if (locationOfTiger != null) {
+                if (location.getxCoordinate() == locationOfTiger.getxCoordinate() && location.getyCoordinate() == locationOfTiger.getyCoordinate()) {
+                    throw new TigerWouldBeCrushedException("Tiger would be crushed at " + locationOfTiger.toString());
+                }
+            }
+
+            if (locationOfTotoro != null) {
+                if (location.getxCoordinate() == locationOfTotoro.getxCoordinate() && location.getyCoordinate() == locationOfTotoro.getyCoordinate()) {
+                    throw new TotoroWouldBeCrushedException("Totoro would be crushed at "+ locationOfTotoro.toString());
+                }
+            }
+
+        }
+
+        return true;
+    }
+
 
     private void verifyNoHexesExistAtLocations(Location[] locationOfHexes) throws HexAlreadyAtLocationException {
         boolean ableToInsertTileIntoWorld = true;
