@@ -11,13 +11,13 @@ public class Game {
     public World world;
     public Player opponent;
     public Player theAI;
-    public AiVersion3 ai;
+    public Ai ai;
 
     public Game() {
         this.world = new World();
         this.opponent = new Player(this.world);
         this.theAI = new Player(this.world);
-        this.ai = new AiVersion3(this.world, this.opponent, this.theAI);
+        this.ai = new Ai(this.world);
     }
 
     public Tile drawTile() {

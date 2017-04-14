@@ -86,20 +86,16 @@ public class GameThread extends MyThread {
 
     private Message processCommand(GameCommandMessage message) {
         String gameId = message.getGameId();
-
         int moveNumber = message.getMoveNumber();
-
-            Message aiResponse = null;
-           // try {
-                aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
-                return aiResponse;
-
-            /*} catch (IllegalTilePlacementException e) {
-                e.printStackTrace();
-                return aiResponse;
-            }*/
-
-
+        Message aiResponse = null;
+        try {
+            aiResponse = game.ai.chooseMove(gameId, moveNumber, myPlayerId, message.getTileToPlace());
+            return aiResponse;
+        }
+        catch (IllegalTilePlacementException e) {
+            e.printStackTrace();
+            return aiResponse;
+        }
     }
 
     private void processOpponentAction(GameActionMessage message) throws IllegalTilePlacementException {

@@ -168,7 +168,6 @@ public class Settlement {
         return potentialSettlementHexes;
     }
 
-
     public Location[] getAllHexLocationsAdjacentToSettlement() {
         Set<Location> setWithoutDuplicates = new HashSet<>();
         for (Hex hex : this.settlementHexes) {

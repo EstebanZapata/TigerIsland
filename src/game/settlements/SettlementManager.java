@@ -4,7 +4,6 @@ import game.settlements.exceptions.*;
 import game.world.*;
 import game.world.rules.exceptions.*;
 import game.tile.*;
-import gherkin.lexer.Ar;
 
 import java.util.ArrayList;
 
@@ -50,14 +49,12 @@ public class SettlementManager {
     }
 
     public Settlement getSettlementFromHex(Hex hex) throws NoSettlementOnHexException {
-        for(Settlement settlement : settlements) {
-            if (settlement.containsHex(hex)) {
-                return settlement;
-            }
+        if (hex.getSettlement() == null) {
+            String errorMessage = String.format("There are no settlements on the hex you passed in.");
+            throw new NoSettlementOnHexException(errorMessage);
         }
 
-        String errorMessage = String.format("There are no settlements on the hex you passed in.");
-        throw new NoSettlementOnHexException(errorMessage);
+        return hex.getSettlement();
     }
 
     public int getNumberOfVillagersRequiredToExpand(Settlement existingSettlement, Terrain terrainType) throws
