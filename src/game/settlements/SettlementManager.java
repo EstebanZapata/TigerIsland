@@ -198,7 +198,7 @@ public class SettlementManager {
     }
 
     public void tryToMergeAfterExpanding(Settlement expandedSettlement) {
-        ArrayList<Settlement> adjacentSettlements = new ArrayList<>();
+        ArrayList<Settlement> adjacentSettlements;
         ArrayList<Integer> adjacentSettlementSizes = new ArrayList<>();
         ArrayList<Settlement> allAdjacentSettlements = new ArrayList<>();
         ArrayList<Hex> visited = new ArrayList<>();
@@ -269,6 +269,7 @@ public class SettlementManager {
                 Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
 
                 if (adjacentHex.getSettlement() != null) {
+
                     if (!expansionQueue.contains(adjacentHex)) {
                         adjacentSettlements.add(adjacentHex.getSettlement());
                         expansionQueue.add(adjacentHex);
