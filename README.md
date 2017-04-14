@@ -1,5 +1,4 @@
-# TigerIsland
-TigerIsland Spring 2017
+# TigerIsland Spring 2017
 
 To start the game:
 1) Run main from the Start class
