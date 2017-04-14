@@ -15,9 +15,8 @@ public class Settlement {
 
     public Settlement(Hex foundingHex) throws SettlementAlreadyExistsOnHexException {
         settlementHexes = new ArrayList<Hex>();
-        settlementHexes.add(foundingHex);
-        foundingHex.setSettlement(this);
         expansionQueue = new LinkedList<Hex>();
+        this.addHexToSettlement(foundingHex);
     }
 
     public boolean containsHex(Hex hexToSearchFor) {
@@ -33,7 +32,7 @@ public class Settlement {
     }
 
     public void addHexToSettlement(Hex newHex) throws SettlementAlreadyExistsOnHexException {
-        if (this.settlementHexes.contains(newHex)) {
+        if (newHex.getSettlement() != null) {
             String errorMessage = "A settlement already exists on the hex.";
             throw new SettlementAlreadyExistsOnHexException(errorMessage);
         }
@@ -52,6 +51,10 @@ public class Settlement {
             String errorMessage = "A settlement cannot be completely wiped out.";
             throw new SettlementCannotBeCompletelyWipedOutException(errorMessage);
         }
+    }
+
+    public void removeHexFromSettlementForMerging(Hex hexToBeRemoved)  {
+        settlementHexes.remove(hexToBeRemoved);
     }
 
     public void setHasTotoroSanctuary() {
@@ -137,6 +140,9 @@ public class Settlement {
                     String errorMessage = String.format("There are no playable hexes for the player to expand to.");
                     throw new NoHexesToExpandToException(errorMessage);
                 }
+                catch (SettlementHeightRequirementException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
 
@@ -145,56 +151,39 @@ public class Settlement {
 
     public ArrayList<Hex> getPotentialSettlementHexes(Hex settlementHex, World world, Terrain terrainType) throws SettlementHeightRequirementException {
         ArrayList<Hex> potentialSettlementHexes = new ArrayList<>();
+
         Location hexLocation = settlementHex.getLocation();
         Location[] hexLocationsAdjacentToCenter = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
+
         for (Location adjacentHexLocation : hexLocationsAdjacentToCenter) {
             try {
-                Hex adjacentHex = world.getHexByLocation(adjacentHexLocation);
+                int x = adjacentHexLocation.getxCoordinate();
+                int y = adjacentHexLocation.getyCoordinate();
+                Hex adjacentHex = world.getHexRegardlessOfHeight(x, y);
+
                 adjacentHex.checkExpansionConditions(terrainType);
-                if (!expansionQueue.contains(adjacentHex))
-                {
+
+                if (!expansionQueue.contains(adjacentHex)) {
                     potentialSettlementHexes.add(adjacentHex);
                     expansionQueue.add(adjacentHex);
                 }
-            }
-            catch (NoHexAtLocationException e) {
+
+            } catch (NoHexAtLocationException e) {
+                System.out.println(e.getMessage());
+            } catch (HexDoesNotMeetConditionsException e) {
+                System.out.println(e.getMessage());
+            } catch (SettlementAlreadyExistsOnHexException e) {
                 System.out.println(e.getMessage());
             }
-            catch (HexDoesNotMeetConditionsException e) {
-                System.out.println(e.getMessage());
-            }
-            catch (SettlementAlreadyExistsOnHexException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        try {
-            int x = hexLocation.getxCoordinate();
-            int y = hexLocation.getyCoordinate();
-            int height = hexLocation.getHeight();
-
-            Hex nextLevelHex = world.getHexByCoordinate(x, y, height+1);
-            nextLevelHex.checkExpansionConditions(terrainType);
-            potentialSettlementHexes.add(nextLevelHex);
-            expansionQueue.add(nextLevelHex);
-
-        }
-        catch (NoHexAtLocationException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (HexDoesNotMeetConditionsException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (SettlementAlreadyExistsOnHexException e) {
-            System.out.println(e.getMessage());
         }
 
         return potentialSettlementHexes;
     }
 
+
     public Location[] getAllHexLocationsAdjacentToSettlement() {
         Set<Location> setWithoutDuplicates = new HashSet<>();
-        for (Hex hex : settlementHexes) {
+        for (Hex hex : this.settlementHexes) {
             Location hexLocation = hex.getLocation();
             Location[] locationsToAdd = CoordinateSystemHelper.getHexLocationsAdjacentToCenter(hexLocation);
             setWithoutDuplicates.addAll(Arrays.asList(locationsToAdd));
@@ -203,4 +192,3 @@ public class Settlement {
     }
 
 }
-
