@@ -26,7 +26,7 @@ public class Game {
 
     public void foundSettlement(Player currentlyActivePlayer, Hex settlementHex) throws
             NotEnoughPiecesException,
-            SettlementAlreadyExistsOnHexException
+            BuildConditionsNotMetException
     {
         currentlyActivePlayer.foundSettlement(settlementHex);
     }
