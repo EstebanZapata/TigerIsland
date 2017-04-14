@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import game.tile.orientation.TileOrientation;
 
+import java.util.ArrayList;
+
 public class WorldTest {
     private World world;
 
@@ -284,6 +286,19 @@ public class WorldTest {
         Location locationOfAdjacent = new Location(1,-2,0);
 
         world.calculateTileOrientationToCoverVolcanoLocationAndAdjacentLocation(locationOfVolcanoToCover, locationOfAdjacent);
+    }
+
+    @Test
+    public void testGetHexesAdjacentToLocationOnCliff() throws IllegalTilePlacementException {
+        setupBaseForHigherTiles();
+
+        Location locationToCheck = new Location(1,-2,0);
+
+        ArrayList<Hex> adjacentHexes = world.getHexesAdjacentToLocation(locationToCheck);
+
+        Assert.assertEquals(2, adjacentHexes.size());
+        Assert.assertTrue(adjacentHexes.contains(tileTwo.getVolcanoHex()));
+        Assert.assertTrue(adjacentHexes.contains(tileTwo.getLeftHexRelativeToVolcano()));
     }
 
 
